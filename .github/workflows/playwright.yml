@@ -7,6 +7,10 @@ on:
       - develop
   pull_request: null
   workflow_dispatch: null
+
+permissions:
+  contents: read
+
 jobs:
   test:
     timeout-minutes: 60

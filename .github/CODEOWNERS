@@ -1,0 +1,16 @@
+# CODEOWNERS — ll-corporate
+#
+# Contract and adapter files require approval from a maintainer of both repos.
+# This prevents either side from drifting from the shared contract unilaterally.
+
+# Contract types and Zod schemas — must stay in sync with LL-task-tracker OpenAPI spec
+/src/lib/contracts/             @HillSide2026
+
+# API adapter layer — changes here affect how backend contracts are consumed
+/src/lib/api/                   @HillSide2026
+
+# Auth configuration — shared auth assumptions with LL-task-tracker (Keycloak realm)
+/src/lib/auth/                  @HillSide2026
+
+# CI workflows — changes here affect cross-repo contract checks
+/.github/workflows/             @HillSide2026

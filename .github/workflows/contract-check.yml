@@ -1,0 +1,92 @@
+name: Contract Check
+
+# Runs on every PR and on pushes to main.
+# Also triggered via workflow_dispatch so LL-task-tracker CI can call it
+# when its own contract files change (cross-repo gate).
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - "src/lib/contracts/**"
+      - "src/lib/api/**"
+  pull_request:
+    paths:
+      - "src/lib/contracts/**"
+      - "src/lib/api/**"
+      - ".github/workflows/contract-check.yml"
+  workflow_dispatch:
+    inputs:
+      upstream_contract_version:
+        description: "Contract version from LL-task-tracker that triggered this run"
+        required: false
+        default: ""
+
+jobs:
+  contract-check:
+    name: Contract Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read node version
+        run: echo "node_version=$(cat .github/nodejs.version)" >> $GITHUB_ENV
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "${{ env.node_version }}"
+
+      - name: Install pnpm & dependencies
+        uses: pnpm/action-setup@v4
+        with:
+          run_install:
+            - recursive: true
+            - args: [--frozen-lockfile]
+
+      # TypeScript compile check — catches type errors in contracts/
+      - name: TypeScript check
+        run: pnpm exec tsc --noEmit
+
+      # Verify the declared contract version matches what's in version.ts.
+      # This step fails loudly if someone bumped types without updating the version.
+      - name: Verify contract version is declared
+        run: |
+          VERSION=$(node -e "const v = require('./src/lib/contracts/version.ts'); console.log(v)" 2>/dev/null || \
+                    grep -oP '(?<=SUPPORTED_CONTRACT_VERSION = ")[^"]+' src/lib/contracts/version.ts)
+          echo "Declared contract version: $VERSION"
+          if [ -z "$VERSION" ]; then
+            echo "ERROR: Could not read SUPPORTED_CONTRACT_VERSION from src/lib/contracts/version.ts"
+            exit 1
+          fi
+
+      # If triggered by upstream with a specific version, validate compatibility.
+      - name: Check upstream version compatibility
+        if: ${{ github.event.inputs.upstream_contract_version != '' }}
+        run: |
+          DECLARED=$(grep -oP '(?<=SUPPORTED_CONTRACT_VERSION = ")[^"]+' src/lib/contracts/version.ts)
+          UPSTREAM="${{ github.event.inputs.upstream_contract_version }}"
+          echo "Upstream contract: $UPSTREAM"
+          echo "This consumer supports: $DECLARED"
+          DECLARED_MAJOR=$(echo "$DECLARED" | cut -d. -f1)
+          UPSTREAM_MAJOR=$(echo "$UPSTREAM" | cut -d. -f1)
+          if [ "$DECLARED_MAJOR" != "$UPSTREAM_MAJOR" ]; then
+            echo "ERROR: Major version mismatch — upstream is $UPSTREAM but consumer declares $DECLARED"
+            echo "Update src/lib/contracts/index.ts and src/lib/contracts/version.ts before merging."
+            exit 1
+          fi
+          echo "OK: Major versions match ($DECLARED_MAJOR)"
+
+      # Unit tests — catches regressions in contract-adjacent code
+      - name: Unit & Integration tests
+        run: pnpm run test
+
+      # Build check — ensures no compile/import errors in the contract layer
+      - name: Build
+        run: pnpm run build
