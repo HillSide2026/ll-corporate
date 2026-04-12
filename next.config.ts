@@ -1,6 +1,7 @@
 import { type NextConfig } from "next"
 
 const config: NextConfig = {
+  basePath: "/corporate",
   reactStrictMode: true,
   outputFileTracingRoot: process.cwd(),
   logging: {

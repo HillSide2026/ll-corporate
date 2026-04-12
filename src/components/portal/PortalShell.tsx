@@ -1,3 +1,6 @@
+import { signOutFromPortal } from "src/lib/auth/actions"
+import { type PortalSession } from "src/lib/auth/session"
+
 const boundaryItems = [
   "ll-task-tracker remains the system of record.",
   "Client data appears only after backend contracts exist.",
@@ -6,7 +9,13 @@ const boundaryItems = [
 
 const pendingAreas = ["Matters", "Documents", "Requests", "Account"]
 
-export function PortalShell() {
+type PortalShellProps = {
+  session: PortalSession
+}
+
+export function PortalShell({ session }: PortalShellProps) {
+  const displayName = session.identity.displayName ?? session.identity.email ?? "Signed-in client"
+
   return (
     <main className="min-h-dvh bg-neutral-50 text-neutral-950">
       <header className="border-b border-neutral-200 bg-white">
@@ -15,10 +24,20 @@ export function PortalShell() {
             <p className="text-sm font-medium text-emerald-700">Levine LLP</p>
             <h1 className="mt-1 text-3xl font-semibold">Corporate Portal</h1>
           </div>
-          <p className="max-w-xl text-sm leading-6 text-neutral-600">
-            Secure client access is being prepared. Matter, document, request, and account records will appear only
-            after client-safe backend contracts are available.
-          </p>
+          <div className="flex flex-col gap-3 text-sm text-neutral-600 md:items-end">
+            <p>
+              Signed in as <span className="font-medium text-neutral-950">{displayName}</span>
+            </p>
+            {session.identity.email ? <p>{session.identity.email}</p> : null}
+            <form action={signOutFromPortal}>
+              <button
+                type="submit"
+                className="rounded-md border border-neutral-300 bg-white px-3 py-2 font-medium text-neutral-800 transition-colors hover:border-neutral-400"
+              >
+                Sign out
+              </button>
+            </form>
+          </div>
         </div>
       </header>
 

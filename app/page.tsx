@@ -1,5 +1,5 @@
-import { PortalShell } from "src/components/portal/PortalShell"
+import { PortalEntry } from "src/components/portal/PortalEntry"
 
 export default function Page() {
-  return <PortalShell />
+  return <PortalEntry />
 }

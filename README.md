@@ -45,6 +45,12 @@ pnpm install
 pnpm dev
 ```
 
+Local entry URL:
+
+```text
+http://localhost:3000/corporate
+```
+
 Useful checks:
 
 ```sh
@@ -63,3 +69,9 @@ pnpm run e2e:headless
 4. Closure/archive: add only after backend lifecycle support exists.
 
 No business logic should be imported from `toronto-corporate`.
+
+## Deployment Notes
+
+- [Deployment Topology Note](docs/deployment-topology.md)
+- [Production Routing + Auth Note](docs/production-routing-auth.md)
+- [Infra / DevOps Implementation Note](docs/infra-devops.md)
