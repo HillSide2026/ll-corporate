@@ -34,3 +34,7 @@ yarn-error.log*
 
 /.npm-only-allow
 .pnpm-store/
+
+# prevent nested sibling repos / local records stacks
+/ll-corporate_records/
+/ll-corporate-records/
