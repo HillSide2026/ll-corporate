@@ -4,10 +4,10 @@ import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: {
-    default: "Levine LLP Corporate Portal",
-    template: "%s | Levine LLP Corporate Portal",
+    default: "Levine LLP",
+    template: "%s | Levine LLP",
   },
-  description: "Bounded client portal for Levine LLP corporate clients.",
+  description: "Levine LLP corporate legal services and secure client portal access.",
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

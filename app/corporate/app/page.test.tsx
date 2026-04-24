@@ -39,11 +39,11 @@ describe("PortalAppPage", () => {
     vi.clearAllMocks()
   })
 
-  it("redirects unauthenticated users to the public portal entry", async () => {
+  it("redirects unauthenticated users to the corporate sign-in page", async () => {
     vi.mocked(getPortalSession).mockResolvedValue(null)
 
-    await expect(PortalAppPage()).rejects.toThrow("redirect:/")
-    expect(redirect).toHaveBeenCalledWith("/")
+    await expect(PortalAppPage()).rejects.toThrow("redirect:/corporate")
+    expect(redirect).toHaveBeenCalledWith("/corporate")
   })
 
   it("renders the protected shell for authenticated users", async () => {
