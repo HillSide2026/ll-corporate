@@ -22,6 +22,7 @@ describe("PortalShell", () => {
     expect(screen.getByRole("heading", { name: "Corporate Portal" })).toBeInTheDocument()
     expect(screen.getByText("Client User")).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Sign out" })).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "NDA Generator" })).toHaveAttribute("href", "/nda")
     expect(screen.getByText("ll-task-tracker remains the system of record.")).toBeInTheDocument()
     expect(screen.getByText("Workflow, state, and permission decisions stay out of the frontend.")).toBeInTheDocument()
   })

@@ -43,7 +43,7 @@ export function PortalShell({ session }: PortalShellProps) {
 
       <div className="mx-auto grid max-w-6xl gap-8 px-6 py-10 lg:grid-cols-[240px_1fr]">
         <nav
-          aria-label="Portal sections"
+          aria-label="Portal navigation"
           className="border-b border-neutral-200 pb-5 lg:border-r lg:border-b-0 lg:pr-6"
         >
           <p className="text-xs font-semibold text-neutral-500 uppercase">Portal</p>
@@ -56,6 +56,20 @@ export function PortalShell({ session }: PortalShellProps) {
               </li>
             ))}
           </ul>
+          <div className="mt-6">
+            <p className="text-xs font-semibold text-neutral-500 uppercase">Sibling apps</p>
+            <ul className="mt-4 space-y-2">
+              <li>
+                <a
+                  href="/nda"
+                  className="block rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-900 transition-colors hover:bg-emerald-100"
+                >
+                  NDA Generator
+                </a>
+                <p className="mt-2 text-xs leading-5 text-neutral-500">Separate service mounted at /nda.</p>
+              </li>
+            </ul>
+          </div>
         </nav>
 
         <section aria-labelledby="portal-foundation-heading" className="space-y-8">

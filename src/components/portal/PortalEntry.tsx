@@ -22,6 +22,20 @@ export function PortalEntry() {
           </button>
         </form>
 
+        <div className="mt-6 rounded-md border border-neutral-200 bg-white px-4 py-4 text-sm text-neutral-700">
+          <p className="font-semibold text-neutral-950">Also available</p>
+          <p className="mt-2">
+            Need a one-off NDA? Use the separate Levine LLP{" "}
+            <a
+              href="/nda"
+              className="font-medium text-emerald-700 underline underline-offset-2 transition-colors hover:text-emerald-800"
+            >
+              NDA Generator
+            </a>
+            .
+          </p>
+        </div>
+
         <div className="mt-12 border-t border-neutral-200 pt-8">
           <p className="text-sm font-semibold text-neutral-700">Available after backend contract integration</p>
           <ul className="mt-4 grid gap-3 sm:grid-cols-2">

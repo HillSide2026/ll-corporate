@@ -1,5 +1,11 @@
 # Infra / DevOps Implementation Note
 
+> System note: `ll-corporate` is the primary application associated with `https://levinellp.ca`.
+> The current implemented portal shell in this repo may still run under `/corporate`.
+> `/nda` is reserved for `NDA-Esq` and must not be handled by this repo.
+> Moving `ll-corporate` fully to `/` is a future deployment decision and is not part of this change.
+> See [DEPLOYMENT.md](../DEPLOYMENT.md) for the cross-app boundary overview.
+
 ## DNS
 
 Public hostname:

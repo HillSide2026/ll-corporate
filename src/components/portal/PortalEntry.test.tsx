@@ -13,6 +13,7 @@ describe("PortalEntry", () => {
 
     expect(screen.getByRole("heading", { name: "Corporate Portal" })).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Sign in" })).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "NDA Generator" })).toHaveAttribute("href", "/nda")
     expect(screen.getByText("Available after backend contract integration")).toBeInTheDocument()
   })
 })

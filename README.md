@@ -4,6 +4,20 @@
 
 This repository is a Next.js application shell. It is not the system of record and must not become a second workflow system.
 
+## System Architecture (Levine LLP)
+
+Levine LLP currently runs a multi-repo web system:
+
+- `ll-corporate` (this repo) is the primary application associated with `https://levinellp.ca`.
+- `NDA-Esq` owns the NDA Generator mounted at `https://levinellp.ca/nda`.
+- `LL-task-tracker` is a separate operational app deployed at `https://firm.levinellp.ca`.
+
+Current state versus intended domain role:
+
+- `ll-corporate` is the primary application associated with `https://levinellp.ca`, even though the current implemented portal shell in this repo may still run under `/corporate`.
+- `/nda` is reserved for `NDA-Esq` and must not be handled by this repo.
+- Moving `ll-corporate` fully to root `/` is a future deployment and routing decision, and is not part of this change.
+
 ## System Boundary
 
 `ll-task-tracker` is canonical for:
@@ -72,6 +86,7 @@ No business logic should be imported from `toronto-corporate`.
 
 ## Deployment Notes
 
+- [System Deployment Overview](DEPLOYMENT.md)
 - [Deployment Topology Note](docs/deployment-topology.md)
 - [Production Routing + Auth Note](docs/production-routing-auth.md)
 - [Infra / DevOps Implementation Note](docs/infra-devops.md)

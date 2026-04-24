@@ -9,6 +9,8 @@ const config: NextConfig = {
       fullUrl: true,
     },
   },
+  // Keep rewrites scoped to this app's current implementation surface.
+  // `/nda` is reserved for the sibling NDA-Esq service and must not be handled here.
   rewrites: async () => [
     { source: "/healthz", destination: "/api/health" },
     { source: "/api/healthz", destination: "/api/health" },
