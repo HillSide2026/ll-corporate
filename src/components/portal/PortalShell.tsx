@@ -1,13 +1,23 @@
 import { signOutFromPortal } from "src/lib/auth/actions"
 import { type PortalSession } from "src/lib/auth/session"
 
-const boundaryItems = [
-  "ll-task-tracker remains the system of record.",
-  "Client data appears only after backend contracts exist.",
-  "Workflow, state, and permission decisions stay out of the frontend.",
+const portalAreas = [
+  {
+    title: "Matters",
+    description: "See client-safe matter updates and key next steps when matter access is connected.",
+    nextAction: "Review your active and upcoming legal work once matter contracts are available.",
+  },
+  {
+    title: "Documents",
+    description: "Find secure document access, review, download, and upload tools as they become available.",
+    nextAction: "Use this area for document exchange once document contracts are connected.",
+  },
+  {
+    title: "Requests",
+    description: "Send updates, questions, or new service requests to the Levine LLP team from one place.",
+    nextAction: "Use this area for client requests once request intake is enabled.",
+  },
 ]
-
-const pendingAreas = ["Matters", "Documents", "Requests", "Account"]
 
 type PortalShellProps = {
   session: PortalSession
@@ -22,7 +32,7 @@ export function PortalShell({ session }: PortalShellProps) {
         <div className="mx-auto flex max-w-6xl flex-col gap-5 px-6 py-6 md:flex-row md:items-center md:justify-between">
           <div>
             <p className="text-sm font-medium text-emerald-700">Levine LLP</p>
-            <h1 className="mt-1 text-3xl font-semibold">Corporate Portal</h1>
+            <h1 className="mt-1 text-3xl font-semibold">Client Portal</h1>
           </div>
           <div className="flex flex-col gap-3 text-sm text-neutral-600 md:items-end">
             <p>
@@ -48,10 +58,10 @@ export function PortalShell({ session }: PortalShellProps) {
         >
           <p className="text-xs font-semibold text-neutral-500 uppercase">Portal</p>
           <ul className="mt-4 space-y-2">
-            {pendingAreas.map((area) => (
-              <li key={area}>
+            {portalAreas.map((area) => (
+              <li key={area.title}>
                 <span className="block rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm text-neutral-500">
-                  {area}
+                  {area.title}
                 </span>
               </li>
             ))}
@@ -72,27 +82,31 @@ export function PortalShell({ session }: PortalShellProps) {
           </div>
         </nav>
 
-        <section aria-labelledby="portal-foundation-heading" className="space-y-8">
+        <section aria-labelledby="portal-home-heading" className="space-y-8">
           <div>
-            <p className="text-sm font-medium text-emerald-700">Foundation mode</p>
-            <h2 id="portal-foundation-heading" className="mt-2 text-2xl font-semibold">
-              Portal shell ready for contract-first implementation
+            <p className="text-sm font-medium text-emerald-700">Welcome back</p>
+            <h2 id="portal-home-heading" className="mt-2 text-2xl font-semibold">
+              Good to see you, {displayName}
             </h2>
             <p className="mt-4 max-w-3xl text-base leading-7 text-neutral-700">
-              This surface is intentionally empty of client records, workflow actions, and operational decisions until
-              `ll-task-tracker` provides the corresponding client-safe contracts.
+              Your portal home will bring together client-safe matter updates, document access, and requests as Levine
+              LLP enables each service.
             </p>
           </div>
 
-          <div className="grid gap-3">
-            {boundaryItems.map((item) => (
-              <p
-                key={item}
-                className="rounded-md border border-neutral-200 bg-white px-4 py-3 text-sm text-neutral-700"
-              >
-                {item}
-              </p>
+          <div className="grid gap-4 md:grid-cols-3">
+            {portalAreas.map((area) => (
+              <article key={area.title} className="rounded-md border border-neutral-200 bg-white px-4 py-4">
+                <h3 className="text-base font-semibold text-neutral-950">{area.title}</h3>
+                <p className="mt-3 text-sm leading-6 text-neutral-700">{area.description}</p>
+                <p className="mt-4 text-sm font-medium text-emerald-700">{area.nextAction}</p>
+              </article>
             ))}
+          </div>
+
+          <div className="rounded-md border border-neutral-200 bg-white px-4 py-4 text-sm leading-6 text-neutral-700">
+            Matter, task, and workflow state remains managed by LL-task-tracker. This portal only displays client-safe
+            information after backend contracts are available.
           </div>
         </section>
       </div>

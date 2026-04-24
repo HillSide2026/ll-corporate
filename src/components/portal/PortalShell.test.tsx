@@ -19,11 +19,14 @@ describe("PortalShell", () => {
   it("renders the protected Levine LLP portal shell without domain data", () => {
     render(<PortalShell session={session} />)
 
-    expect(screen.getByRole("heading", { name: "Corporate Portal" })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "Client Portal" })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "Good to see you, Client User" })).toBeInTheDocument()
     expect(screen.getByText("Client User")).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Sign out" })).toBeInTheDocument()
     expect(screen.getByRole("link", { name: "NDA Generator" })).toHaveAttribute("href", "/nda")
-    expect(screen.getByText("ll-task-tracker remains the system of record.")).toBeInTheDocument()
-    expect(screen.getByText("Workflow, state, and permission decisions stay out of the frontend.")).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "Matters" })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "Documents" })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "Requests" })).toBeInTheDocument()
+    expect(screen.getByText(/Matter, task, and workflow state remains managed by LL-task-tracker/)).toBeInTheDocument()
   })
 })
