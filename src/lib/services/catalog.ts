@@ -20,6 +20,30 @@ export type CorporateService = {
   ctaLabel: string
 }
 
+export function getServicePriceDisplay(service: CorporateService) {
+  if (service.price) {
+    return service.price
+  }
+
+  if (service.priceType === "quote") {
+    return "Quoted after review"
+  }
+
+  return "Estimate provided after review"
+}
+
+export function getServicePriceTypeLabel(priceType: ServicePriceType) {
+  if (priceType === "fixed") {
+    return "Fixed fee"
+  }
+
+  if (priceType === "estimate") {
+    return "Estimate"
+  }
+
+  return "Quote"
+}
+
 export const serviceCatalog: readonly CorporateService[] = [
   {
     slug: "incorporation",

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { getServiceBySlug, serviceCatalog } from "./catalog"
+import { getServiceBySlug, getServicePriceDisplay, getServicePriceTypeLabel, serviceCatalog } from "./catalog"
 
 describe("serviceCatalog", () => {
   it("defines the MVP corporate services with required catalog fields", () => {
@@ -31,5 +31,18 @@ describe("serviceCatalog", () => {
     expect(new Set(slugs).size).toBe(slugs.length)
     expect(getServiceBySlug("share-issuance")?.title).toBe("Share Issuance")
     expect(getServiceBySlug("missing-service")).toBeUndefined()
+  })
+
+  it("formats pricing labels for UI surfaces", () => {
+    const incorporation = getServiceBySlug("incorporation")
+
+    expect(incorporation).toBeDefined()
+    expect(getServicePriceTypeLabel("fixed")).toBe("Fixed fee")
+    expect(getServicePriceTypeLabel("estimate")).toBe("Estimate")
+    expect(getServicePriceTypeLabel("quote")).toBe("Quote")
+    expect(incorporation ? getServicePriceDisplay(incorporation) : "").toBe("From $1,250 + disbursements")
+    expect(getServicePriceDisplay({ ...serviceCatalog[0], price: undefined, priceType: "quote" })).toBe(
+      "Quoted after review"
+    )
   })
 })
