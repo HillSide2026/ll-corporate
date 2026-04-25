@@ -1,4 +1,4 @@
-import { signInWithKeycloak } from "src/lib/auth/actions"
+import { previewPortalAccess, signInWithKeycloak } from "src/lib/auth/actions"
 import { SignInButton } from "./SignInButton"
 
 const portalHighlights = [
@@ -21,10 +21,25 @@ const portalHighlights = [
 
 type PortalEntryProps = {
   authError?: string
+  previewAccessEnabled?: boolean
 }
 
-export function PortalEntry({ authError }: PortalEntryProps) {
-  const hasAuthError = Boolean(authError)
+function getAuthErrorMessage(authError?: string) {
+  if (authError === "Configuration") {
+    return "Portal sign-in is not fully configured yet. Please use preview access if it is enabled, or contact Levine LLP if you need help."
+  }
+
+  if (authError === "PreviewAccessDisabled") {
+    return "Preview access is not enabled for this environment. Please use secure sign-in when authentication is configured."
+  }
+
+  return authError
+    ? "We could not complete sign-in. Please try again, or contact Levine LLP if this keeps happening."
+    : undefined
+}
+
+export function PortalEntry({ authError, previewAccessEnabled = false }: PortalEntryProps) {
+  const authErrorMessage = getAuthErrorMessage(authError)
 
   return (
     <main className="min-h-dvh bg-neutral-50 text-neutral-950">
@@ -36,18 +51,32 @@ export function PortalEntry({ authError }: PortalEntryProps) {
           Levine LLP team.
         </p>
 
-        {hasAuthError ? (
+        {authErrorMessage ? (
           <div
             role="alert"
             className="mt-6 rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-950"
           >
-            We could not complete sign-in. Please try again, or contact Levine LLP if this keeps happening.
+            {authErrorMessage}
           </div>
         ) : null}
 
         <form action={signInWithKeycloak} className="mt-8">
           <SignInButton />
         </form>
+
+        {previewAccessEnabled ? (
+          <form action={previewPortalAccess} className="mt-3">
+            <button
+              type="submit"
+              className="rounded-md border border-neutral-300 bg-white px-5 py-3 text-sm font-semibold text-neutral-800 transition-colors hover:border-neutral-400"
+            >
+              Preview portal
+            </button>
+            <p className="mt-2 text-xs leading-5 text-neutral-500">
+              Preview mode uses a mock session for review only. Do not use it for real client authentication.
+            </p>
+          </form>
+        ) : null}
 
         <div className="mt-6 rounded-md border border-neutral-200 bg-white px-4 py-4 text-sm text-neutral-700">
           <p className="font-semibold text-neutral-950">Also available</p>

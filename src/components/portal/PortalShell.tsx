@@ -21,32 +21,48 @@ const portalAreas = [
 
 type PortalShellProps = {
   session: PortalSession
+  previewMode?: boolean
 }
 
-export function PortalShell({ session }: PortalShellProps) {
+export function PortalShell({ previewMode = false, session }: PortalShellProps) {
   const displayName = session.identity.displayName ?? session.identity.email ?? "Signed-in client"
 
   return (
     <main className="min-h-dvh bg-neutral-50 text-neutral-950">
+      {previewMode ? (
+        <div role="status" className="bg-amber-50 px-6 py-3 text-sm font-medium text-amber-950">
+          Preview mode: this portal is using a mock session for development review only.
+        </div>
+      ) : null}
       <header className="border-b border-neutral-200 bg-white">
         <div className="mx-auto flex max-w-6xl flex-col gap-5 px-6 py-6 md:flex-row md:items-center md:justify-between">
           <div>
             <p className="text-sm font-medium text-emerald-700">Levine LLP</p>
             <h1 className="mt-1 text-3xl font-semibold">Client Portal</h1>
+            {previewMode ? <p className="mt-2 text-sm font-medium text-amber-700">Preview mode</p> : null}
           </div>
           <div className="flex flex-col gap-3 text-sm text-neutral-600 md:items-end">
             <p>
               Signed in as <span className="font-medium text-neutral-950">{displayName}</span>
             </p>
             {session.identity.email ? <p>{session.identity.email}</p> : null}
-            <form action={signOutFromPortal}>
-              <button
-                type="submit"
+            {previewMode ? (
+              <a
+                href="/corporate"
                 className="rounded-md border border-neutral-300 bg-white px-3 py-2 font-medium text-neutral-800 transition-colors hover:border-neutral-400"
               >
-                Sign out
-              </button>
-            </form>
+                Exit preview
+              </a>
+            ) : (
+              <form action={signOutFromPortal}>
+                <button
+                  type="submit"
+                  className="rounded-md border border-neutral-300 bg-white px-3 py-2 font-medium text-neutral-800 transition-colors hover:border-neutral-400"
+                >
+                  Sign out
+                </button>
+              </form>
+            )}
           </div>
         </div>
       </header>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 
 import { PortalEntry } from "src/components/portal/PortalEntry"
+import { isPreviewPortalAccessEnabled } from "src/lib/auth/config"
 
 export const metadata: Metadata = {
   title: "Corporate Portal",
@@ -15,5 +16,5 @@ export default async function CorporatePortalPage({ searchParams }: PageProps) {
   const params = await searchParams
   const authError = typeof params?.error === "string" ? params.error : undefined
 
-  return <PortalEntry authError={authError} />
+  return <PortalEntry authError={authError} previewAccessEnabled={isPreviewPortalAccessEnabled()} />
 }

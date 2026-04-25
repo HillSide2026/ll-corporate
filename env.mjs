@@ -3,16 +3,13 @@ import { z } from "zod"
 
 const optionalString = z.preprocess((value) => (value === "" ? undefined : value), z.string().optional())
 const optionalUrl = z.preprocess((value) => (value === "" ? undefined : value), z.string().url().optional())
-const optionalBoolean = z.preprocess(
-  (value) => {
-    if (value === "" || value === undefined) {
-      return undefined
-    }
+const optionalBoolean = z.preprocess((value) => {
+  if (value === "" || value === undefined) {
+    return undefined
+  }
 
-    return value === "true"
-  },
-  z.boolean().optional()
-)
+  return value === "true"
+}, z.boolean().optional())
 
 export const env = createEnv({
   server: {
@@ -26,6 +23,7 @@ export const env = createEnv({
     LL_CORPORATE_APP_BASE_URL: optionalUrl,
     LL_CORPORATE_POST_LOGIN_REDIRECT_URL: optionalUrl,
     LL_CORPORATE_LOGOUT_REDIRECT_URL: optionalUrl,
+    LL_CORPORATE_ENABLE_PREVIEW_ACCESS: optionalBoolean,
   },
   client: {},
   runtimeEnv: {
@@ -39,5 +37,6 @@ export const env = createEnv({
     LL_CORPORATE_APP_BASE_URL: process.env.LL_CORPORATE_APP_BASE_URL,
     LL_CORPORATE_POST_LOGIN_REDIRECT_URL: process.env.LL_CORPORATE_POST_LOGIN_REDIRECT_URL,
     LL_CORPORATE_LOGOUT_REDIRECT_URL: process.env.LL_CORPORATE_LOGOUT_REDIRECT_URL,
+    LL_CORPORATE_ENABLE_PREVIEW_ACCESS: process.env.LL_CORPORATE_ENABLE_PREVIEW_ACCESS,
   },
 })
