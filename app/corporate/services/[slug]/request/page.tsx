@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 
+import { getPreviewPortalSession, isPreviewPortalAccessEnabled } from "src/lib/auth/config"
 import { getPortalSession } from "src/lib/auth/session"
 import { getServiceBySlug, getServicePriceDisplay } from "src/lib/services/catalog"
 
@@ -37,7 +38,7 @@ export default async function ServiceRequestPage({ params }: ServiceRequestPageP
     notFound()
   }
 
-  const session = await getPortalSession()
+  const session = (await getPortalSession()) ?? (isPreviewPortalAccessEnabled() ? getPreviewPortalSession() : null)
 
   if (!session) {
     redirect("/corporate")

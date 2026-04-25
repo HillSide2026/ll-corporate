@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import { getPortalSession, type PortalSession } from "src/lib/auth/session"
+import { getPreviewPortalSession, isPreviewPortalAccessEnabled } from "src/lib/auth/config"
 
 import ServiceRequestPage, { generateMetadata } from "./page"
 
@@ -19,6 +20,17 @@ vi.mock("src/lib/auth/session", () => ({
   getPortalSession: vi.fn(),
 }))
 
+vi.mock("src/lib/auth/config", () => ({
+  getPreviewPortalSession: vi.fn(() => ({
+    identity: {
+      subject: "preview-client",
+      displayName: "Preview Client",
+      email: "preview.client@levinellp.example",
+    },
+  })),
+  isPreviewPortalAccessEnabled: vi.fn(() => false),
+}))
+
 const session: PortalSession = {
   identity: {
     subject: "user-123",
@@ -31,6 +43,7 @@ describe("ServiceRequestPage", () => {
   beforeEach(() => {
     vi.clearAllMocks()
     vi.mocked(getPortalSession).mockResolvedValue(session)
+    vi.mocked(isPreviewPortalAccessEnabled).mockReturnValue(false)
   })
 
   it("generates request metadata from the selected service", async () => {
@@ -59,6 +72,18 @@ describe("ServiceRequestPage", () => {
     expect(screen.getByRole("heading", { name: "Service inputs" })).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Submit request not enabled yet" })).toBeDisabled()
     expect(screen.getByText(/LL-task-tracker remains the system of record/)).toBeInTheDocument()
+  })
+
+  it("renders the request shell with a preview session when preview access is enabled", async () => {
+    vi.mocked(getPortalSession).mockResolvedValue(null)
+    vi.mocked(isPreviewPortalAccessEnabled).mockReturnValue(true)
+
+    const page = await ServiceRequestPage({ params: Promise.resolve({ slug: "incorporation" }) })
+    render(page)
+
+    expect(getPreviewPortalSession).toHaveBeenCalled()
+    expect(screen.getByRole("heading", { name: "Incorporation" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Submit request not enabled yet" })).toBeDisabled()
   })
 
   it("shows not found for unknown service slugs", async () => {
