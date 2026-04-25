@@ -111,13 +111,12 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
             before accepting structured submissions through the portal.
           </p>
           {session ? (
-            <button
-              type="button"
-              disabled
-              className="mt-5 rounded-md bg-neutral-200 px-4 py-2 text-sm font-semibold text-neutral-500"
+            <Link
+              href={`/corporate/services/${service.slug}/request`}
+              className="mt-5 inline-flex rounded-md bg-emerald-700 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-800"
             >
-              Request flow coming soon
-            </button>
+              {service.ctaLabel}
+            </Link>
           ) : (
             <a
               href="/corporate"

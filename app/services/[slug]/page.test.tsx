@@ -49,13 +49,16 @@ describe("ServiceDetailPage", () => {
     expect(screen.getByRole("link", { name: "Sign in to request this service" })).toHaveAttribute("href", "/corporate")
   })
 
-  it("renders a disabled placeholder CTA for authenticated users until intake exists", async () => {
+  it("links authenticated users to the intake request shell", async () => {
     vi.mocked(getPortalSession).mockResolvedValue(session)
 
     const page = await ServiceDetailPage({ params: Promise.resolve({ slug: "director-officer-change" }) })
     render(page)
 
-    expect(screen.getByRole("button", { name: "Request flow coming soon" })).toBeDisabled()
+    expect(screen.getByRole("link", { name: "Start change request" })).toHaveAttribute(
+      "href",
+      "/corporate/services/director-officer-change/request"
+    )
   })
 
   it("shows not found for unknown service slugs", async () => {
