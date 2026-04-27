@@ -1,23 +1,6 @@
-import { previewPortalAccess, signInWithKeycloak } from "src/lib/auth/actions"
+import { previewPortalAccess, signInWithCredentials, signInWithKeycloak } from "src/lib/auth/actions"
+import { isKeycloakConfigured } from "src/lib/auth/config"
 import { SignInButton } from "./SignInButton"
-
-const portalHighlights = [
-  {
-    title: "Manage Matters",
-    description: "View client-safe matter updates and stay current on the work Levine LLP is handling for you.",
-    cta: "Sign in to continue →",
-  },
-  {
-    title: "Access Client Documents",
-    description: "Review, download, or upload documents securely once document access is enabled for your account.",
-    cta: "Sign in to continue →",
-  },
-  {
-    title: "Submit Requests",
-    description: "Send requests or updates to the legal team from one secure place as portal services come online.",
-    cta: "Sign in to continue →",
-  },
-]
 
 type PortalEntryProps = {
   authError?: string
@@ -25,12 +8,12 @@ type PortalEntryProps = {
 }
 
 function getAuthErrorMessage(authError?: string) {
-  if (authError === "Configuration") {
-    return "Portal sign-in is not fully configured yet. Please use preview access if it is enabled, or contact Levine LLP if you need help."
+  if (authError === "CredentialsSignIn") {
+    return "Incorrect email or password. Please try again."
   }
 
   if (authError === "PreviewAccessDisabled") {
-    return "Preview access is not enabled for this environment. Please use secure sign-in when authentication is configured."
+    return "Preview access is not enabled for this environment."
   }
 
   return authError
@@ -40,73 +23,79 @@ function getAuthErrorMessage(authError?: string) {
 
 export function PortalEntry({ authError, previewAccessEnabled = false }: PortalEntryProps) {
   const authErrorMessage = getAuthErrorMessage(authError)
+  const keycloakConfigured = isKeycloakConfigured()
 
   return (
     <main className="min-h-dvh bg-stone-50 text-stone-900">
-      <section className="mx-auto flex min-h-dvh max-w-5xl flex-col justify-center px-6 py-12">
+      <section className="mx-auto flex min-h-dvh max-w-md flex-col justify-center px-6 py-12">
         <p className="text-sm font-medium text-brand-navy">Levine LLP</p>
-        <h1 className="mt-3 max-w-3xl text-4xl font-semibold tracking-tight">Client Portal</h1>
-        <p className="mt-5 max-w-2xl text-base leading-7 text-stone-500">
-          Sign in securely to view your client portal, including open matters, shared documents, and requests for the
-          Levine LLP team.
+        <h1 className="mt-3 text-3xl font-semibold tracking-tight">Client Portal</h1>
+        <p className="mt-3 text-sm leading-6 text-stone-500">
+          Sign in to view your matters, documents, and requests.
         </p>
 
         {authErrorMessage ? (
           <div
             role="alert"
-            className="mt-6 rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-950"
+            className="mt-5 rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-950"
           >
             {authErrorMessage}
           </div>
         ) : null}
 
-        <form action={signInWithKeycloak} className="mt-8">
-          <SignInButton />
+        <form action={signInWithCredentials} className="mt-6 space-y-4">
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-stone-700">
+              Email
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+              className="mt-1 block w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 placeholder-stone-400 focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
+              placeholder="you@example.com"
+            />
+          </div>
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-stone-700">
+              Password
+            </label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              required
+              className="mt-1 block w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 placeholder-stone-400 focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
+            />
+          </div>
+          <SignInButton label="Sign in" pendingLabel="Signing in..." />
         </form>
 
+        {keycloakConfigured ? (
+          <div className="mt-5 border-t border-stone-200 pt-5">
+            <p className="mb-3 text-xs text-stone-400">Or sign in with your organisation account</p>
+            <form action={signInWithKeycloak}>
+              <SignInButton label="Sign in with SSO" pendingLabel="Opening secure sign-in..." />
+            </form>
+          </div>
+        ) : null}
+
         {previewAccessEnabled ? (
-          <form action={previewPortalAccess} className="mt-3">
+          <form action={previewPortalAccess} className="mt-4">
             <button
               type="submit"
-              className="rounded-md border border-stone-300 bg-white px-5 py-3 text-sm font-semibold text-stone-700 transition-colors hover:border-stone-400"
+              className="rounded-md border border-stone-300 bg-white px-5 py-2 text-sm font-medium text-stone-600 transition-colors hover:border-stone-400"
             >
               Preview portal
             </button>
             <p className="mt-2 text-xs leading-5 text-stone-400">
-              Preview mode uses a mock session for review only. Do not use it for real client authentication.
+              Preview mode uses a mock session for review only.
             </p>
           </form>
         ) : null}
-
-        <div className="mt-6 rounded-md border border-stone-200 bg-white px-4 py-4 text-sm text-stone-500">
-          <p className="font-semibold text-stone-900">Also available</p>
-          <p className="mt-2">
-            Need a one-off NDA? Use the separate Levine LLP{" "}
-            <a
-              href="/ndaesq"
-              className="font-medium text-brand-navy underline underline-offset-2 transition-colors hover:text-brand-navy-dark"
-            >
-              NDA Tool
-            </a>
-            .
-          </p>
-        </div>
-
-        <div className="mt-12 border-t border-stone-200 pt-8">
-          <p className="text-sm font-semibold text-stone-700">Everything you need. All in one secure place.</p>
-          <ul className="mt-4 grid gap-3 sm:grid-cols-2">
-            {portalHighlights.map((item) => (
-              <li
-                key={item.title}
-                className="rounded-md border border-stone-200 bg-white px-4 py-3 text-sm text-stone-500"
-              >
-                <p className="font-semibold text-stone-900">{item.title}</p>
-                <p className="mt-2 leading-6">{item.description}</p>
-                <p className="mt-3 font-medium text-brand-navy">{item.cta}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
       </section>
     </main>
   )

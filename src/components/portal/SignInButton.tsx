@@ -2,7 +2,12 @@
 
 import { useFormStatus } from "react-dom"
 
-export function SignInButton() {
+type SignInButtonProps = {
+  label?: string
+  pendingLabel?: string
+}
+
+export function SignInButton({ label = "Sign in securely", pendingLabel = "Signing in..." }: SignInButtonProps) {
   const { pending } = useFormStatus()
 
   return (
@@ -12,7 +17,7 @@ export function SignInButton() {
       disabled={pending}
       className="rounded-md bg-brand-navy px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-dark disabled:cursor-wait disabled:opacity-60"
     >
-      {pending ? "Opening secure sign-in..." : "Sign in securely"}
+      {pending ? pendingLabel : label}
     </button>
   )
 }
