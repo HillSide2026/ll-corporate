@@ -1,5 +1,11 @@
 @import 'tailwindcss';
 
+@theme {
+  --color-brand-navy: #1d5191;
+  --color-brand-navy-dark: #0d3d7c;
+  --color-brand-navy-light: #2d7bc4;
+}
+
 /*
   The default border color has changed to `currentColor` in Tailwind CSS v4,
   so we've added these compatibility styles to make sure everything still

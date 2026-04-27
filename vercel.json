@@ -1,4 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "installCommand": "corepack enable && pnpm install"
+  "installCommand": "corepack enable && pnpm install",
+  "rewrites": [
+    { "source": "/ndaesq", "destination": "https://nda-esq.vercel.app" },
+    { "source": "/ndaesq/:path*", "destination": "https://nda-esq.vercel.app/:path*" }
+  ]
 }

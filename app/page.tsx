@@ -1,141 +1,207 @@
+import Image from "next/image"
 import Link from "next/link"
 
-import { serviceCatalog } from "src/lib/services/catalog"
+const serviceCategories = [
+  {
+    title: "Corporate Governance",
+    description:
+      "Shareholder agreements, director matters, equity structure, and corporate maintenance for private companies.",
+  },
+  {
+    title: "Commercial Contracts",
+    description:
+      "Drafting and negotiating commercial agreements that allocate risk, revenue, and responsibility clearly.",
+  },
+  {
+    title: "Fintech & Payments",
+    description:
+      "Legal support for businesses operating in regulated payment, banking, and financial services environments.",
+  },
+]
 
-const serviceHighlights = serviceCatalog.slice(0, 3)
+const legalFramework = [
+  {
+    title: "Corporate Structure",
+    description: "Shareholders, directors, control, and governance frameworks.",
+  },
+  {
+    title: "Contracts",
+    description: "Commercial agreements that allocate risk, revenue, and responsibility.",
+  },
+  {
+    title: "Financial Flows",
+    description: "Payments, banking relationships, and movement of funds.",
+  },
+  {
+    title: "Regulatory Overlay",
+    description: "FINTRAC, AML obligations, MSB exposure, and compliance architecture.",
+  },
+]
 
-const engagementPrinciples = [
-  "Responsive advice grounded in how businesses actually operate.",
-  "Clear next steps for founders, operators, and in-house teams.",
-  "Secure client access for ongoing corporate matters and document flow.",
+const clientTypes = [
+  {
+    title: "Operators & Executives",
+    description: "Running and scaling private companies.",
+  },
+  {
+    title: "Fintech Platforms",
+    description: "Businesses dealing with regulated financial flows.",
+  },
+  {
+    title: "Investors & Funds",
+    description: "Deploying capital into operating businesses.",
+  },
+  {
+    title: "Cross-Border Businesses",
+    description: "Managing multi-jurisdictional structures.",
+  },
 ]
 
 export default function HomePage() {
   return (
-    <main className="min-h-dvh bg-stone-950 text-stone-50">
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-x-0 top-0 h-64 bg-[radial-gradient(circle_at_top,rgba(52,211,153,0.22),transparent_60%)]" />
+    <main className="min-h-dvh bg-white text-stone-800">
+      <header className="border-b border-stone-200 bg-white">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+          <Image
+            src="/levine-llp-logo.svg"
+            alt="Levine LLP"
+            width={120}
+            height={48}
+            priority
+            className="h-10 w-auto"
+          />
+          <nav className="flex items-center gap-6 text-sm">
+            <Link href="/services" className="text-stone-600 transition-colors hover:text-stone-900">
+              Services
+            </Link>
+            <a href="#industries" className="text-stone-600 transition-colors hover:text-stone-900">
+              Industries
+            </a>
+            <a href="#insights" className="text-stone-600 transition-colors hover:text-stone-900">
+              Insights
+            </a>
+            <a
+              href="/corporate"
+              className="rounded border border-[#1d5191] px-4 py-2 font-medium text-[#1d5191] transition-colors hover:bg-[#1d5191] hover:text-white"
+            >
+              Client Portal
+            </a>
+          </nav>
+        </div>
+      </header>
 
-        <div className="relative mx-auto flex min-h-dvh max-w-6xl flex-col px-6 py-8">
-          <header className="flex flex-col gap-4 border-b border-white/10 pb-8 text-sm text-stone-300 md:flex-row md:items-center md:justify-between">
-            <div>
-              <p className="font-semibold tracking-[0.24em] text-emerald-300 uppercase">Levine LLP</p>
-              <p className="mt-2 max-w-xl text-sm leading-6 text-stone-400">
-                Corporate counsel for growing companies, with a secure workspace for active client matters.
+      {/* Hero */}
+      <section className="bg-white py-24">
+        <div className="mx-auto max-w-6xl px-6">
+          <p className="text-xs font-semibold tracking-[0.2em] text-[#1d5191] uppercase">Levine LLP</p>
+          <h1 className="mt-6 max-w-3xl text-5xl font-semibold leading-tight tracking-tight text-stone-900 sm:text-6xl">
+            Corporate, Contract, and Financial Services Counsel for Growing Businesses.
+          </h1>
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-stone-500">
+            Levine Law advises executives, investors, and regulated businesses on corporate structure, commercial
+            agreements, and financial services matters.
+          </p>
+          <div className="mt-10 flex flex-wrap gap-4">
+            <Link
+              href="/services"
+              className="inline-flex items-center justify-center rounded bg-[#1d5191] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#0d3d7c]"
+            >
+              View Services
+            </Link>
+            <a
+              href="/corporate"
+              className="inline-flex items-center justify-center rounded border border-stone-300 px-6 py-3 text-sm font-semibold text-stone-700 transition-colors hover:border-stone-400 hover:bg-stone-50"
+            >
+              Client Portal
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Section 2: How We Help */}
+      <section className="bg-stone-50 py-20">
+        <div className="mx-auto max-w-6xl px-6">
+          <h2 className="text-2xl font-semibold text-stone-900">How We Help</h2>
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+            {serviceCategories.map((item) => (
+              <div key={item.title} className="rounded border border-stone-200 bg-white p-6">
+                <h3 className="text-lg font-semibold text-stone-900">{item.title}</h3>
+                <p className="mt-3 text-sm leading-6 text-stone-500">{item.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Section 3: How Legal Work Actually Fits Together */}
+      <section className="bg-white py-20">
+        <div className="mx-auto max-w-6xl px-6">
+          <h2 className="text-2xl font-semibold text-stone-900">How Legal Work Actually Fits Together</h2>
+          <p className="mt-3 max-w-2xl text-stone-500">
+            Corporate structure, contracts, and financial flows are interdependent. Legal issues rarely exist in
+            isolation.
+          </p>
+          <div className="mt-10 grid gap-6 sm:grid-cols-2">
+            {legalFramework.map((item) => (
+              <div key={item.title} className="rounded border border-stone-200 bg-stone-50 p-6">
+                <h3 className="text-base font-semibold text-stone-900">{item.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-stone-500">{item.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Section 4: Client Tools */}
+      <section className="bg-stone-50 py-20">
+        <div className="mx-auto max-w-6xl px-6">
+          <h2 className="text-2xl font-semibold text-stone-900">Client Tools</h2>
+          <div className="mt-8 max-w-sm">
+            <div className="rounded border border-stone-200 bg-white p-6">
+              <h3 className="text-base font-semibold text-stone-900">NDA Tool</h3>
+              <p className="mt-2 text-sm leading-6 text-stone-500">
+                Prepare a standard NDA for early-stage discussions.
               </p>
-            </div>
-
-            <nav className="flex flex-wrap items-center gap-3">
-              <Link
-                href="/services"
-                className="rounded-full border border-white/15 px-4 py-2 font-medium text-stone-100 transition-colors hover:border-emerald-300 hover:text-emerald-200"
-              >
-                Services
-              </Link>
-              <a
-                href="/corporate"
-                className="rounded-full border border-white/15 px-4 py-2 font-medium text-stone-100 transition-colors hover:border-emerald-300 hover:text-emerald-200"
-              >
-                Client Portal
-              </a>
               <a
                 href="/nda"
-                className="rounded-full border border-white/10 px-4 py-2 font-medium text-stone-300 transition-colors hover:border-stone-200 hover:text-stone-100"
+                className="mt-4 inline-flex text-sm font-semibold text-[#1d5191] underline underline-offset-4 transition-colors hover:text-[#0d3d7c]"
               >
-                NDA Generator
+                Open NDA Tool
               </a>
-            </nav>
-          </header>
-
-          <div className="grid flex-1 gap-12 py-14 lg:grid-cols-[minmax(0,1.25fr)_minmax(18rem,28rem)] lg:items-center">
-            <div>
-              <p className="text-sm font-medium tracking-[0.22em] text-emerald-300 uppercase">Corporate Law</p>
-              <h1 className="mt-6 max-w-4xl text-5xl font-semibold tracking-tight text-white sm:text-6xl">
-                Business counsel built for momentum, not bottlenecks.
-              </h1>
-              <p className="mt-6 max-w-2xl text-lg leading-8 text-stone-300">
-                Levine LLP helps companies stay current, move decisively, and keep legal work organized without losing
-                clarity along the way.
-              </p>
-
-              <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-                <Link
-                  href="/services"
-                  className="inline-flex items-center justify-center rounded-full bg-emerald-300 px-6 py-3 text-sm font-semibold text-stone-950 transition-transform hover:-translate-y-0.5 hover:bg-emerald-200"
-                >
-                  Browse Services
-                </Link>
-                <a
-                  href="/corporate"
-                  className="inline-flex items-center justify-center rounded-full border border-white/15 px-6 py-3 text-sm font-semibold text-white transition-colors hover:border-white/30 hover:bg-white/5"
-                >
-                  Enter Corporate Portal
-                </a>
-                <a
-                  href="/nda"
-                  className="inline-flex items-center justify-center rounded-full border border-white/15 px-6 py-3 text-sm font-semibold text-white transition-colors hover:border-white/30 hover:bg-white/5"
-                >
-                  Launch NDA Generator
-                </a>
-              </div>
-
-              <ul className="mt-10 grid gap-3 text-sm text-stone-300">
-                {engagementPrinciples.map((item) => (
-                  <li
-                    key={item}
-                    className="flex items-start gap-3 rounded-2xl border border-white/8 bg-white/5 px-4 py-3"
-                  >
-                    <span className="mt-1 h-2.5 w-2.5 rounded-full bg-emerald-300" aria-hidden="true" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
             </div>
+          </div>
+        </div>
+      </section>
 
-            <aside className="rounded-[2rem] border border-white/10 bg-white/6 p-6 shadow-2xl shadow-black/20 backdrop-blur">
-              <p className="text-sm font-semibold tracking-[0.18em] text-emerald-300 uppercase">How We Help</p>
-              <div className="mt-6 grid gap-4">
-                {serviceHighlights.map((item) => (
-                  <section key={item.title} className="rounded-2xl border border-white/8 bg-stone-900/70 p-5">
-                    <h2 className="text-lg font-semibold text-white">{item.title}</h2>
-                    <p className="mt-2 text-sm leading-6 text-stone-300">{item.description}</p>
-                    <Link
-                      href={`/services/${item.slug}`}
-                      className="mt-4 inline-flex text-sm font-semibold text-emerald-200 underline underline-offset-4 hover:text-emerald-100"
-                    >
-                      View details
-                    </Link>
-                  </section>
-                ))}
+      {/* Section 5: Who We Work With */}
+      <section id="industries" className="bg-white py-20">
+        <div className="mx-auto max-w-6xl px-6">
+          <h2 className="text-2xl font-semibold text-stone-900">Who We Work With</h2>
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {clientTypes.map((item) => (
+              <div key={item.title} className="rounded border border-stone-200 p-6">
+                <h3 className="text-base font-semibold text-stone-900">{item.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-stone-500">{item.description}</p>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-              <div className="mt-6 rounded-2xl border border-white/10 bg-stone-900/70 p-5">
-                <p className="text-sm font-semibold text-stone-100">Corporate services</p>
-                <p className="mt-2 text-sm leading-6 text-stone-300">
-                  Browse fixed-fee and estimated-scope corporate services before signing in.
-                </p>
-                <Link
-                  href="/services"
-                  className="mt-4 inline-flex text-sm font-semibold text-emerald-200 underline underline-offset-4 hover:text-emerald-100"
-                >
-                  View service menu
-                </Link>
-              </div>
-
-              <div className="mt-6 rounded-2xl border border-emerald-300/20 bg-emerald-300/10 p-5">
-                <p className="text-sm font-semibold text-emerald-200">Existing client?</p>
-                <p className="mt-2 text-sm leading-6 text-stone-200">
-                  Open the secure portal to review updates, access shared materials, or send requests to the Levine LLP
-                  team.
-                </p>
-                <a
-                  href="/corporate"
-                  className="mt-4 inline-flex text-sm font-semibold text-emerald-200 underline underline-offset-4 hover:text-emerald-100"
-                >
-                  Go to secure sign-in
-                </a>
-              </div>
-            </aside>
+      {/* Section 6: Client Portal */}
+      <section id="insights" className="bg-stone-50 py-20">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="max-w-xl">
+            <h2 className="text-2xl font-semibold text-stone-900">Client Portal</h2>
+            <p className="mt-3 text-stone-500">
+              Access active matters, documents, and communications through the secure client workspace.
+            </p>
+            <a
+              href="/corporate"
+              className="mt-6 inline-flex items-center justify-center rounded border border-[#1d5191] px-6 py-3 text-sm font-semibold text-[#1d5191] transition-colors hover:bg-[#1d5191] hover:text-white"
+            >
+              Access Client Portal
+            </a>
           </div>
         </div>
       </section>
