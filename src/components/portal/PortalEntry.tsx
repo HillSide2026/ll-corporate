@@ -42,11 +42,11 @@ export function PortalEntry({ authError, previewAccessEnabled = false }: PortalE
   const authErrorMessage = getAuthErrorMessage(authError)
 
   return (
-    <main className="min-h-dvh bg-neutral-50 text-neutral-950">
+    <main className="min-h-dvh bg-stone-50 text-stone-900">
       <section className="mx-auto flex min-h-dvh max-w-5xl flex-col justify-center px-6 py-12">
-        <p className="text-sm font-medium text-emerald-700">Levine LLP</p>
+        <p className="text-sm font-medium text-brand-navy">Levine LLP</p>
         <h1 className="mt-3 max-w-3xl text-4xl font-semibold tracking-tight">Client Portal</h1>
-        <p className="mt-5 max-w-2xl text-base leading-7 text-neutral-700">
+        <p className="mt-5 max-w-2xl text-base leading-7 text-stone-500">
           Sign in securely to view your client portal, including open matters, shared documents, and requests for the
           Levine LLP team.
         </p>
@@ -68,41 +68,41 @@ export function PortalEntry({ authError, previewAccessEnabled = false }: PortalE
           <form action={previewPortalAccess} className="mt-3">
             <button
               type="submit"
-              className="rounded-md border border-neutral-300 bg-white px-5 py-3 text-sm font-semibold text-neutral-800 transition-colors hover:border-neutral-400"
+              className="rounded-md border border-stone-300 bg-white px-5 py-3 text-sm font-semibold text-stone-700 transition-colors hover:border-stone-400"
             >
               Preview portal
             </button>
-            <p className="mt-2 text-xs leading-5 text-neutral-500">
+            <p className="mt-2 text-xs leading-5 text-stone-400">
               Preview mode uses a mock session for review only. Do not use it for real client authentication.
             </p>
           </form>
         ) : null}
 
-        <div className="mt-6 rounded-md border border-neutral-200 bg-white px-4 py-4 text-sm text-neutral-700">
-          <p className="font-semibold text-neutral-950">Also available</p>
+        <div className="mt-6 rounded-md border border-stone-200 bg-white px-4 py-4 text-sm text-stone-500">
+          <p className="font-semibold text-stone-900">Also available</p>
           <p className="mt-2">
             Need a one-off NDA? Use the separate Levine LLP{" "}
             <a
-              href="/nda"
-              className="font-medium text-emerald-700 underline underline-offset-2 transition-colors hover:text-emerald-800"
+              href="/ndaesq"
+              className="font-medium text-brand-navy underline underline-offset-2 transition-colors hover:text-brand-navy-dark"
             >
-              NDA Generator
+              NDA Tool
             </a>
             .
           </p>
         </div>
 
-        <div className="mt-12 border-t border-neutral-200 pt-8">
-          <p className="text-sm font-semibold text-neutral-700">Everything you need. All in one secure place.</p>
+        <div className="mt-12 border-t border-stone-200 pt-8">
+          <p className="text-sm font-semibold text-stone-700">Everything you need. All in one secure place.</p>
           <ul className="mt-4 grid gap-3 sm:grid-cols-2">
             {portalHighlights.map((item) => (
               <li
                 key={item.title}
-                className="rounded-md border border-neutral-200 bg-white px-4 py-3 text-sm text-neutral-500"
+                className="rounded-md border border-stone-200 bg-white px-4 py-3 text-sm text-stone-500"
               >
-                <p className="font-semibold text-neutral-950">{item.title}</p>
+                <p className="font-semibold text-stone-900">{item.title}</p>
                 <p className="mt-2 leading-6">{item.description}</p>
-                <p className="mt-3 font-medium text-emerald-700">{item.cta}</p>
+                <p className="mt-3 font-medium text-brand-navy">{item.cta}</p>
               </li>
             ))}
           </ul>

@@ -1,6 +1,8 @@
 import Image from "next/image"
 import Link from "next/link"
 
+import { SiteFooter } from "src/components/SiteFooter"
+
 const serviceCategories = [
   {
     title: "Corporate Governance",
@@ -82,7 +84,7 @@ export default function HomePage() {
             </a>
             <a
               href="/corporate"
-              className="rounded border border-[#1d5191] px-4 py-2 font-medium text-[#1d5191] transition-colors hover:bg-[#1d5191] hover:text-white"
+              className="rounded border border-brand-navy px-4 py-2 font-medium text-brand-navy transition-colors hover:bg-brand-navy hover:text-white"
             >
               Client Portal
             </a>
@@ -93,7 +95,7 @@ export default function HomePage() {
       {/* Hero */}
       <section className="bg-white py-24">
         <div className="mx-auto max-w-6xl px-6">
-          <p className="text-xs font-semibold tracking-[0.2em] text-[#1d5191] uppercase">Levine LLP</p>
+          <p className="text-xs font-semibold tracking-[0.2em] text-brand-navy uppercase">Levine LLP</p>
           <h1 className="mt-6 max-w-3xl text-5xl font-semibold leading-tight tracking-tight text-stone-900 sm:text-6xl">
             Corporate, Contract, and Financial Services Counsel for Growing Businesses.
           </h1>
@@ -104,7 +106,7 @@ export default function HomePage() {
           <div className="mt-10 flex flex-wrap gap-4">
             <Link
               href="/services"
-              className="inline-flex items-center justify-center rounded bg-[#1d5191] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#0d3d7c]"
+              className="inline-flex items-center justify-center rounded bg-brand-navy px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-dark"
             >
               View Services
             </Link>
@@ -163,8 +165,8 @@ export default function HomePage() {
                 Prepare a standard NDA for early-stage discussions.
               </p>
               <a
-                href="/nda"
-                className="mt-4 inline-flex text-sm font-semibold text-[#1d5191] underline underline-offset-4 transition-colors hover:text-[#0d3d7c]"
+                href="/ndaesq"
+                className="mt-4 inline-flex text-sm font-semibold text-brand-navy underline underline-offset-4 transition-colors hover:text-brand-navy-dark"
               >
                 Open NDA Tool
               </a>
@@ -198,13 +200,15 @@ export default function HomePage() {
             </p>
             <a
               href="/corporate"
-              className="mt-6 inline-flex items-center justify-center rounded border border-[#1d5191] px-6 py-3 text-sm font-semibold text-[#1d5191] transition-colors hover:bg-[#1d5191] hover:text-white"
+              className="mt-6 inline-flex items-center justify-center rounded border border-brand-navy px-6 py-3 text-sm font-semibold text-brand-navy transition-colors hover:bg-brand-navy hover:text-white"
             >
               Access Client Portal
             </a>
           </div>
         </div>
       </section>
+
+      <SiteFooter />
     </main>
   )
 }

@@ -28,28 +28,28 @@ export function PortalShell({ previewMode = false, session }: PortalShellProps) 
   const displayName = session.identity.displayName ?? session.identity.email ?? "Signed-in client"
 
   return (
-    <main className="min-h-dvh bg-neutral-50 text-neutral-950">
+    <main className="min-h-dvh bg-stone-50 text-stone-900">
       {previewMode ? (
         <div role="status" className="bg-amber-50 px-6 py-3 text-sm font-medium text-amber-950">
           Preview mode: this portal is using a mock session for development review only.
         </div>
       ) : null}
-      <header className="border-b border-neutral-200 bg-white">
+      <header className="border-b border-stone-200 bg-white">
         <div className="mx-auto flex max-w-6xl flex-col gap-5 px-6 py-6 md:flex-row md:items-center md:justify-between">
           <div>
-            <p className="text-sm font-medium text-emerald-700">Levine LLP</p>
-            <h1 className="mt-1 text-3xl font-semibold">Client Portal</h1>
+            <p className="text-sm font-medium text-brand-navy">Levine LLP</p>
+            <h1 className="mt-1 text-3xl font-semibold text-stone-900">Client Portal</h1>
             {previewMode ? <p className="mt-2 text-sm font-medium text-amber-700">Preview mode</p> : null}
           </div>
-          <div className="flex flex-col gap-3 text-sm text-neutral-600 md:items-end">
+          <div className="flex flex-col gap-3 text-sm text-stone-500 md:items-end">
             <p>
-              Signed in as <span className="font-medium text-neutral-950">{displayName}</span>
+              Signed in as <span className="font-medium text-stone-900">{displayName}</span>
             </p>
             {session.identity.email ? <p>{session.identity.email}</p> : null}
             {previewMode ? (
               <a
                 href="/corporate"
-                className="rounded-md border border-neutral-300 bg-white px-3 py-2 font-medium text-neutral-800 transition-colors hover:border-neutral-400"
+                className="rounded-md border border-stone-300 bg-white px-3 py-2 font-medium text-stone-700 transition-colors hover:border-stone-400"
               >
                 Exit preview
               </a>
@@ -57,7 +57,7 @@ export function PortalShell({ previewMode = false, session }: PortalShellProps) 
               <form action={signOutFromPortal}>
                 <button
                   type="submit"
-                  className="rounded-md border border-neutral-300 bg-white px-3 py-2 font-medium text-neutral-800 transition-colors hover:border-neutral-400"
+                  className="rounded-md border border-stone-300 bg-white px-3 py-2 font-medium text-stone-700 transition-colors hover:border-stone-400"
                 >
                   Sign out
                 </button>
@@ -70,29 +70,29 @@ export function PortalShell({ previewMode = false, session }: PortalShellProps) 
       <div className="mx-auto grid max-w-6xl gap-8 px-6 py-10 lg:grid-cols-[240px_1fr]">
         <nav
           aria-label="Portal navigation"
-          className="border-b border-neutral-200 pb-5 lg:border-r lg:border-b-0 lg:pr-6"
+          className="border-b border-stone-200 pb-5 lg:border-r lg:border-b-0 lg:pr-6"
         >
-          <p className="text-xs font-semibold text-neutral-500 uppercase">Portal</p>
+          <p className="text-xs font-semibold text-stone-400 uppercase">Portal</p>
           <ul className="mt-4 space-y-2">
             {portalAreas.map((area) => (
               <li key={area.title}>
-                <span className="block rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm text-neutral-500">
+                <span className="block rounded-md border border-stone-200 bg-white px-3 py-2 text-sm text-stone-400">
                   {area.title}
                 </span>
               </li>
             ))}
           </ul>
           <div className="mt-6">
-            <p className="text-xs font-semibold text-neutral-500 uppercase">Sibling apps</p>
+            <p className="text-xs font-semibold text-stone-400 uppercase">Tools</p>
             <ul className="mt-4 space-y-2">
               <li>
                 <a
-                  href="/nda"
-                  className="block rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-900 transition-colors hover:bg-emerald-100"
+                  href="/ndaesq"
+                  className="block rounded-md border border-stone-200 bg-white px-3 py-2 text-sm font-medium text-brand-navy transition-colors hover:border-brand-navy"
                 >
-                  NDA Generator
+                  NDA Tool
                 </a>
-                <p className="mt-2 text-xs leading-5 text-neutral-500">Separate service mounted at /nda.</p>
+                <p className="mt-2 text-xs leading-5 text-stone-400">Separate service mounted at /ndaesq.</p>
               </li>
             </ul>
           </div>
@@ -100,11 +100,11 @@ export function PortalShell({ previewMode = false, session }: PortalShellProps) 
 
         <section aria-labelledby="portal-home-heading" className="space-y-8">
           <div>
-            <p className="text-sm font-medium text-emerald-700">Welcome back</p>
-            <h2 id="portal-home-heading" className="mt-2 text-2xl font-semibold">
+            <p className="text-sm font-medium text-brand-navy">Welcome back</p>
+            <h2 id="portal-home-heading" className="mt-2 text-2xl font-semibold text-stone-900">
               Good to see you, {displayName}
             </h2>
-            <p className="mt-4 max-w-3xl text-base leading-7 text-neutral-700">
+            <p className="mt-4 max-w-3xl text-base leading-7 text-stone-500">
               Your portal home will bring together client-safe matter updates, document access, and requests as Levine
               LLP enables each service.
             </p>
@@ -112,15 +112,15 @@ export function PortalShell({ previewMode = false, session }: PortalShellProps) 
 
           <div className="grid gap-4 md:grid-cols-3">
             {portalAreas.map((area) => (
-              <article key={area.title} className="rounded-md border border-neutral-200 bg-white px-4 py-4">
-                <h3 className="text-base font-semibold text-neutral-950">{area.title}</h3>
-                <p className="mt-3 text-sm leading-6 text-neutral-700">{area.description}</p>
-                <p className="mt-4 text-sm font-medium text-emerald-700">{area.nextAction}</p>
+              <article key={area.title} className="rounded-md border border-stone-200 bg-white px-4 py-4">
+                <h3 className="text-base font-semibold text-stone-900">{area.title}</h3>
+                <p className="mt-3 text-sm leading-6 text-stone-500">{area.description}</p>
+                <p className="mt-4 text-sm font-medium text-brand-navy">{area.nextAction}</p>
               </article>
             ))}
           </div>
 
-          <div className="rounded-md border border-neutral-200 bg-white px-4 py-4 text-sm leading-6 text-neutral-700">
+          <div className="rounded-md border border-stone-200 bg-white px-4 py-4 text-sm leading-6 text-stone-500">
             Matter, task, and workflow state remains managed by LL-task-tracker. This portal only displays client-safe
             information after backend contracts are available.
           </div>
