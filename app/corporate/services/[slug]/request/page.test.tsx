@@ -31,6 +31,10 @@ vi.mock("src/lib/auth/config", () => ({
   isPreviewPortalAccessEnabled: vi.fn(() => false),
 }))
 
+vi.mock("src/lib/services/actions", () => ({
+  submitServiceRequest: vi.fn(),
+}))
+
 const session: PortalSession = {
   identity: {
     subject: "user-123",
@@ -61,20 +65,21 @@ describe("ServiceRequestPage", () => {
     expect(redirect).toHaveBeenCalledWith("/corporate")
   })
 
-  it("renders the authenticated request shell without submitting anything", async () => {
+  it("renders the authenticated request form for the selected service", async () => {
     const page = await ServiceRequestPage({ params: Promise.resolve({ slug: "incorporation" }) })
 
     render(page)
 
     expect(screen.getByRole("heading", { name: "Incorporation" })).toBeInTheDocument()
-    expect(screen.getByRole("heading", { name: "Limited-scope acknowledgement" })).toBeInTheDocument()
-    expect(screen.getByText(/Submitting a request does not mean work has started/)).toBeInTheDocument()
-    expect(screen.getByRole("heading", { name: "Service inputs" })).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Submit request not enabled yet" })).toBeDisabled()
-    expect(screen.getByText(/LL-task-tracker remains the system of record/)).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "Provide required information" })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "Acknowledgement" })).toBeInTheDocument()
+    expect(screen.getByText(/Submitting this request does not mean work has started/)).toBeInTheDocument()
+    expect(screen.getByRole("checkbox")).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Start incorporation request" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Start incorporation request" })).not.toBeDisabled()
   })
 
-  it("renders the request shell with a preview session when preview access is enabled", async () => {
+  it("renders the request form with a preview session when preview access is enabled", async () => {
     vi.mocked(getPortalSession).mockResolvedValue(null)
     vi.mocked(isPreviewPortalAccessEnabled).mockReturnValue(true)
 
@@ -83,7 +88,7 @@ describe("ServiceRequestPage", () => {
 
     expect(getPreviewPortalSession).toHaveBeenCalled()
     expect(screen.getByRole("heading", { name: "Incorporation" })).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Submit request not enabled yet" })).toBeDisabled()
+    expect(screen.getByRole("button", { name: "Start incorporation request" })).toBeInTheDocument()
   })
 
   it("shows not found for unknown service slugs", async () => {

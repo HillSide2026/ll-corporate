@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { Suspense } from "react"
 
 import { signOutFromPortal } from "src/lib/auth/actions"
@@ -68,7 +69,7 @@ export function PortalShell({ previewMode = false, session, accessToken = null }
           aria-label="Portal navigation"
           className="border-b border-stone-200 pb-5 lg:border-r lg:border-b-0 lg:pr-6"
         >
-          <p className="text-xs font-semibold text-stone-400 uppercase">Portal</p>
+          <p className="text-xs font-semibold uppercase text-stone-400">Portal</p>
           <ul className="mt-4 space-y-2">
             <li>
               <span className="block rounded-md border border-brand-navy/20 bg-brand-navy/5 px-3 py-2 text-sm font-medium text-brand-navy">
@@ -76,18 +77,24 @@ export function PortalShell({ previewMode = false, session, accessToken = null }
               </span>
             </li>
             <li>
-              <span className="block rounded-md border border-stone-200 bg-white px-3 py-2 text-sm text-stone-400">
+              <Link
+                href="/corporate/app/documents"
+                className="block rounded-md border border-stone-200 bg-white px-3 py-2 text-sm text-stone-600 transition-colors hover:border-stone-300 hover:text-stone-900"
+              >
                 Documents
-              </span>
+              </Link>
             </li>
             <li>
-              <span className="block rounded-md border border-stone-200 bg-white px-3 py-2 text-sm text-stone-400">
+              <Link
+                href="/corporate/app/requests"
+                className="block rounded-md border border-stone-200 bg-white px-3 py-2 text-sm text-stone-600 transition-colors hover:border-stone-300 hover:text-stone-900"
+              >
                 Requests
-              </span>
+              </Link>
             </li>
           </ul>
           <div className="mt-6">
-            <p className="text-xs font-semibold text-stone-400 uppercase">Tools</p>
+            <p className="text-xs font-semibold uppercase text-stone-400">Tools</p>
             <ul className="mt-4 space-y-2">
               <li>
                 <a
@@ -102,7 +109,7 @@ export function PortalShell({ previewMode = false, session, accessToken = null }
           </div>
         </nav>
 
-        <section aria-labelledby="portal-home-heading" className="space-y-8">
+        <section aria-labelledby="portal-home-heading" className="space-y-10">
           <div>
             <p className="text-sm font-medium text-brand-navy">Welcome back</p>
             <h2 id="portal-home-heading" className="mt-2 text-2xl font-semibold text-stone-900">
@@ -110,7 +117,7 @@ export function PortalShell({ previewMode = false, session, accessToken = null }
             </h2>
           </div>
 
-          {/* Matters — accessToken may be null in preview mode; MatterList falls back to mock data */}
+          {/* Matters */}
           <div>
             <h3 className="text-base font-semibold text-stone-900">Matters</h3>
             <div className="mt-4">
@@ -120,20 +127,32 @@ export function PortalShell({ previewMode = false, session, accessToken = null }
             </div>
           </div>
 
-          {/* Documents — placeholder */}
+          {/* Documents */}
           <div>
             <h3 className="text-base font-semibold text-stone-900">Documents</h3>
-            <p className="mt-3 text-sm leading-6 text-stone-500">
-              Secure document access will appear here once document contracts are connected.
+            <p className="mt-2 text-sm leading-6 text-stone-500">
+              Access documents shared by your counsel — agreements, filings, and supporting materials.
             </p>
+            <Link
+              href="/corporate/app/documents"
+              className="mt-3 inline-flex text-sm font-semibold text-brand-navy underline-offset-2 hover:underline"
+            >
+              View documents →
+            </Link>
           </div>
 
-          {/* Requests — placeholder */}
+          {/* Requests */}
           <div>
             <h3 className="text-base font-semibold text-stone-900">Requests</h3>
-            <p className="mt-3 text-sm leading-6 text-stone-500">
-              Service requests and status updates will appear here once request intake is enabled.
+            <p className="mt-2 text-sm leading-6 text-stone-500">
+              Submit limited-scope service requests or track the status of existing ones.
             </p>
+            <Link
+              href="/corporate/app/requests"
+              className="mt-3 inline-flex text-sm font-semibold text-brand-navy underline-offset-2 hover:underline"
+            >
+              View requests →
+            </Link>
           </div>
         </section>
       </div>

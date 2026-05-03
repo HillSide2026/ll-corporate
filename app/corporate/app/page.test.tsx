@@ -14,6 +14,7 @@ vi.mock("next/navigation", () => ({
 
 vi.mock("src/lib/auth/session", () => ({
   getPortalSession: vi.fn(),
+  getAccessToken: vi.fn().mockResolvedValue(null),
 }))
 
 vi.mock("src/components/portal/PortalShell", () => ({

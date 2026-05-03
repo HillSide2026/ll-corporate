@@ -24,11 +24,12 @@ describe("PortalShell", () => {
     expect(screen.getByText("Client User")).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Sign out" })).toBeInTheDocument()
     expect(screen.queryByRole("link", { name: "Exit preview" })).not.toBeInTheDocument()
-    expect(screen.getByRole("link", { name: "NDA Generator" })).toHaveAttribute("href", "/nda")
+    expect(screen.getByRole("link", { name: "NDA Tool" })).toHaveAttribute("href", "/ndaesq")
     expect(screen.getByRole("heading", { name: "Matters" })).toBeInTheDocument()
     expect(screen.getByRole("heading", { name: "Documents" })).toBeInTheDocument()
     expect(screen.getByRole("heading", { name: "Requests" })).toBeInTheDocument()
-    expect(screen.getByText(/Matter, task, and workflow state remains managed by LL-task-tracker/)).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "View documents →" })).toHaveAttribute("href", "/corporate/app/documents")
+    expect(screen.getByRole("link", { name: "View requests →" })).toHaveAttribute("href", "/corporate/app/requests")
   })
 
   it("clearly indicates preview mode without showing the real sign-out action", () => {

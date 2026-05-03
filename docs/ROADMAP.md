@@ -2,9 +2,9 @@
 
 ## Current state
 
-The client portal (`/corporate/app`) is structurally complete and accessible. Authentication is wired through NextAuth v5 + Keycloak but the Keycloak instance has not been configured for production. Until it is, the portal runs in **preview mode** — a mock session is injected via `src/lib/auth/preview.ts` and matter data is served from hardcoded fixtures in `src/lib/portal/mockMatters.ts`.
+The client portal (`/corporate/app`) is fully functional for the Phase 1 MVP scope. Authentication is wired through NextAuth v5 + Keycloak but the Keycloak instance has not been configured for production. Until it is, the portal runs in **preview mode** — a mock session is injected and data is served from hardcoded fixtures.
 
-The portal renders real UI for all three core sections (Matters, Documents, Requests) but only Matters has any data plumbing behind it.
+All three core sections (Matters, Documents, Requests) are now live with real UI and data plumbing. Service request submission is wired end-to-end via server action and in-memory store (TEMPORARY — see removal checklist below).
 
 ---
 
@@ -31,26 +31,33 @@ The portal renders real UI for all three core sections (Matters, Documents, Requ
 
 ---
 
-## Pass 2 — Service request intake (next)
+## Pass 2 — Service request intake, documents, and requests (complete)
 
-**Goal**: Allow clients to submit a service request from the portal and see its status.
+**Goal**: Allow clients to submit service requests, view documents, and track request status.
 
-**Scope**:
-- Build or connect a request form in `app/corporate/app/requests/` (shell exists at `app/corporate/services/[slug]/request/page.tsx`)
-- Wire the form submission to LL-task-tracker or a separate intake endpoint
-- Surface submitted requests in the "Requests" section of `PortalShell`
-- Add request status tracking (mirrors the matter state/event log pattern from Pass 1)
+**Completed 2026-05-03.**
 
-**Dependencies**:
-- LL-task-tracker must expose a task/request creation endpoint
-- Keycloak token must be available to authenticate the submission
-- Service contract for request payloads (analogous to `CaseInstance`) must be defined
+**Files created**:
+- `src/lib/portal/mockDocuments.ts` — TEMPORARY document fixtures (same pattern as `mockMatters.ts`)
+- `src/lib/portal/documentSource.ts` — TEMPORARY document fetch abstraction with mock fallback
+- `src/lib/portal/requestStore.ts` — TEMPORARY in-memory store for submitted intake contracts
+- `src/lib/services/actions.ts` — `submitServiceRequest` server action; builds `IntakeRequestContract`, stores it, redirects to requests page
+- `app/corporate/app/documents/page.tsx` — document list: filename, matter link, date, download
+- `app/corporate/app/requests/page.tsx` — submitted request list with status badges + service catalog grid
 
-**Pre-existing work**: `app/corporate/services/[slug]/request/page.tsx` is a static shell with a non-functional form. The contract types for service requests may need to be extended in `src/lib/contracts.ts`.
+**Files modified**:
+- `app/corporate/services/[slug]/request/page.tsx` — replaced disabled stub with real form: `requiredInputs` as labelled textareas, acknowledgement checkbox, live submit button using `service.ctaLabel`
+- `src/components/portal/PortalShell.tsx` — Documents and Requests sidebar items are now `<Link>` elements; home sections replaced with descriptions + "View →" links
+
+**Removal checklist** (once real document API and request backend are available):
+1. Delete `src/lib/portal/mockDocuments.ts` and `documentSource.ts`; replace with real API call in `documents/page.tsx`
+2. Delete `src/lib/portal/requestStore.ts`; replace `addRequest` / `getRequests` calls in `actions.ts` and `requests/page.tsx` with real DB/API calls
+3. Remove `isMock` handling from `documents/page.tsx`
+4. Remove the `?submitted=1` query-param success banner if the requests page fetches live status
 
 ---
 
-## Pass 3 — Production auth + Keycloak configuration (parallel with Pass 2)
+## Pass 3 — Production auth + Keycloak configuration (next)
 
 **Goal**: Replace preview/mock auth with a live Keycloak realm configured for client access.
 
@@ -68,11 +75,14 @@ The portal renders real UI for all three core sections (Matters, Documents, Requ
 
 ---
 
-## Pass 4 — Document access (future)
+## Pass 4 — Replace temporary data stores with real backends (next)
 
-**Goal**: Surface client documents securely through the portal.
+**Goal**: Replace the three TEMPORARY data layers added in Pass 2 with real API-backed implementations.
 
-**Scope**: TBD. Depends on a document storage and access-control system being connected to LL-task-tracker or a separate service.
+**Scope**:
+1. **Documents**: Connect `documentSource.ts` to a real document storage endpoint (S3/R2 + metadata API or task tracker extension). Replace mock with live fetch; remove `isMock` flag.
+2. **Request store**: Replace `requestStore.ts` in-memory Map with a real database (Postgres, PlanetScale, Airtable, or task tracker intake endpoint). Wire `submitServiceRequest` to POST to the real endpoint instead of `addRequest()`. Wire `requests/page.tsx` to query live records.
+3. **Request → Matter linkage**: Once the task tracker creates a `CaseInstance` per intake, filter `listCases()` by matter type in the requests page instead of querying a separate store.
 
 ---
 
@@ -83,7 +93,10 @@ The portal renders real UI for all three core sections (Matters, Documents, Requ
 | Framework | Next.js 15, App Router | All portal pages are server components |
 | Auth | NextAuth v5 + Keycloak OIDC | Beta — see risk note above |
 | API adapter | `src/lib/api/taskTracker.ts` | Zod-validated; `listCases`, `getCase`, `listTasks`, `transitionCase` |
-| Contracts | `src/lib/contracts.ts` | `CaseInstance` v1.1.0; all fields optional |
-| Mock fallback | `src/lib/portal/matterSource.ts` | Remove in Pass 1 cleanup |
+| Contracts | `src/lib/contracts/` | `CaseInstance` v1.1.0; intake contract in `intake.ts` |
+| Mock fallback — matters | `src/lib/portal/matterSource.ts` | TEMPORARY; remove when task tracker is live |
+| Mock fallback — documents | `src/lib/portal/documentSource.ts` | TEMPORARY; remove when document API is live |
+| Request store | `src/lib/portal/requestStore.ts` | TEMPORARY in-memory; replace with real DB |
+| Service action | `src/lib/services/actions.ts` | `submitServiceRequest` server action |
 | Environment | `env.mjs` via `@t3-oss/env-nextjs` | `LL_TASK_TRACKER_API_BASE_URL` is the live-API gate |
 | Deployment | Vercel | NDA Tool proxied from `/ndaesq` via rewrites in `vercel.json` |
