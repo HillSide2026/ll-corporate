@@ -87,7 +87,7 @@ export default function ServicesPage() {
       <header className="border-b border-stone-200 bg-white">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
           <Link href="/">
-            <Image src="/levine-llp-logo.svg" alt="Levine LLP" width={120} height={48} className="h-10 w-auto" />
+            <Image src="/logos/levine-law-wordmark-navy-transparent.png" alt="Levine Law" width={1080} height={600} className="h-10 w-auto" />
           </Link>
           <nav className="flex items-center gap-6 text-sm">
             <Link href="/services" className="font-medium text-brand-navy">
