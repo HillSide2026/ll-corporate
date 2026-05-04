@@ -133,6 +133,22 @@ export default async function ServiceRequestPage({ params }: ServiceRequestPageP
             </div>
           </div>
 
+          {/* Optional attachment */}
+          <div className="mt-5 rounded-md border border-stone-200 bg-white px-5 py-5">
+            <h2 className="text-sm font-semibold text-stone-900">Supporting document</h2>
+            <p className="mt-2 text-sm leading-6 text-stone-500">
+              Optionally attach a document relevant to this request. PDF, DOCX, or image — 10 MB max.
+            </p>
+            <div className="mt-4">
+              <input
+                type="file"
+                name="attachment"
+                accept=".pdf,.docx,image/*"
+                className="block text-sm text-stone-600 file:mr-3 file:rounded file:border file:border-stone-300 file:bg-white file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-stone-700 file:transition-colors file:hover:bg-stone-50"
+              />
+            </div>
+          </div>
+
           {/* Acknowledgement + submit */}
           <div className="mt-5 rounded-md border border-stone-200 bg-white px-5 py-5">
             <h2 className="text-sm font-semibold text-stone-900">Acknowledgement</h2>

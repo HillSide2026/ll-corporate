@@ -45,7 +45,14 @@ export async function submitServiceRequest(formData: FormData) {
     createdAt: now,
   })
 
-  addRequest(contract)
+  // Capture optional file attachment metadata (bytes are not persisted — TEMPORARY).
+  const file = formData.get("attachment")
+  const attachment =
+    file instanceof File && file.name && file.size > 0
+      ? { filename: file.name, addedAt: now }
+      : undefined
 
-  redirect("/corporate/app/requests?submitted=1")
+  const stored = addRequest(contract, attachment)
+
+  redirect(`/corporate/app/requests/${stored.id}?submitted=1`)
 }

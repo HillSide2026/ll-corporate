@@ -254,6 +254,12 @@ export default function HomePage() {
               >
                 Explore Counsel Models
               </Link>
+              <Link
+                href="/corporate-health-check"
+                className="inline-flex items-center justify-center rounded border border-stone-300 px-6 py-3 text-sm font-semibold text-stone-700 transition-colors hover:border-stone-400 hover:bg-stone-50"
+              >
+                Corporate Health Check
+              </Link>
               <a
                 href="/corporate"
                 className="inline-flex items-center justify-center rounded border border-stone-300 px-6 py-3 text-sm font-semibold text-stone-700 transition-colors hover:border-stone-400 hover:bg-stone-50"

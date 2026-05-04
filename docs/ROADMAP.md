@@ -2,9 +2,9 @@
 
 ## Current state
 
-The client portal (`/corporate/app`) is fully functional for the Phase 1 MVP scope. Authentication is wired through NextAuth v5 + Keycloak but the Keycloak instance has not been configured for production. Until it is, the portal runs in **preview mode** — a mock session is injected and data is served from hardcoded fixtures.
+Phase 1, Phase 2, and Phase 3 are complete. The portal has full workflow depth: matter updates from counsel, client document upload, request detail views, file attachments on service requests, matter filtering, client-initiated matter requests, a scope summary page, and a light lawyer-facing admin surface. All TEMPORARY data stores remain in place until real backends are wired (Pass 4).
 
-All three core sections (Matters, Documents, Requests) are now live with real UI and data plumbing. Service request submission is wired end-to-end via server action and in-memory store (TEMPORARY — see removal checklist below).
+Authentication is wired through NextAuth v5 + Keycloak but the Keycloak instance has not been configured for production. Until it is, the portal runs in **preview mode** — a mock session is injected and data is served from hardcoded fixtures. The admin surface uses a separate `PORTAL_ADMIN_TOKEN` env var + httpOnly cookie, independent of Keycloak.
 
 ---
 
@@ -57,6 +57,80 @@ All three core sections (Matters, Documents, Requests) are now live with real UI
 
 ---
 
+## Pass 2b — Workflow depth / Phase 2 (complete)
+
+**Goal**: Make the portal the primary communication surface for ongoing fractional counsel.
+
+**Completed 2026-05-03.**
+
+**Files created**:
+- `src/lib/portal/matterUpdateStore.ts` — TEMPORARY in-memory store for `MatterUpdate`
+- `src/lib/portal/mockMatterUpdates.ts` — mock updates for preview mode
+- `src/lib/portal/matterUpdateSource.ts` — live/mock abstraction (same pattern as `matterSource.ts`)
+- `src/lib/portal/uploadedDocumentStore.ts` — TEMPORARY in-memory store for client-uploaded document metadata
+- `src/lib/portal/uploadActions.ts` — `uploadMatterDocument` server action; validates file, stores metadata, redirects
+- `app/corporate/app/requests/[id]/page.tsx` — request detail: service, inputs, scope, pricing, attachment, acknowledgement
+
+**Files modified**:
+- `app/corporate/app/matters/[key]/page.tsx` — added "Updates from counsel" feed + document upload form
+- `app/corporate/app/documents/page.tsx` — merges lawyer-uploaded and client-uploaded documents; "Uploaded by you" badge
+- `app/corporate/app/requests/page.tsx` — each request row is now a link to its detail page; shows attachment filename
+- `app/corporate/services/[slug]/request/page.tsx` — optional file attachment field added before acknowledgement
+- `src/lib/portal/requestStore.ts` — added `attachment` field to `StoredRequest`; added `getRequestById`
+- `src/lib/services/actions.ts` — captures file metadata from `attachment` field; redirects to detail page
+- `src/components/portal/PortalShell.tsx` — state filter tabs (All / Active / Pending / Closed) + text search form above matter list
+- `src/components/portal/MatterList.tsx` — accepts `filterState` + `filterSearch`; applies client-side filtering
+- `app/corporate/app/page.tsx` — accepts `searchParams`; extracts `state` + `search` and passes to PortalShell
+
+**Deferred** (requires infrastructure not yet configured):
+- Email confirmation to client on request submission — needs email provider (Resend, SendGrid, etc.)
+- Email notification to firm on new request — same
+- Real S3/R2 file storage — file bytes are discarded in TEMPORARY upload store; only metadata persists
+
+**Removal checklist** (once real backends are available):
+1. Replace `matterUpdateStore.ts` + `mockMatterUpdates.ts` + `matterUpdateSource.ts` with real API calls once the lawyer admin surface posts updates
+2. Replace `uploadedDocumentStore.ts` with S3/R2 upload in `uploadActions.ts`; store real `fileUrl`
+3. Add email provider; call it from `submitServiceRequest` and `uploadMatterDocument`
+
+---
+
+## Pass 2c — Intelligence and differentiation / Phase 3 (complete)
+
+**Goal**: Make the portal a competitive differentiator — client-initiated matter requests, scope summary, and a lawyer-facing admin surface.
+
+**Completed 2026-05-03.**
+
+**Files created**:
+- `src/lib/portal/matterRequestStore.ts` — TEMPORARY in-memory store for `MatterRequest` (category, description, status, clientIdentity)
+- `src/lib/portal/counselProfileSource.ts` — mock `CounselProfile` (model, startedAt, lawyerName, description, scopeItems); same live/mock abstraction pattern
+- `src/lib/portal/adminDocumentStore.ts` — TEMPORARY in-memory store for documents uploaded via the admin surface
+- `src/lib/portal/adminActions.ts` — server actions `postMatterUpdate` and `adminUploadDocument`; both gate on `getAdminSession()`
+- `src/lib/auth/adminAuth.ts` — admin session using `ll_admin_token` httpOnly cookie vs `PORTAL_ADMIN_TOKEN` env var; preview mode when token not set
+- `app/corporate/admin/login/page.tsx` + `app/corporate/admin/login/actions.ts` — password form; validates token, sets cookie, redirects
+- `app/corporate/admin/page.tsx` — admin home: all matters + all matter requests
+- `app/corporate/admin/matters/[key]/page.tsx` — admin matter detail: post update form + upload document form
+- `app/corporate/app/requests/new/page.tsx` — client-initiated matter request form (category, description, optional attachment, acknowledgement)
+- `app/corporate/app/requests/new/actions.ts` — `submitMatterRequest` server action; validates and stores, redirects to requests page
+- `app/corporate/app/scope/page.tsx` — scope summary: counsel model, start date, lawyer name, scope items, active/pending matters, CTA
+
+**Files modified**:
+- `app/corporate/app/requests/page.tsx` — rewritten to show matter requests + service requests in separate sections; "Open a matter" nav button
+- `app/corporate/app/documents/page.tsx` — merges admin-uploaded docs alongside lawyer and client docs; no "Uploaded by you" badge on admin docs
+- `src/components/portal/PortalShell.tsx` — Scope sidebar link added
+- `env.mjs` — `PORTAL_ADMIN_TOKEN: optionalString` added to server schema
+
+**Deferred**:
+- Automated status nudges (email provider not yet configured)
+- Matter request → Keycloak role–based access (admin auth is PORTAL_ADMIN_TOKEN placeholder)
+
+**Removal checklist** (once Keycloak roles + real backends are available):
+1. Replace `matterRequestStore.ts` + `counselProfileSource.ts` with real API calls
+2. Replace `adminDocumentStore.ts` with real S3/R2 storage
+3. Replace `adminAuth.ts` PORTAL_ADMIN_TOKEN check with Keycloak lawyer role check
+4. Remove admin login page once SSO covers lawyer access
+
+---
+
 ## Pass 3 — Production auth + Keycloak configuration (next)
 
 **Goal**: Replace preview/mock auth with a live Keycloak realm configured for client access.
@@ -97,6 +171,9 @@ All three core sections (Matters, Documents, Requests) are now live with real UI
 | Mock fallback — matters | `src/lib/portal/matterSource.ts` | TEMPORARY; remove when task tracker is live |
 | Mock fallback — documents | `src/lib/portal/documentSource.ts` | TEMPORARY; remove when document API is live |
 | Request store | `src/lib/portal/requestStore.ts` | TEMPORARY in-memory; replace with real DB |
+| Matter update store | `src/lib/portal/matterUpdateStore.ts` | TEMPORARY in-memory; replace when lawyer admin is live |
+| Upload store | `src/lib/portal/uploadedDocumentStore.ts` | TEMPORARY metadata-only; replace with S3/R2 |
 | Service action | `src/lib/services/actions.ts` | `submitServiceRequest` server action |
+| Upload action | `src/lib/portal/uploadActions.ts` | `uploadMatterDocument` server action |
 | Environment | `env.mjs` via `@t3-oss/env-nextjs` | `LL_TASK_TRACKER_API_BASE_URL` is the live-API gate |
 | Deployment | Vercel | NDA Tool proxied from `/ndaesq` via rewrites in `vercel.json` |

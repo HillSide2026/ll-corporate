@@ -9,6 +9,8 @@ type PortalShellProps = {
   session: PortalSession
   previewMode?: boolean
   accessToken?: string | null
+  filterState?: string
+  filterSearch?: string
 }
 
 function MatterListSkeleton() {
@@ -21,7 +23,13 @@ function MatterListSkeleton() {
   )
 }
 
-export function PortalShell({ previewMode = false, session, accessToken = null }: PortalShellProps) {
+export function PortalShell({
+  previewMode = false,
+  session,
+  accessToken = null,
+  filterState,
+  filterSearch,
+}: PortalShellProps) {
   const displayName = session.identity.displayName ?? session.identity.email ?? "Signed-in client"
 
   return (
@@ -92,6 +100,14 @@ export function PortalShell({ previewMode = false, session, accessToken = null }
                 Requests
               </Link>
             </li>
+            <li>
+              <Link
+                href="/corporate/app/scope"
+                className="block rounded-md border border-stone-200 bg-white px-3 py-2 text-sm text-stone-600 transition-colors hover:border-stone-300 hover:text-stone-900"
+              >
+                Scope
+              </Link>
+            </li>
           </ul>
           <div className="mt-6">
             <p className="text-xs font-semibold uppercase text-stone-400">Tools</p>
@@ -120,9 +136,52 @@ export function PortalShell({ previewMode = false, session, accessToken = null }
           {/* Matters */}
           <div>
             <h3 className="text-base font-semibold text-stone-900">Matters</h3>
+
+            {/* State filter tabs */}
+            <div className="mt-3 flex flex-wrap gap-2 text-xs">
+              {(["", "Active", "Pending", "Closed"] as const).map((state) => {
+                const label = state || "All"
+                const href = state ? `/corporate/app?state=${state}${filterSearch ? `&search=${encodeURIComponent(filterSearch)}` : ""}` : `/corporate/app${filterSearch ? `?search=${encodeURIComponent(filterSearch)}` : ""}`
+                const isActive = (filterState ?? "") === state
+                return (
+                  <a
+                    key={label}
+                    href={href}
+                    className={`rounded px-2.5 py-1 font-medium transition-colors ${
+                      isActive
+                        ? "bg-brand-navy text-white"
+                        : "bg-stone-100 text-stone-500 hover:bg-stone-200 hover:text-stone-700"
+                    }`}
+                  >
+                    {label}
+                  </a>
+                )
+              })}
+            </div>
+
+            {/* Text search */}
+            <form method="GET" action="/corporate/app" className="mt-3">
+              {filterState ? <input type="hidden" name="state" value={filterState} /> : null}
+              <div className="flex gap-2">
+                <input
+                  type="search"
+                  name="search"
+                  defaultValue={filterSearch ?? ""}
+                  placeholder="Search matters…"
+                  className="w-full max-w-xs rounded border border-stone-200 bg-white px-3 py-1.5 text-sm text-stone-900 placeholder:text-stone-400 focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
+                />
+                <button
+                  type="submit"
+                  className="rounded border border-stone-300 bg-white px-3 py-1.5 text-sm font-medium text-stone-600 transition-colors hover:border-stone-400"
+                >
+                  Search
+                </button>
+              </div>
+            </form>
+
             <div className="mt-4">
               <Suspense fallback={<MatterListSkeleton />}>
-                <MatterList accessToken={accessToken} />
+                <MatterList accessToken={accessToken} filterState={filterState} filterSearch={filterSearch} />
               </Suspense>
             </div>
           </div>

@@ -7,7 +7,7 @@
 
 ## Current State (as of 2026-05-03)
 
-Phase 1 MVP is complete. The portal is usable for a real fractional counsel client.
+Phase 1, Phase 2, and Phase 3 are complete. The portal is usable for a real fractional counsel client and includes a light lawyer-facing admin surface.
 
 ### Live and functional
 
@@ -29,14 +29,26 @@ Phase 1 MVP is complete. The portal is usable for a real fractional counsel clie
 - `src/lib/portal/requestStore.ts` — in-memory Map for submitted requests; resets on server restart; replace with real database or task tracker intake endpoint
 - `src/lib/portal/mockMatters.ts` + `matterSource.ts` — mock matter data; replace when `LL_TASK_TRACKER_API_BASE_URL` is live
 
-### Not started (Phase 2+)
+### Phase 2 — complete
 
-- Document upload (client-side)
-- Matter updates / counsel notes visible to client
-- Automated status email notifications
-- Messaging or client-initiated updates
-- Client-initiated matter requests (beyond fixed-fee services)
-- Lawyer-facing admin surface inside the portal
+- Document upload (client-side) ✓
+- Matter updates / counsel notes visible to client ✓
+- Matter filtering (state tabs + text search) ✓
+- Service request detail view + file attachment ✓
+
+### Phase 3 — complete
+
+- Client-initiated matter requests (`/corporate/app/requests/new`) ✓
+- Recurring scope summary (`/corporate/app/scope`) ✓
+- Light admin view (`/corporate/admin`, `/corporate/admin/matters/[key]`) ✓
+- Admin document upload to matter ✓
+
+### Not started (Phase 4+)
+
+- Automated status email notifications (requires email provider)
+- In-app messaging — intentionally deferred (see "What to Avoid")
+- Real S3/R2 file storage (file bytes currently discarded)
+- Replace all TEMPORARY in-memory stores with real backends
 
 ---
 
@@ -124,11 +136,11 @@ No dashboard. The sidebar is the navigation. Clients land on Matters. This is co
 
 ---
 
-## Phase 2 — Workflow Depth
+## Phase 2 — Workflow Depth ✓ Complete
 
 **Goal:** Make the portal the primary communication and coordination surface for ongoing fractional counsel.
 
-**Estimate:** 4–8 weeks after Phase 1 is stable.
+**Completed:** 2026-05-03.
 
 ---
 
@@ -182,11 +194,11 @@ The API already supports state filtering via `listCases()` params.
 
 ---
 
-## Phase 3 — Intelligence and Differentiation
+## Phase 3 — Intelligence and Differentiation ✓ Complete
 
 **Goal:** Make this portal a genuine competitive differentiator — a law firm portal that works like a product.
 
-**Estimate:** 2–3 months after Phase 2. Do not start until Phase 2 is solid.
+**Completed:** 2026-05-03.
 
 ---
 
@@ -418,7 +430,8 @@ Do not build a multi-step client onboarding wizard in Phase 1 or 2. A lawyer cre
 
 In priority order:
 
-1. **Wire the service request form** — render `requiredInputs` as form fields, call `createIntakeRequestContract()`, POST to an endpoint or email the payload. All scaffolding is done.
-2. **Remove the disabled submit button** from `app/corporate/services/[slug]/request/page.tsx`.
-3. **Build the Documents route** — even against a static mock list. The nav section exists; it just needs a page behind it.
-4. **Build the Requests list route** — show submitted requests. If the task tracker creates cases from intake, filter `listCases()`. If not, store intake contracts somewhere queryable.
+1. **Configure Keycloak** — set `AUTH_KEYCLOAK_ID`, `AUTH_KEYCLOAK_SECRET`, `AUTH_KEYCLOAK_ISSUER` in Vercel production; disable preview mode.
+2. **Set `LL_TASK_TRACKER_API_BASE_URL`** — point to deployed LL-task-tracker; live matter data will flow automatically.
+3. **Wire real document storage** — replace `documentSource.ts` mock and `uploadedDocumentStore.ts` / `adminDocumentStore.ts` metadata stubs with S3/R2 + metadata API.
+4. **Wire real request backend** — replace `requestStore.ts` and `matterRequestStore.ts` in-memory Maps with a real database or task tracker intake endpoint.
+5. **Replace admin auth** — swap `PORTAL_ADMIN_TOKEN` cookie check in `adminAuth.ts` with a Keycloak lawyer role check once SSO is live.

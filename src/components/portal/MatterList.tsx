@@ -7,6 +7,8 @@ import { getMatterList } from "src/lib/portal/matterSource"
 // Once LL-task-tracker is live, narrow this back to string and call listCases() directly.
 type MatterListProps = {
   accessToken: string | null
+  filterState?: string
+  filterSearch?: string
 }
 
 function matterStateBadge(state: CaseInstance["matterState"]) {
@@ -23,7 +25,7 @@ function matterStateBadge(state: CaseInstance["matterState"]) {
   }
 }
 
-export async function MatterList({ accessToken }: MatterListProps) {
+export async function MatterList({ accessToken, filterState, filterSearch }: MatterListProps) {
   let matters: CaseInstance[] = []
   let isMock = false
   let errorMessage: string | null = null
@@ -34,6 +36,18 @@ export async function MatterList({ accessToken }: MatterListProps) {
     isMock = result.isMock
   } catch (err) {
     errorMessage = err instanceof Error ? err.message : "An unexpected error occurred."
+  }
+
+  if (filterState) {
+    matters = matters.filter((m) => m.matterState === filterState)
+  }
+  if (filterSearch) {
+    const q = filterSearch.toLowerCase()
+    matters = matters.filter(
+      (m) =>
+        (m.businessKey ?? "").toLowerCase().includes(q) ||
+        (m.matterType ?? "").toLowerCase().includes(q),
+    )
   }
 
   if (errorMessage) {
@@ -55,7 +69,9 @@ export async function MatterList({ accessToken }: MatterListProps) {
       ) : null}
 
       {matters.length === 0 ? (
-        <p className="text-sm text-stone-400">No active matters found.</p>
+        <p className="text-sm text-stone-400">
+          {filterState || filterSearch ? "No matters match your filter." : "No active matters found."}
+        </p>
       ) : (
         <ul className="space-y-3">
           {matters.map((matter, i) => {

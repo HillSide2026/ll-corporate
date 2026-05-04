@@ -8,7 +8,11 @@ export const metadata: Metadata = {
   title: "Portal Workspace",
 }
 
-export default async function PortalAppPage() {
+type PortalAppPageProps = {
+  searchParams: Promise<Record<string, string | string[] | undefined>>
+}
+
+export default async function PortalAppPage({ searchParams }: PortalAppPageProps) {
   const session = await getPortalSession()
 
   if (!session) {
@@ -16,6 +20,16 @@ export default async function PortalAppPage() {
   }
 
   const accessToken = await getAccessToken()
+  const sp = await searchParams
+  const filterState = typeof sp.state === "string" ? sp.state : undefined
+  const filterSearch = typeof sp.search === "string" ? sp.search : undefined
 
-  return <PortalShell session={session} accessToken={accessToken} />
+  return (
+    <PortalShell
+      session={session}
+      accessToken={accessToken}
+      filterState={filterState}
+      filterSearch={filterSearch}
+    />
+  )
 }

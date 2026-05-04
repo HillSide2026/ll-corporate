@@ -5,6 +5,8 @@ import { redirect } from "next/navigation"
 import { getPreviewPortalSession, isPreviewPortalAccessEnabled } from "src/lib/auth/config"
 import { getPortalSession } from "src/lib/auth/session"
 import { getDocumentList } from "src/lib/portal/documentSource"
+import { getUploadedDocuments } from "src/lib/portal/uploadedDocumentStore"
+import { getAdminDocuments } from "src/lib/portal/adminDocumentStore"
 
 export const metadata: Metadata = {
   title: "Documents",
@@ -25,7 +27,16 @@ export default async function DocumentsPage() {
     redirect("/corporate")
   }
 
-  const { documents, isMock } = await getDocumentList()
+  const { documents: lawyerDocs, isMock } = await getDocumentList()
+  const clientDocs = getUploadedDocuments()
+  const adminDocs = getAdminDocuments()
+
+  // Merge and sort newest first. Admin docs appear as lawyer-uploaded; no "Uploaded by you" badge.
+  const allDocs = [
+    ...lawyerDocs.map((d) => ({ ...d, uploadedByClient: false as const })),
+    ...adminDocs.map((d) => ({ ...d, uploadedByClient: false as const })),
+    ...clientDocs,
+  ].sort((a, b) => new Date(b.addedAt).getTime() - new Date(a.addedAt).getTime())
 
   return (
     <main className="min-h-dvh bg-stone-50 text-stone-900">
@@ -43,7 +54,7 @@ export default async function DocumentsPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-navy">Portal</p>
           <h1 className="mt-3 text-3xl font-semibold text-stone-900">Documents</h1>
           <p className="mt-2 text-sm text-stone-500">
-            Documents shared by your counsel. Download-only — contact your lawyer to request additions.
+            Documents shared by your counsel, plus materials you have uploaded to your matters.
           </p>
         </div>
 
@@ -51,7 +62,7 @@ export default async function DocumentsPage() {
           <p className="mt-4 text-xs text-stone-400">Preview data — document API not yet connected.</p>
         ) : null}
 
-        {documents.length === 0 ? (
+        {allDocs.length === 0 ? (
           <p className="mt-10 text-sm text-stone-400">No documents have been shared yet.</p>
         ) : (
           <div className="mt-8 overflow-hidden rounded border border-stone-200 bg-white">
@@ -66,9 +77,16 @@ export default async function DocumentsPage() {
                 </tr>
               </thead>
               <tbody>
-                {documents.map((doc) => (
+                {allDocs.map((doc) => (
                   <tr key={doc.id} className="border-b border-stone-100 last:border-0">
-                    <td className="px-5 py-4 font-medium text-stone-900">{doc.filename}</td>
+                    <td className="px-5 py-4">
+                      <span className="font-medium text-stone-900">{doc.filename}</span>
+                      {doc.uploadedByClient ? (
+                        <span className="ml-2 rounded bg-stone-100 px-1.5 py-0.5 text-xs text-stone-500">
+                          Uploaded by you
+                        </span>
+                      ) : null}
+                    </td>
                     <td className="px-5 py-4">
                       <Link
                         href={`/corporate/app/matters/${encodeURIComponent(doc.matterKey)}`}
@@ -80,12 +98,16 @@ export default async function DocumentsPage() {
                     <td className="px-5 py-4 text-stone-500">{formatDate(doc.addedAt)}</td>
                     <td className="px-5 py-4 text-stone-500">{doc.addedByName}</td>
                     <td className="px-5 py-4 text-right">
-                      <a
-                        href={doc.fileUrl}
-                        className="font-medium text-brand-navy transition-colors hover:text-brand-navy-dark"
-                      >
-                        Download
-                      </a>
+                      {doc.fileUrl !== "#" ? (
+                        <a
+                          href={doc.fileUrl}
+                          className="font-medium text-brand-navy transition-colors hover:text-brand-navy-dark"
+                        >
+                          Download
+                        </a>
+                      ) : (
+                        <span className="text-stone-300">—</span>
+                      )}
                     </td>
                   </tr>
                 ))}

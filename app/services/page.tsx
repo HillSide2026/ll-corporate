@@ -235,6 +235,26 @@ export default function ServicesPage() {
         </div>
       </section>
 
+      {/* Health Check callout */}
+      <section className="bg-white py-12 md:py-14">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="flex flex-col items-center justify-between gap-6 rounded-2xl border border-stone-200 bg-stone-50 px-8 py-7 sm:flex-row">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-navy">Corporate Health Check</p>
+              <p className="mt-1 text-sm leading-6 text-stone-600">
+                Not sure whether your existing structure is ready for what&apos;s next? Start with a focused review.
+              </p>
+            </div>
+            <Link
+              href="/corporate-health-check"
+              className="shrink-0 inline-flex items-center justify-center rounded border border-brand-navy px-5 py-2.5 text-sm font-semibold text-brand-navy transition-colors hover:bg-brand-navy hover:text-white"
+            >
+              Learn about the Health Check
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Lead Capture */}
       <section className="bg-gray-50 py-20 md:py-24">
         <div className="mx-auto max-w-6xl px-6">
@@ -283,12 +303,20 @@ export default function ServicesPage() {
               Existing clients can request specific corporate filings, document updates, and limited-scope services
               directly through the client portal.
             </p>
-            <a
-              href="/corporate"
-              className="mt-8 inline-flex items-center justify-center rounded border border-brand-navy px-6 py-3 text-sm font-semibold text-brand-navy transition-colors hover:bg-brand-navy hover:text-white"
-            >
-              Access Client Portal
-            </a>
+            <div className="mt-8 flex flex-wrap justify-center gap-4">
+              <a
+                href="/corporate"
+                className="inline-flex items-center justify-center rounded border border-brand-navy px-6 py-3 text-sm font-semibold text-brand-navy transition-colors hover:bg-brand-navy hover:text-white"
+              >
+                Access Client Portal
+              </a>
+              <Link
+                href="/corporate-health-check"
+                className="inline-flex items-center justify-center rounded border border-stone-300 px-6 py-3 text-sm font-semibold text-stone-700 transition-colors hover:border-stone-400 hover:bg-stone-50"
+              >
+                Corporate Health Check
+              </Link>
+            </div>
           </div>
         </div>
       </section>

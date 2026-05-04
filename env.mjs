@@ -26,6 +26,7 @@ export const env = createEnv({
     LL_CORPORATE_ENABLE_PREVIEW_ACCESS: optionalBoolean,
     PORTAL_CLIENT_EMAIL: optionalString,
     PORTAL_CLIENT_PASSWORD: optionalString,
+    PORTAL_ADMIN_TOKEN: optionalString,
   },
   client: {},
   runtimeEnv: {
@@ -42,5 +43,6 @@ export const env = createEnv({
     LL_CORPORATE_ENABLE_PREVIEW_ACCESS: process.env.LL_CORPORATE_ENABLE_PREVIEW_ACCESS,
     PORTAL_CLIENT_EMAIL: process.env.PORTAL_CLIENT_EMAIL,
     PORTAL_CLIENT_PASSWORD: process.env.PORTAL_CLIENT_PASSWORD,
+    PORTAL_ADMIN_TOKEN: process.env.PORTAL_ADMIN_TOKEN,
   },
 })
