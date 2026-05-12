@@ -291,36 +291,6 @@ export default function ServicesPage() {
         <Script src="https://link.msgsndr.com/js/form_embed.js" strategy="lazyOnload" />
       </section>
 
-      {/* Portal Note */}
-      <section className="bg-white py-20 md:py-24">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="mx-auto max-w-xl text-center">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-brand-navy">Existing Clients</p>
-            <h2 className="text-2xl font-semibold leading-tight tracking-tight text-stone-900">
-              Need a specific filing or document?
-            </h2>
-            <p className="mt-4 text-stone-500">
-              Existing clients can request specific corporate filings, document updates, and limited-scope services
-              directly through the client portal.
-            </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-4">
-              <a
-                href="/corporate"
-                className="inline-flex items-center justify-center rounded border border-brand-navy px-6 py-3 text-sm font-semibold text-brand-navy transition-colors hover:bg-brand-navy hover:text-white"
-              >
-                Access Client Portal
-              </a>
-              <Link
-                href="/corporate-health-check"
-                className="inline-flex items-center justify-center rounded border border-stone-300 px-6 py-3 text-sm font-semibold text-stone-700 transition-colors hover:border-stone-400 hover:bg-stone-50"
-              >
-                Corporate Health Check
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <SiteFooter />
     </main>
   )

@@ -12,7 +12,6 @@ describe("ServicesPage", () => {
     expect(screen.getByRole("heading", { name: "Growth Counsel" })).toBeInTheDocument()
     expect(screen.getByRole("heading", { name: "Strategic Counsel" })).toBeInTheDocument()
     expect(screen.getByRole("heading", { name: "How fractional counsel works" })).toBeInTheDocument()
-    expect(screen.getByRole("heading", { name: "Need a specific filing or document?" })).toBeInTheDocument()
-    expect(screen.getByRole("link", { name: "Access Client Portal" })).toHaveAttribute("href", "/corporate")
+    expect(screen.queryByRole("heading", { name: "Need a specific filing or document?" })).not.toBeInTheDocument()
   })
 })
