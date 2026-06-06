@@ -2,44 +2,24 @@ import Image from "next/image"
 import Link from "next/link"
 
 import { SiteFooter } from "src/components/SiteFooter"
+import { PortalRegistrationForm } from "src/components/PortalRegistrationForm"
 
-const clientTypes = [
+const portalCapabilities = [
   {
-    title: "Operators & Executives",
-    description: "Running and scaling private companies with ongoing legal needs.",
+    title: "Secure Document Access",
+    description: "Receive and access documents shared with you through a secure workspace.",
   },
   {
-    title: "Digital Platforms",
-    description: "Growing payment and financial services businesses.",
+    title: "Submit Requests",
+    description: "Initiate legal requests, intake forms, and service workflows online.",
   },
   {
-    title: "Investors & Funds",
-    description: "Structuring and deploying capital into operating businesses.",
+    title: "Track Matters",
+    description: "Monitor the status of active matters and ongoing legal work.",
   },
   {
-    title: "Cross-Border Businesses",
-    description: "Managing multi-jurisdictional entities and contractual partnerships.",
-  },
-]
-
-const engagementCards = [
-  {
-    label: "New Clients",
-    title: "Fractional Counsel",
-    description:
-      "Ongoing legal support across corporate, contract, and financial services matters — structured around how each business operates.",
-    cta: "Explore Counsel Models",
-    href: "/services",
-    primary: true,
-  },
-  {
-    label: "Existing Clients",
-    title: "Client Portal",
-    description:
-      "Access documents, request work, and manage ongoing matters through the secure client workspace.",
-    cta: "Access Portal",
-    href: "/corporate",
-    primary: false,
+    title: "Centralized Communications",
+    description: "Maintain a single record of updates, requests, and firm communications.",
   },
 ]
 
@@ -57,20 +37,17 @@ export default function HomePage() {
             className="h-10 w-auto"
           />
           <nav className="flex items-center gap-6 text-sm">
-            <Link href="/services" className="text-stone-600 transition-colors hover:text-stone-900">
-              Services
-            </Link>
-            <Link href="/industries" className="text-stone-600 transition-colors hover:text-stone-900">
-              Industries
-            </Link>
-            <a href="#insights" className="text-stone-600 transition-colors hover:text-stone-900">
-              Insights
+            <a href="#portal-capabilities" className="hidden text-stone-600 transition-colors hover:text-stone-900 sm:inline">
+              Portal
+            </a>
+            <a href="#create-account" className="hidden text-stone-600 transition-colors hover:text-stone-900 sm:inline">
+              Create Account
             </a>
             <a
               href="/corporate"
               className="rounded border border-brand-navy px-4 py-2 font-medium text-brand-navy transition-colors hover:bg-brand-navy hover:text-white"
             >
-              Client Portal
+              Sign In
             </a>
           </nav>
         </div>
@@ -79,49 +56,52 @@ export default function HomePage() {
       {/* 1. Hero */}
       <section className="bg-white py-24 md:py-32">
         <div className="mx-auto max-w-6xl px-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-navy">Levine LLP</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-navy">Secure Client Portal</p>
           <h1 className="mt-6 max-w-3xl text-5xl font-semibold leading-tight tracking-tight text-stone-900 sm:text-6xl">
-            High Quality Corporate and Financial Services Counsel
+            Access Your Levine Law Workspace
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-8 text-stone-500">
-            We advise executives and investors on corporate, contract, and financial services where legal work adds
-            value.
+            Create an account to access documents, submit requests, track matters, and communicate securely with Levine
+            Law through our digital client portal.
           </p>
           <div className="mt-10 flex flex-wrap gap-4">
-            <Link
-              href="/services"
+            <a
+              href="#create-account"
               className="inline-flex items-center justify-center rounded bg-brand-navy px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-dark"
             >
-              Explore
-            </Link>
+              Create Account
+            </a>
             <a
               href="/corporate"
               className="inline-flex items-center justify-center rounded border border-stone-300 px-6 py-3 text-sm font-semibold text-stone-700 transition-colors hover:border-stone-400 hover:bg-stone-50"
             >
-              Client Portal
+              Sign In
             </a>
           </div>
+          <p className="mt-5 max-w-xl text-xs leading-5 text-stone-400">
+            Creating a portal account is for administrative access only and does not create a lawyer-client
+            relationship, retainer, engagement, or obligation on the part of Levine Law.
+          </p>
         </div>
       </section>
 
-      {/* 2. Who We Work With */}
-      <section className="bg-stone-50 py-20 md:py-24">
+      {/* 2. Portal Capabilities */}
+      <section id="portal-capabilities" className="bg-stone-50 py-20 md:py-24">
         <div className="mx-auto max-w-6xl px-6">
           <div className="mb-12 text-center">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-brand-navy">Who We Work With</p>
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-brand-navy">Client Workspace</p>
             <h2 className="mx-auto max-w-2xl text-2xl font-semibold leading-tight tracking-tight text-stone-900">
-              Built for Dynamic Businesses.
+              What Clients Can Do In The Portal
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-stone-500">
-              We work with entrepreneurial executives and investors so that their entire team can move forward with
-              confidence.
+              Use one secure workspace to manage access, requests, matter updates, and firm communications.
             </p>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 md:gap-8 lg:grid-cols-4">
-            {clientTypes.map((item) => (
+            {portalCapabilities.map((item) => (
               <div
                 key={item.title}
-                className="rounded-2xl border border-stone-200 bg-white p-6 transition hover:border-stone-300 hover:shadow-md"
+                className="rounded border border-stone-200 bg-white p-6 transition hover:border-stone-300 hover:shadow-md"
               >
                 <h3 className="mb-2 text-base font-semibold leading-tight text-stone-900">{item.title}</h3>
                 <p className="text-sm leading-6 text-stone-500">{item.description}</p>
@@ -135,26 +115,27 @@ export default function HomePage() {
       <section className="bg-white py-20 md:py-24">
         <div className="mx-auto max-w-6xl px-6">
           <div className="mb-12 text-center">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-brand-navy">Digital First</p>
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-brand-navy">Account Access</p>
             <h2 className="mx-auto max-w-2xl text-2xl font-semibold leading-tight tracking-tight text-stone-900">
-              Legal Support, Accessible Where You Work
+              Existing Clients Sign In Here
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-stone-500">
-              Clients access matters, documents, and requests through Levine LLP's structured digital workspace.
+              Use your portal credentials to access the client workspace for documents, requests, matter updates, and
+              secure communications.
             </p>
           </div>
-          <div className="mx-auto max-w-2xl rounded-2xl border border-stone-200 bg-white p-6 transition hover:border-stone-300 hover:shadow-md md:p-8">
-            <h3 className="text-xl font-semibold leading-tight text-stone-900">Client Portal</h3>
+          <div className="mx-auto max-w-2xl rounded border border-stone-200 bg-white p-6 transition hover:border-stone-300 hover:shadow-md md:p-8">
+            <h3 className="text-xl font-semibold leading-tight text-stone-900">Secure Portal Access</h3>
             <p className="mt-3 text-sm leading-6 text-stone-500">
-              Access active matters, documents, filings, communications, and service requests through the secure client
-              workspace.
+              Sign in if you already have a Levine Law portal account. New users can create an account below and begin
+              the administrative onboarding process.
             </p>
-            <a
+            <Link
               href="/corporate"
               className="mt-6 inline-flex items-center justify-center rounded bg-brand-navy px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-dark"
             >
-              Access Client Portal
-            </a>
+              Sign In
+            </Link>
           </div>
         </div>
       </section>
@@ -175,85 +156,71 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 5. Digital Innovation */}
+      {/* 5. Create Account */}
+      <section id="create-account" className="bg-stone-50 py-20 md:py-24">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-navy">Create Account</p>
+              <h2 className="mt-3 text-3xl font-semibold leading-tight tracking-tight text-stone-900">
+                Start your portal access request
+              </h2>
+              <p className="mt-4 text-sm leading-6 text-stone-500">
+                Registration gives you access to digital services and administrative workflows. Levine Law reviews
+                submitted requests before accepting any engagement.
+              </p>
+              <p className="mt-4 text-sm leading-6 text-stone-500">
+                Creating an account does not create a lawyer-client relationship, retainer, engagement, or obligation on
+                the part of Levine Law.
+              </p>
+            </div>
+            <div className="rounded border border-stone-200 bg-white p-6 shadow-sm md:p-8">
+              <PortalRegistrationForm />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 6. Notice */}
+      <section id="notice" className="bg-white py-20 md:py-24">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="mx-auto max-w-3xl rounded border border-stone-200 bg-stone-50 px-6 py-6 md:px-8 md:py-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-navy">Notice</p>
+            <h2 className="mt-3 text-2xl font-semibold leading-tight tracking-tight text-stone-900">Notice</h2>
+            <p className="mt-4 text-sm leading-6 text-stone-600">
+              Registration for Levine Law Client Portal is provided for administrative convenience and access to digital
+              services.
+            </p>
+            <p className="mt-4 text-sm leading-6 text-stone-600">
+              Creating an account does not: Create a lawyer-client relationship; Retain Levine Law as legal counsel;
+              Constitute legal advice; Guarantee representation; Create an engagement agreement. A lawyer-client
+              relationship is established only after Levine Law has completed its intake and conflict review processes
+              and a formal engagement has been accepted.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* 7. Final Portal CTA */}
       <section className="bg-stone-50 py-20 md:py-24">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="mb-12 text-center">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-brand-navy">
-              Digital Innovation
-            </p>
-            <h2 className="mx-auto max-w-2xl text-2xl font-semibold leading-tight tracking-tight text-stone-900">
-              Legal workflows, standardized and scalable.
-            </h2>
-            <p className="mx-auto mt-4 max-w-xl text-stone-500">
-              Levine LLP transforms common legal requests into structured digital workflows using playbooks and
-              automation.
-            </p>
-          </div>
-          <div className="mx-auto max-w-2xl rounded-2xl border border-stone-200 bg-white p-6 transition hover:border-stone-300 hover:shadow-md md:p-8">
-            <h3 className="text-xl font-semibold leading-tight text-stone-900">NDA Tool</h3>
-            <p className="mt-3 text-sm leading-6 text-stone-500">
-              Prepare a standard NDA for early-stage discussions through a guided digital workflow.
-            </p>
-            <a
-              href="/ndaesq"
-              className="mt-6 inline-flex items-center justify-center rounded border border-stone-300 px-5 py-2.5 text-sm font-semibold text-stone-700 transition-colors hover:border-stone-400 hover:bg-stone-50"
-            >
-              Try NDA Tool
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* 6. How to Work With Us */}
-      <section id="insights" className="bg-white py-20 md:py-24">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="mb-12 text-center">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-brand-navy">Engagement</p>
-            <h2 className="mx-auto max-w-2xl text-2xl font-semibold leading-tight tracking-tight text-stone-900">
-              How to work with us
-            </h2>
-          </div>
-          <div className="mx-auto grid max-w-4xl gap-6 md:grid-cols-2 md:gap-8">
-            {engagementCards.map((card) => (
-              <div
-                key={card.title}
-                className="flex flex-col rounded-2xl border border-stone-200 bg-white p-6 transition hover:border-stone-300 hover:shadow-md md:p-8"
-              >
-                <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-brand-navy">{card.label}</p>
-                <h3 className="mb-3 text-lg font-semibold leading-tight text-stone-900">{card.title}</h3>
-                <p className="flex-1 text-sm leading-6 text-stone-500">{card.description}</p>
-                <Link
-                  href={card.href}
-                  className={[
-                    "mt-6 inline-flex w-full items-center justify-center rounded px-5 py-3 text-sm font-semibold transition-colors",
-                    card.primary
-                      ? "bg-brand-navy text-white hover:bg-brand-navy-dark"
-                      : "border border-stone-300 text-stone-700 hover:border-stone-400 hover:bg-stone-50",
-                  ].join(" ")}
-                >
-                  {card.cta}
-                </Link>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 7. Final Directional CTA */}
-      <section className="bg-white py-20 md:py-24">
         <div className="mx-auto max-w-6xl px-6">
           <div className="mx-auto max-w-xl text-center">
             <h2 className="text-2xl font-semibold leading-tight tracking-tight text-stone-900">
-              Work with counsel that understands how your business actually operates.
+              Ready to access your Levine Law workspace?
             </h2>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               <a
-                href="mailto:matthew@levinelegal.ca"
+                href="#create-account"
                 className="inline-flex items-center justify-center rounded bg-brand-navy px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-dark"
               >
-                Start a Conversation
+                Create Account
               </a>
+              <Link
+                href="/corporate"
+                className="inline-flex items-center justify-center rounded border border-stone-300 px-6 py-3 text-sm font-semibold text-stone-700 transition-colors hover:border-stone-400 hover:bg-white"
+              >
+                Sign In
+              </Link>
             </div>
           </div>
         </div>

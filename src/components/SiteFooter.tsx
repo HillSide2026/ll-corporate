@@ -13,20 +13,17 @@ export function SiteFooter() {
             <p className="mt-4 text-sm text-stone-400">Toronto, Ontario</p>
           </div>
           <nav className="flex flex-wrap gap-x-8 gap-y-3 text-sm text-stone-500">
-            <Link href="/services" className="transition-colors hover:text-stone-900">
-              Services
+            <Link href="/#portal-capabilities" className="transition-colors hover:text-stone-900">
+              Portal
             </Link>
-            <Link href="/industries" className="transition-colors hover:text-stone-900">
-              Clients
+            <Link href="/#create-account" className="transition-colors hover:text-stone-900">
+              Create Account
             </Link>
-            <Link href="/#insights" className="transition-colors hover:text-stone-900">
-              Insights
+            <Link href="/#notice" className="transition-colors hover:text-stone-900">
+              Notice
             </Link>
             <Link href="/corporate" className="transition-colors hover:text-stone-900">
-              Client Portal
-            </Link>
-            <Link href="/ndaesq" className="transition-colors hover:text-stone-900">
-              NDA Tool
+              Sign In
             </Link>
           </nav>
         </div>
