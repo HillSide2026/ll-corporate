@@ -5,7 +5,7 @@ import { notFound, redirect } from "next/navigation"
 import { getAdminSession } from "src/lib/auth/adminAuth"
 import { getMatterByKey } from "src/lib/portal/matterSource"
 import { getMatterUpdateList } from "src/lib/portal/matterUpdateSource"
-import { postMatterUpdate, adminUploadDocument } from "src/lib/portal/adminActions"
+import { adminUploadDocument, postMatterUpdate } from "src/lib/portal/adminActions"
 
 type AdminMatterPageProps = {
   params: Promise<{ key: string }>

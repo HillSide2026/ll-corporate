@@ -1,34 +1,44 @@
 # Deployment Topology Note
 
-> System note: `ll-corporate` is the primary application associated with `https://levinellp.ca`.
-> The current implemented portal shell in this repo may still run under `/corporate`.
-> `/nda` is reserved for `NDA-Esq` and must not be handled by this repo.
-> Moving `ll-corporate` fully to `/` is a future deployment decision and is not part of this change.
+> System note: the public Levine Law website and the client portal are separate production deployments.
+> The public WordPress website is served from `https://www.levine-law.ca`.
+> The `ll-corporate` Next.js client portal is served from `https://clients.levine-law.ca`.
+> Production must not mount the portal at `/corporate` on the WordPress domain.
 > See [DEPLOYMENT.md](../DEPLOYMENT.md) for the cross-app boundary overview.
 
 Target public URL:
 
-- `https://levinellp.ca/corporate`
+- `https://clients.levine-law.ca`
 
 Assumed ownership:
 
-- `levinellp.ca` root site remains separately owned.
-- `ll-corporate` is deployed as its own Next.js app.
-- Reverse proxy or ingress maps `/corporate` to the `ll-corporate` app.
-- This repo must not be merged into the root website to serve the portal.
+- `https://www.levine-law.ca` is the public WordPress website.
+- `https://clients.levine-law.ca` is the standalone `ll-corporate` Next.js app.
+- The portal is a separate app deployment from WordPress.
+- This repo must not be merged into WordPress and must not depend on a WordPress `/corporate` mount.
 
 Next.js path behavior:
 
-- `next.config.ts` sets `basePath: "/corporate"`.
-- The public entry page is implemented at internal route `/` and is externally reachable at `/corporate`.
-- The protected shell is implemented at internal route `/app` and is externally reachable at `/corporate/app`.
-- Auth.js handlers are implemented at internal `/api/auth/*` and are externally reachable at `/corporate/api/auth/*`.
-- Health routes should be checked through the mounted path, for example `/corporate/healthz`.
+- Production does not use `basePath`; `next.config.ts` currently avoids `basePath` and should stay that way unless a dev-only reason is documented.
+- Existing `/corporate` paths are application routes in this Next.js app, not deployment topology.
+- The current public portal entry route is `https://clients.levine-law.ca/corporate`.
+- The current protected shell route is `https://clients.levine-law.ca/corporate/app`.
+- Auth.js handlers are currently exposed at `https://clients.levine-law.ca/corporate/api/auth/*`.
+- Health routes are checked on the client portal origin, for example `https://clients.levine-law.ca/healthz`.
 
-Reverse proxy requirement:
+Future route simplification may move:
+
+- `/corporate/sign-in` -> `/sign-in`
+- `/corporate/app` -> `/app`
+- `/corporate/admin` -> `/admin`
+
+Do not implement those route changes until the routing migration is explicitly approved.
+
+Production DNS / ingress requirement:
 
 ```text
-https://levinellp.ca/corporate/* -> ll-corporate upstream /*
+clients.levine-law.ca -> ll-corporate Next.js upstream
+www.levine-law.ca -> WordPress upstream
 ```
 
 The proxy must preserve:
@@ -37,12 +47,11 @@ The proxy must preserve:
 - `X-Forwarded-Host`
 - `X-Forwarded-Proto`
 - `X-Forwarded-For`
-- request path under `/corporate`
 
-Do not rewrite `/corporate` away before the request reaches Next.js unless the app is rebuilt without `basePath`.
+Do not proxy `www.levine-law.ca/corporate/*` to this app in production. If WordPress needs a portal link, it should link to `https://clients.levine-law.ca/corporate` until route simplification is approved.
 
 Assets:
 
-- Next.js framework assets are emitted and requested under `/corporate/_next/*`.
-- No separate `assetPrefix` is required for the same-domain `/corporate` mount.
+- Next.js framework assets are emitted and requested from the portal origin under `/_next/*`.
+- No separate `assetPrefix` is required for the same-origin `clients.levine-law.ca` deployment.
 - Add `assetPrefix` only if static assets are moved to a different CDN origin.

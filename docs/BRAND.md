@@ -1,6 +1,6 @@
 # Levine LLP — Brand & Design Standards
 
-> Source of truth for visual language, layout systems, and interaction patterns across levinellp.ca (public) and the client portal.
+> Source of truth for visual language, layout systems, and interaction patterns across www.levine-law.ca (public WordPress website) and clients.levine-law.ca (client portal).
 > This document defines what we do and what we do not do.
 > All tokens map directly to `styles/tailwind.css` and Tailwind CSS v4 `@theme` definitions.
 > Last updated: 2026-05-03

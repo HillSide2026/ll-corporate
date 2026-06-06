@@ -1,61 +1,71 @@
 # Production Routing + Auth Note
 
-> System note: `ll-corporate` is the primary application associated with `https://levinellp.ca`.
-> The current implemented portal shell in this repo may still run under `/corporate`.
-> `/nda` is reserved for `NDA-Esq` and must not be handled by this repo.
-> Moving `ll-corporate` fully to `/` is a future deployment decision and is not part of this change.
+> System note: the public WordPress website and the client portal are separate production deployments.
+> WordPress serves `https://www.levine-law.ca`.
+> `ll-corporate` serves the client portal at `https://clients.levine-law.ca`.
+> Production must not mount the portal at `/corporate` on the WordPress domain.
 > See [DEPLOYMENT.md](../DEPLOYMENT.md) for the cross-app boundary overview.
 
 Production hostname:
 
-- `levinellp.ca`
+- `clients.levine-law.ca`
 
-Mounted portal:
+Current portal application routes:
 
-- Public login entry: `https://levinellp.ca/corporate`
-- Protected shell: `https://levinellp.ca/corporate/app`
-- Auth handlers: `https://levinellp.ca/corporate/api/auth/*`
+- Public portal entry: `https://clients.levine-law.ca/corporate`
+- Protected shell: `https://clients.levine-law.ca/corporate/app`
+- Auth handlers: `https://clients.levine-law.ca/corporate/api/auth/*`
+
+These `/corporate` paths are current application routes. They are not a production deployment mount and do not imply a Next.js `basePath`.
+
+Future route simplification may move:
+
+- `/corporate/sign-in` -> `/sign-in`
+- `/corporate/app` -> `/app`
+- `/corporate/admin` -> `/admin`
+
+Do not implement those route changes until approved.
 
 Auth.js configuration:
 
 ```text
-AUTH_URL=https://levinellp.ca/corporate/api/auth
+AUTH_URL=https://clients.levine-law.ca/corporate/api/auth
 AUTH_TRUST_HOST=true
 ```
 
 `AUTH_TRUST_HOST=true` is required behind a reverse proxy so Auth.js can trust forwarded host/protocol headers.
 
-Next.js owns the `/corporate` path prefix through `basePath`. The Auth.js route handler restores that external path before handing auth requests to Auth.js so Keycloak callback URLs are generated with `/corporate/api/auth/*`.
+Production does not use Next.js `basePath`. `next.config.ts` currently avoids `basePath` and should stay that way unless a dev-only reason is documented. Auth.js is still configured for the current application route `/corporate/api/auth/*`.
 
 Keycloak redirect URIs:
 
 ```text
-https://levinellp.ca/corporate/api/auth/callback/keycloak
+https://clients.levine-law.ca/corporate/api/auth/callback/keycloak
 ```
 
 Keycloak post-logout redirect URI:
 
 ```text
-https://levinellp.ca/corporate
+https://clients.levine-law.ca/corporate
 ```
 
 Keycloak web origin:
 
 ```text
-https://levinellp.ca
+https://clients.levine-law.ca
 ```
 
 Cookie and session assumptions:
 
-- Auth.js session cookies are scoped to `levinellp.ca`.
-- The portal is same-domain and path-mounted, not a separate subdomain.
+- Auth.js session cookies are scoped to `clients.levine-law.ca`.
+- The portal is a dedicated subdomain app, separate from WordPress.
 - The reverse proxy must keep HTTPS externally; production cookies should be secure.
 - Frontend session state proves identity only.
 - `ll-task-tracker` remains responsible for authorization, permissions, allowed actions, and workflow decisions.
 
 API routing:
 
-- `/corporate/api/auth/*` belongs to `ll-corporate`.
+- `https://clients.levine-law.ca/corporate/api/auth/*` belongs to `ll-corporate`.
 - Future `ll-task-tracker` API access must go through `src/lib/api/`.
 - Do not expose backend domain routes directly from browser components.
 - Do not mount backend domain APIs under ambiguous public `/api/*` paths without an explicit proxy rule and security review.

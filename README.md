@@ -8,15 +8,16 @@ This repository is a Next.js application shell. It is not the system of record a
 
 Levine LLP currently runs a multi-repo web system:
 
-- `ll-corporate` (this repo) is the primary application associated with `https://levinellp.ca`.
-- `NDA-Esq` owns the NDA Generator mounted at `https://levinellp.ca/nda`.
-- `LL-task-tracker` is a separate operational app deployed at `https://firm.levinellp.ca`.
+- The public WordPress website is served from `https://www.levine-law.ca`.
+- `ll-corporate` (this repo) is the standalone client portal app served from `https://clients.levine-law.ca`.
+- `LL-task-tracker` is a separate operational backend/app outside this repo.
 
 Current state versus intended domain role:
 
-- `ll-corporate` is the primary application associated with `https://levinellp.ca`, even though the current implemented portal shell in this repo may still run under `/corporate`.
-- `/nda` is reserved for `NDA-Esq` and must not be handled by this repo.
-- Moving `ll-corporate` fully to root `/` is a future deployment and routing decision, and is not part of this change.
+- `ll-corporate` is deployed separately from WordPress.
+- Production must not mount the portal at `https://www.levine-law.ca/corporate`.
+- Existing `/corporate` paths are application routes in this Next.js app, not production deployment topology.
+- Future route simplification may move `/corporate/sign-in` to `/sign-in`, `/corporate/app` to `/app`, and `/corporate/admin` to `/admin`; do not implement those route changes until approved.
 
 ## System Boundary
 

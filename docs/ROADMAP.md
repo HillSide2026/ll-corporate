@@ -144,7 +144,7 @@ Authentication is wired through NextAuth v5 + Keycloak but the Keycloak instance
 
 **Risk areas**:
 - **NextAuth v5 beta** (`5.0.0-beta.30`): API surface is not stable. Avoid upgrading minor versions without checking changelogs; the `auth()` call shape and JWT callback signature have changed across betas.
-- **basePath discrepancy**: `docs/deployment-topology.md` and `docs/infra-devops.md` describe `basePath: "/corporate"` but `next.config.ts` does not set it. Vercel routing currently handles the `/corporate` prefix via rewrites. Reconcile this before production Keycloak callback URIs are registered — the redirect URI must match exactly.
+- **Current route prefix**: Production topology is `https://clients.levine-law.ca` with no Next.js `basePath`. The current `/corporate` paths are application routes, so Keycloak callback URLs must use `https://clients.levine-law.ca/corporate/api/auth/callback/keycloak` until route simplification is approved.
 - **Per-page route guards**: Auth is currently enforced inside each page component (`getPortalSession()` + redirect). If the app grows, consider middleware-level protection for the entire `/corporate/app` subtree.
 
 ---
@@ -157,6 +157,43 @@ Authentication is wired through NextAuth v5 + Keycloak but the Keycloak instance
 1. **Documents**: Connect `documentSource.ts` to a real document storage endpoint (S3/R2 + metadata API or task tracker extension). Replace mock with live fetch; remove `isMock` flag.
 2. **Request store**: Replace `requestStore.ts` in-memory Map with a real database (Postgres, PlanetScale, Airtable, or task tracker intake endpoint). Wire `submitServiceRequest` to POST to the real endpoint instead of `addRequest()`. Wire `requests/page.tsx` to query live records.
 3. **Request → Matter linkage**: Once the task tracker creates a `CaseInstance` per intake, filter `listCases()` by matter type in the requests page instead of querying a separate store.
+
+---
+
+## Production wiring backlog
+
+**Goal**: Move the portal from preview/mock mode to a production client workspace backed by Keycloak, LL-task-tracker, durable request storage, and real file/document storage.
+
+**Current blockers**:
+- Keycloak is not configured for production portal users, so real client sessions and server-side access tokens are not available.
+- `LL_TASK_TRACKER_API_BASE_URL` is not wired to a production API, so matter data falls back to fixtures.
+- Requests, uploads, matter updates, admin documents, and scope profile data still use TEMPORARY in-memory or mock sources.
+- File uploads persist metadata only; file bytes are not stored in S3/R2 or another durable object store.
+- Admin access is gated by `PORTAL_ADMIN_TOKEN` instead of Keycloak lawyer/admin roles.
+
+**Backlog**:
+1. **Confirm production auth shape**: define the Keycloak realm, client roles/groups, client users, lawyer/admin users, and callback/logout URLs for the current `/corporate/api/auth` application route on `clients.levine-law.ca`.
+2. **Configure Keycloak**: create the realm and OIDC client, then register `https://clients.levine-law.ca/corporate/api/auth/callback/keycloak` as the production callback URL.
+3. **Set production auth env vars**: configure `AUTH_SECRET`, `AUTH_TRUST_HOST=true`, `AUTH_URL`, `AUTH_KEYCLOAK_ISSUER`, `AUTH_KEYCLOAK_ID`, `AUTH_KEYCLOAK_SECRET`, and set `LL_CORPORATE_ENABLE_PREVIEW_ACCESS=false`.
+4. **Verify real login**: sign into `https://clients.levine-law.ca/corporate`, reach `/corporate/app`, and confirm `getAccessToken()` returns a Keycloak access token for server-side API calls.
+5. **Expose LL-task-tracker API**: deploy or confirm production endpoints for `GET /case`, `GET /case/{businessKey}`, and `GET /task?businessKey=...`, with Keycloak bearer-token validation.
+6. **Wire `LL_TASK_TRACKER_API_BASE_URL`**: set the production API base URL and confirm matter list/detail pages switch from `isMock: true` to live data.
+7. **Validate API contracts**: compare live LL-task-tracker responses against `src/lib/contracts/schemas.ts`; update backend DTOs or frontend contract schemas until Zod validation passes.
+8. **Replace request storage**: replace `requestStore.ts` and `matterRequestStore.ts` with API-backed persistence for service requests, matter requests, attachment metadata, and request status.
+9. **Add real file storage**: choose S3, R2, or equivalent; implement durable upload handling and replace metadata-only upload stores with persisted file records.
+10. **Replace document source**: replace `documentSource.ts`, `mockDocuments.ts`, and admin document mocks with a real document list/download API.
+11. **Replace matter update storage**: move counsel matter updates from temporary stores to backend persistence and confirm client matter pages render live updates.
+12. **Replace admin auth**: remove the `PORTAL_ADMIN_TOKEN` login path and gate admin pages/actions with Keycloak lawyer/admin roles.
+13. **Add notifications**: add an email provider and send client confirmations plus firm notifications for requests and uploads.
+14. **Remove preview/mock paths**: delete mock data and temporary wrappers once production paths are stable, keeping only an intentional local/demo mode if needed.
+
+**Shortest critical path**:
+1. Configure Keycloak.
+2. Wire `LL_TASK_TRACKER_API_BASE_URL`.
+3. Validate live matter list/detail.
+4. Add durable request storage.
+5. Add real document/file storage.
+6. Replace admin token auth with Keycloak roles.
 
 ---
 
@@ -176,4 +213,4 @@ Authentication is wired through NextAuth v5 + Keycloak but the Keycloak instance
 | Service action | `src/lib/services/actions.ts` | `submitServiceRequest` server action |
 | Upload action | `src/lib/portal/uploadActions.ts` | `uploadMatterDocument` server action |
 | Environment | `env.mjs` via `@t3-oss/env-nextjs` | `LL_TASK_TRACKER_API_BASE_URL` is the live-API gate |
-| Deployment | Vercel | NDA Tool proxied from `/ndaesq` via rewrites in `vercel.json` |
+| Deployment | Vercel | Client portal only; NDAESQ is a separate app/deployment/domain |

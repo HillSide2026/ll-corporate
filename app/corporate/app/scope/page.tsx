@@ -5,7 +5,7 @@ import { redirect } from "next/navigation"
 import { getPreviewPortalSession, isPreviewPortalAccessEnabled } from "src/lib/auth/config"
 import { getPortalSession } from "src/lib/auth/session"
 import { getAccessToken } from "src/lib/auth/session"
-import { getCounselProfile, type CounselModel } from "src/lib/portal/counselProfileSource"
+import { type CounselModel, getCounselProfile } from "src/lib/portal/counselProfileSource"
 import { getMatterList } from "src/lib/portal/matterSource"
 
 export const metadata: Metadata = { title: "Scope" }
