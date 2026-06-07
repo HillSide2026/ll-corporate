@@ -57,7 +57,7 @@ export default function HomePage() {
       </section>
 
       {/* 2. Portal Capabilities */}
-      <section className="border-y border-brand-blue bg-brand-blue py-6">
+      <section className="border-y border-brand-navy bg-brand-navy py-6">
         <div className="mx-auto max-w-6xl px-6">
           <p className="text-center text-sm leading-6 text-white">
             Levine Law supports clients as fractional counsel across corporate, contract, and financial services
@@ -93,25 +93,20 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 3. Digital First */}
-      <section className="bg-stone-50 py-20 md:py-24">
+      {/* 3. How We Work */}
+      <section className="bg-brand-navy py-20 md:py-24">
         <div className="mx-auto max-w-6xl px-6 text-center">
-          <div className="border-border-subtle grid justify-items-center gap-8 border-y py-12 md:items-center">
+          <div className="mx-auto max-w-3xl">
             <div>
-              <p className="text-brand-navy text-[11px] font-semibold tracking-[0.24em] uppercase">Account Access</p>
-              <h2 className="text-ink mt-3 text-2xl leading-tight font-semibold tracking-tight">
-                Existing Clients Sign In Here
+              <p className="text-[11px] font-semibold tracking-[0.24em] text-white/75 uppercase">How We Work</p>
+              <h2 className="mt-3 text-3xl leading-tight font-semibold tracking-tight text-white">
+                Ongoing legal support and representation
               </h2>
-              <p className="mx-auto mt-3 max-w-2xl text-[15px] leading-7 text-stone-600">
-                Use your portal credentials to access documents, requests, matter updates, and secure communications.
-              </p>
             </div>
-            <Link
-              href="/sign-in"
-              className="bg-brand-navy hover:bg-brand-navy-dark inline-flex items-center justify-center rounded-md px-6 py-3 text-sm font-semibold text-white transition-colors"
-            >
-              Sign In
-            </Link>
+            <p className="mt-5 text-lg leading-8 text-white/75">
+              Levine Law supports clients as fractional counsel across corporate, contract, and financial services
+              matters.
+            </p>
           </div>
         </div>
       </section>
