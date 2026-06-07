@@ -16,7 +16,7 @@ const session = {
 }
 
 describe("PortalShell", () => {
-  it("renders the protected Levine LLP portal shell without domain data", () => {
+  it("renders the protected Levine Law portal shell without domain data", () => {
     render(<PortalShell session={session} />)
 
     expect(screen.getByRole("heading", { name: "Client Portal" })).toBeInTheDocument()
@@ -24,7 +24,7 @@ describe("PortalShell", () => {
     expect(screen.getByText("Client User")).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Sign out" })).toBeInTheDocument()
     expect(screen.queryByRole("link", { name: "Exit preview" })).not.toBeInTheDocument()
-    expect(screen.getByRole("link", { name: "NDA Tool" })).toHaveAttribute("href", "/ndaesq")
+    expect(screen.queryByRole("link", { name: "NDA Tool" })).not.toBeInTheDocument()
     expect(screen.getByRole("heading", { name: "Matters" })).toBeInTheDocument()
     expect(screen.getByRole("heading", { name: "Documents" })).toBeInTheDocument()
     expect(screen.getByRole("heading", { name: "Requests" })).toBeInTheDocument()

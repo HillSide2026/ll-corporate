@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 
 export const metadata: Metadata = {
-  title: "Portal Onboarding",
+  title: "Portal Access Request",
 }
 
 export default function PortalOnboardingPage() {
@@ -14,11 +14,11 @@ export default function PortalOnboardingPage() {
         </Link>
 
         <div className="mt-8 rounded border border-stone-200 bg-white px-6 py-6 md:px-8 md:py-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-navy">Portal onboarding</p>
-          <h1 className="mt-3 text-3xl font-semibold text-stone-900">Your portal account has been created.</h1>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-navy">Portal access</p>
+          <h1 className="mt-3 text-3xl font-semibold text-stone-900">Request portal access.</h1>
           <p className="mt-4 text-sm leading-6 text-stone-500">
-            Account access does not create a lawyer-client relationship. Levine Law will review any submitted requests
-            before accepting an engagement.
+            Requesting portal access does not create a lawyer-client relationship. Levine Law reviews requests before
+            granting access or accepting an engagement.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link

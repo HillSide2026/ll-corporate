@@ -116,7 +116,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
         <div className="mt-8 rounded border border-stone-200 bg-stone-50 px-5 py-5">
           <h2 className="text-lg font-semibold text-stone-900">Request this service</h2>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-stone-500">
-            Intake submission is not enabled yet. Levine LLP will connect this service to a defined request contract
+            Intake submission is not enabled yet. Levine Law will connect this service to a defined request contract
             before accepting structured submissions through the portal.
           </p>
           {session ? (

@@ -6,7 +6,7 @@ export function SiteFooter() {
       <div className="mx-auto max-w-6xl px-6 py-12">
         <div className="flex flex-col gap-8 md:flex-row md:justify-between">
           <div className="max-w-xs">
-            <p className="text-sm font-semibold text-stone-900">Levine Law / Levine LLP</p>
+            <p className="text-sm font-semibold text-stone-900">Levine Law</p>
             <p className="mt-2 text-sm leading-6 text-stone-500">
               Corporate, contract, and financial services counsel for growing businesses.
             </p>
@@ -16,8 +16,8 @@ export function SiteFooter() {
             <Link href="/#portal-capabilities" className="transition-colors hover:text-stone-900">
               Portal
             </Link>
-            <Link href="/#create-account" className="transition-colors hover:text-stone-900">
-              Create Account
+            <Link href="/#request-access" className="transition-colors hover:text-stone-900">
+              Request Access
             </Link>
             <Link href="/#notice" className="transition-colors hover:text-stone-900">
               Notice

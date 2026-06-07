@@ -17,7 +17,7 @@ function getAuthErrorMessage(authError?: string) {
   }
 
   return authError
-    ? "We could not complete sign-in. Please try again, or contact Levine LLP if this keeps happening."
+    ? "We could not complete sign-in. Please try again, or contact Levine Law if this keeps happening."
     : undefined
 }
 
@@ -28,7 +28,7 @@ export function PortalEntry({ authError, previewAccessEnabled = false }: PortalE
   return (
     <main className="min-h-dvh bg-stone-50 text-stone-900">
       <section className="mx-auto flex min-h-dvh max-w-md flex-col justify-center px-6 py-12">
-        <p className="text-sm font-medium text-brand-navy">Levine LLP</p>
+        <p className="text-sm font-medium text-brand-navy">Levine Law</p>
         <h1 className="mt-3 text-3xl font-semibold tracking-tight">Client Portal</h1>
         <p className="mt-3 text-sm leading-6 text-stone-500">
           Sign in to view your matters, documents, and requests.

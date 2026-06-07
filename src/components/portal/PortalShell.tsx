@@ -42,7 +42,7 @@ export function PortalShell({
       <header className="border-b border-stone-200 bg-white">
         <div className="mx-auto flex max-w-6xl flex-col gap-5 px-6 py-6 md:flex-row md:items-center md:justify-between">
           <div>
-            <p className="text-sm font-medium text-brand-navy">Levine LLP</p>
+            <p className="text-sm font-medium text-brand-navy">Levine Law</p>
             <h1 className="mt-1 text-3xl font-semibold text-stone-900">Client Portal</h1>
             {previewMode ? <p className="mt-2 text-sm font-medium text-amber-700">Preview mode</p> : null}
           </div>
@@ -109,20 +109,6 @@ export function PortalShell({
               </Link>
             </li>
           </ul>
-          <div className="mt-6">
-            <p className="text-xs font-semibold uppercase text-stone-400">Tools</p>
-            <ul className="mt-4 space-y-2">
-              <li>
-                <a
-                  href="/ndaesq"
-                  className="block rounded-md border border-stone-200 bg-white px-3 py-2 text-sm font-medium text-brand-navy transition-colors hover:border-brand-navy"
-                >
-                  NDA Tool
-                </a>
-                <p className="mt-2 text-xs leading-5 text-stone-400">Separate service mounted at /ndaesq.</p>
-              </li>
-            </ul>
-          </div>
         </nav>
 
         <section aria-labelledby="portal-home-heading" className="space-y-10">

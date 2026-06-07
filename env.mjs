@@ -27,6 +27,7 @@ export const env = createEnv({
     PORTAL_CLIENT_EMAIL: optionalString,
     PORTAL_CLIENT_PASSWORD: optionalString,
     PORTAL_ADMIN_TOKEN: optionalString,
+    PORTAL_ACCESS_REQUEST_WEBHOOK_URL: optionalUrl,
   },
   client: {},
   runtimeEnv: {
@@ -44,5 +45,6 @@ export const env = createEnv({
     PORTAL_CLIENT_EMAIL: process.env.PORTAL_CLIENT_EMAIL,
     PORTAL_CLIENT_PASSWORD: process.env.PORTAL_CLIENT_PASSWORD,
     PORTAL_ADMIN_TOKEN: process.env.PORTAL_ADMIN_TOKEN,
+    PORTAL_ACCESS_REQUEST_WEBHOOK_URL: process.env.PORTAL_ACCESS_REQUEST_WEBHOOK_URL,
   },
 })

@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: ServiceRequestPageProps): Pro
 
   return {
     title: `Request ${service.title}`,
-    description: `Submit a request for ${service.title} through the Levine LLP client portal.`,
+    description: `Submit a request for ${service.title} through the Levine Law client portal.`,
   }
 }
 
@@ -153,7 +153,7 @@ export default async function ServiceRequestPage({ params }: ServiceRequestPageP
           <div className="mt-5 rounded-md border border-stone-200 bg-white px-5 py-5">
             <h2 className="text-sm font-semibold text-stone-900">Acknowledgement</h2>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-500">
-              Submitting this request does not mean work has started. Levine LLP will review the request and confirm
+              Submitting this request does not mean work has started. Levine Law will review the request and confirm
               next steps, pricing, and timeline before proceeding.
             </p>
             <label className="mt-4 flex cursor-pointer items-start gap-3">

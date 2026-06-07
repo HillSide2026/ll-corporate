@@ -7,7 +7,7 @@ import { SiteFooter } from "src/components/SiteFooter"
 
 export const metadata: Metadata = {
   title: "Industries",
-  description: "Levine LLP advises operators, fintech platforms, investors, and cross-border businesses on corporate, contract, and financial services matters.",
+  description: "Levine Law advises operators, fintech platforms, investors, and cross-border businesses on corporate, contract, and financial services matters.",
 }
 
 const clientTypes = [
@@ -73,7 +73,7 @@ export default function IndustriesPage() {
             Who We Work With
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-stone-500">
-            Levine LLP advises a focused range of clients on corporate structure, commercial agreements, and financial
+            Levine Law advises a focused range of clients on corporate structure, commercial agreements, and financial
             services matters. Our work is best suited to businesses where legal issues are interconnected.
           </p>
         </div>
@@ -174,11 +174,11 @@ export default function IndustriesPage() {
               data-activation-value=""
               data-deactivation-type="neverDeactivate"
               data-deactivation-value=""
-              data-form-name="Inquiries Form - LL LLP"
+              data-form-name="Inquiries Form - Levine Law"
               data-height="420"
               data-layout-iframe-id="inline-xKjce4uPtz3tWVDyHpVy"
               data-form-id="xKjce4uPtz3tWVDyHpVy"
-              title="Inquiries Form - LL LLP"
+              title="Inquiries Form - Levine Law"
             />
           </div>
         </div>

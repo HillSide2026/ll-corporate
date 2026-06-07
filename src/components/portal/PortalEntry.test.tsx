@@ -5,26 +5,31 @@ import { PortalEntry } from "./PortalEntry"
 
 vi.mock("src/lib/auth/actions", () => ({
   previewPortalAccess: vi.fn(),
+  signInWithCredentials: vi.fn(),
   signInWithKeycloak: vi.fn(),
+}))
+
+vi.mock("src/lib/auth/config", () => ({
+  isKeycloakConfigured: vi.fn(() => false),
 }))
 
 describe("PortalEntry", () => {
   it("renders the public login entry without domain data", () => {
     render(<PortalEntry />)
 
+    expect(screen.getByText("Levine Law")).toBeInTheDocument()
     expect(screen.getByRole("heading", { name: "Client Portal" })).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Sign in securely" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Sign in" })).toBeInTheDocument()
     expect(screen.queryByRole("button", { name: "Preview portal" })).not.toBeInTheDocument()
-    expect(screen.getByRole("link", { name: "NDA Generator" })).toHaveAttribute("href", "/nda")
-    expect(screen.getByText("Everything you need. All in one secure place.")).toBeInTheDocument()
-    expect(screen.getAllByText(/Sign in to continue/)).toHaveLength(3)
+    expect(screen.queryByRole("link", { name: "NDA Generator" })).not.toBeInTheDocument()
+    expect(screen.getByText("Sign in to view your matters, documents, and requests.")).toBeInTheDocument()
   })
 
   it("renders a plain-language sign-in error without provider details", () => {
     render(<PortalEntry authError="OAuthCallback" />)
 
     expect(screen.getByRole("alert")).toHaveTextContent(
-      "We could not complete sign-in. Please try again, or contact Levine LLP if this keeps happening."
+      "We could not complete sign-in. Please try again, or contact Levine Law if this keeps happening."
     )
     expect(screen.queryByText("OAuthCallback")).not.toBeInTheDocument()
   })
@@ -32,7 +37,9 @@ describe("PortalEntry", () => {
   it("renders a plain-language auth configuration error", () => {
     render(<PortalEntry authError="Configuration" />)
 
-    expect(screen.getByRole("alert")).toHaveTextContent("Portal sign-in is not fully configured yet.")
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      "We could not complete sign-in. Please try again, or contact Levine Law if this keeps happening."
+    )
     expect(screen.queryByText("Configuration")).not.toBeInTheDocument()
   })
 

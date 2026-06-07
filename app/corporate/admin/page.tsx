@@ -8,7 +8,7 @@ import { getMatterList } from "src/lib/portal/matterSource"
 import { getMatterRequests } from "src/lib/portal/matterRequestStore"
 import { adminLogout } from "./login/actions"
 
-export const metadata: Metadata = { title: "Admin — Levine LLP Portal" }
+export const metadata: Metadata = { title: "Admin — Levine Law Portal" }
 
 export const dynamic = "force-dynamic"
 
@@ -48,7 +48,7 @@ export default async function AdminHomePage() {
       <header className="border-b border-stone-200 bg-white">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
           <div>
-            <p className="text-sm font-semibold text-brand-navy">Levine LLP</p>
+            <p className="text-sm font-semibold text-brand-navy">Levine Law</p>
             <h1 className="mt-0.5 text-lg font-semibold text-stone-900">Admin</h1>
           </div>
           <div className="flex items-center gap-4 text-sm">

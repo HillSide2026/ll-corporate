@@ -2,7 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 
 import { SiteFooter } from "src/components/SiteFooter"
-import { PortalRegistrationForm } from "src/components/PortalRegistrationForm"
+import { PortalAccessRequestForm } from "src/components/PortalAccessRequestForm"
 
 const portalCapabilities = [
   {
@@ -40,8 +40,8 @@ export default function HomePage() {
             <a href="#portal-capabilities" className="hidden text-stone-600 transition-colors hover:text-stone-900 sm:inline">
               Portal
             </a>
-            <a href="#create-account" className="hidden text-stone-600 transition-colors hover:text-stone-900 sm:inline">
-              Create Account
+            <a href="#request-access" className="hidden text-stone-600 transition-colors hover:text-stone-900 sm:inline">
+              Request Access
             </a>
             <a
               href="/corporate"
@@ -54,22 +54,22 @@ export default function HomePage() {
       </header>
 
       {/* 1. Hero */}
-      <section className="bg-white py-24 md:py-32">
+      <section className="bg-white py-24 text-center md:py-32">
         <div className="mx-auto max-w-6xl px-6">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-navy">Secure Client Portal</p>
-          <h1 className="mt-6 max-w-3xl text-5xl font-semibold leading-tight tracking-tight text-stone-900 sm:text-6xl">
+          <h1 className="mx-auto mt-6 max-w-3xl text-5xl font-semibold leading-tight tracking-tight text-stone-900 sm:text-6xl">
             Access Your Levine Law Workspace
           </h1>
-          <p className="mt-6 max-w-xl text-lg leading-8 text-stone-500">
-            Create an account to access documents, submit requests, track matters, and communicate securely with Levine
-            Law through our digital client portal.
+          <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-stone-500">
+            Request portal access to view documents, submit requests, track matters, and communicate securely with
+            Levine Law through our digital client portal.
           </p>
-          <div className="mt-10 flex flex-wrap gap-4">
+          <div className="mt-10 flex flex-wrap justify-center gap-4">
             <a
-              href="#create-account"
+              href="#request-access"
               className="inline-flex items-center justify-center rounded bg-brand-navy px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-dark"
             >
-              Create Account
+              Request Portal Access
             </a>
             <a
               href="/corporate"
@@ -78,8 +78,8 @@ export default function HomePage() {
               Sign In
             </a>
           </div>
-          <p className="mt-5 max-w-xl text-xs leading-5 text-stone-400">
-            Creating a portal account is for administrative access only and does not create a lawyer-client
+          <p className="mx-auto mt-5 max-w-xl text-xs leading-5 text-stone-400">
+            Requesting portal access is for administrative review only and does not create a lawyer-client
             relationship, retainer, engagement, or obligation on the part of Levine Law.
           </p>
         </div>
@@ -99,10 +99,7 @@ export default function HomePage() {
           </div>
           <div className="grid gap-6 sm:grid-cols-2 md:gap-8 lg:grid-cols-4">
             {portalCapabilities.map((item) => (
-              <div
-                key={item.title}
-                className="rounded border border-stone-200 bg-white p-6 transition hover:border-stone-300 hover:shadow-md"
-              >
+              <div key={item.title} className="rounded border border-stone-200 bg-white p-6 text-center transition hover:border-stone-300 hover:shadow-md">
                 <h3 className="mb-2 text-base font-semibold leading-tight text-stone-900">{item.title}</h3>
                 <p className="text-sm leading-6 text-stone-500">{item.description}</p>
               </div>
@@ -124,11 +121,11 @@ export default function HomePage() {
               secure communications.
             </p>
           </div>
-          <div className="mx-auto max-w-2xl rounded border border-stone-200 bg-white p-6 transition hover:border-stone-300 hover:shadow-md md:p-8">
+          <div className="mx-auto max-w-2xl rounded border border-stone-200 bg-white p-6 text-center transition hover:border-stone-300 hover:shadow-md md:p-8">
             <h3 className="text-xl font-semibold leading-tight text-stone-900">Secure Portal Access</h3>
             <p className="mt-3 text-sm leading-6 text-stone-500">
-              Sign in if you already have a Levine Law portal account. New users can create an account below and begin
-              the administrative onboarding process.
+              Sign in if you already have a Levine Law portal account. New users can request access below to begin
+              administrative review.
             </p>
             <Link
               href="/corporate"
@@ -156,26 +153,26 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 5. Create Account */}
-      <section id="create-account" className="bg-stone-50 py-20 md:py-24">
+      {/* 5. Request Access */}
+      <section id="request-access" className="bg-stone-50 py-20 md:py-24">
         <div className="mx-auto max-w-6xl px-6">
           <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-navy">Create Account</p>
+            <div className="text-center">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-navy">Request Access</p>
               <h2 className="mt-3 text-3xl font-semibold leading-tight tracking-tight text-stone-900">
-                Start your portal access request
+                Request portal access
               </h2>
               <p className="mt-4 text-sm leading-6 text-stone-500">
-                Registration gives you access to digital services and administrative workflows. Levine Law reviews
-                submitted requests before accepting any engagement.
+                Use this form to request access to the client portal. Levine Law reviews requests before granting
+                access or accepting any engagement.
               </p>
               <p className="mt-4 text-sm leading-6 text-stone-500">
-                Creating an account does not create a lawyer-client relationship, retainer, engagement, or obligation on
+                Requesting access does not create a lawyer-client relationship, retainer, engagement, or obligation on
                 the part of Levine Law.
               </p>
             </div>
-            <div className="rounded border border-stone-200 bg-white p-6 shadow-sm md:p-8">
-              <PortalRegistrationForm />
+            <div className="rounded border border-stone-200 bg-white p-6 text-left shadow-sm md:p-8">
+              <PortalAccessRequestForm />
             </div>
           </div>
         </div>
@@ -188,11 +185,11 @@ export default function HomePage() {
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-navy">Notice</p>
             <h2 className="mt-3 text-2xl font-semibold leading-tight tracking-tight text-stone-900">Notice</h2>
             <p className="mt-4 text-sm leading-6 text-stone-600">
-              Registration for Levine Law Client Portal is provided for administrative convenience and access to digital
-              services.
+              Levine Law Client Portal access requests are provided for administrative convenience and access to digital
+              services after review.
             </p>
             <p className="mt-4 text-sm leading-6 text-stone-600">
-              Creating an account does not: Create a lawyer-client relationship; Retain Levine Law as legal counsel;
+              Requesting portal access does not: Create a lawyer-client relationship; Retain Levine Law as legal counsel;
               Constitute legal advice; Guarantee representation; Create an engagement agreement. A lawyer-client
               relationship is established only after Levine Law has completed its intake and conflict review processes
               and a formal engagement has been accepted.
@@ -210,10 +207,10 @@ export default function HomePage() {
             </h2>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               <a
-                href="#create-account"
+                href="#request-access"
                 className="inline-flex items-center justify-center rounded bg-brand-navy px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-dark"
               >
-                Create Account
+                Request Portal Access
               </a>
               <Link
                 href="/corporate"

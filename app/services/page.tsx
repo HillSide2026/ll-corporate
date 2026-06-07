@@ -8,7 +8,7 @@ import { SiteFooter } from "src/components/SiteFooter"
 export const metadata: Metadata = {
   title: "Fractional Counsel",
   description:
-    "Levine LLP provides fractional corporate, contract, and financial services counsel for companies that need practical legal support without building a full in-house legal function.",
+    "Levine Law provides fractional corporate, contract, and financial services counsel for companies that need practical legal support without building a full in-house legal function.",
 }
 
 const plans = [
@@ -117,7 +117,7 @@ export default function ServicesPage() {
             Ongoing legal support for businesses that need more than one-off answers.
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-stone-500">
-            Levine LLP provides fractional corporate, contract, and financial services counsel for companies that need
+            Levine Law provides fractional corporate, contract, and financial services counsel for companies that need
             practical legal support without building a full in-house legal function.
           </p>
           <div className="mt-10 flex flex-wrap gap-4">
@@ -280,11 +280,11 @@ export default function ServicesPage() {
               data-activation-value=""
               data-deactivation-type="neverDeactivate"
               data-deactivation-value=""
-              data-form-name="Inquiries Form - LL LLP"
+              data-form-name="Inquiries Form - Levine Law"
               data-height="420"
               data-layout-iframe-id="inline-xKjce4uPtz3tWVDyHpVy"
               data-form-id="xKjce4uPtz3tWVDyHpVy"
-              title="Inquiries Form - LL LLP"
+              title="Inquiries Form - Levine Law"
             />
           </div>
         </div>

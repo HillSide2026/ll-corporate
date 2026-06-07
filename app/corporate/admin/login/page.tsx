@@ -20,7 +20,7 @@ export default async function AdminLoginPage({ searchParams }: LoginPageProps) {
   return (
     <main className="flex min-h-dvh items-center justify-center bg-stone-50">
       <div className="w-full max-w-sm px-6">
-        <p className="text-sm font-semibold text-brand-navy">Levine LLP</p>
+        <p className="text-sm font-semibold text-brand-navy">Levine Law</p>
         <h1 className="mt-2 text-2xl font-semibold text-stone-900">Admin access</h1>
         <p className="mt-2 text-sm text-stone-500">Enter the admin token to continue.</p>
 
