@@ -31,9 +31,9 @@ export default function HomePage() {
       {/* 1. Hero */}
       <section className="bg-white py-20 md:py-28">
         <div className="mx-auto max-w-6xl px-6">
-          <p className="text-brand-navy text-[11px] font-semibold tracking-[0.24em] uppercase">Secure Client Portal</p>
+          <p className="text-brand-navy text-[11px] font-semibold tracking-[0.24em] uppercase">Client Access</p>
           <h1 className="text-ink mt-5 max-w-4xl text-5xl leading-tight font-semibold tracking-tight sm:text-6xl">
-            Access Your Levine Law Workspace
+            Access The Levine Law Workspace
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-stone-600">
             Request portal access to view documents, submit requests, track matters, and communicate securely with
@@ -44,7 +44,7 @@ export default function HomePage() {
               href="#request-access"
               className="bg-brand-navy hover:bg-brand-navy-dark inline-flex items-center justify-center rounded-md px-6 py-3 text-sm font-semibold text-white transition-colors"
             >
-              Request Portal Access
+              Request Access
             </a>
             <a
               href="/sign-in"
@@ -53,10 +53,6 @@ export default function HomePage() {
               Sign In
             </a>
           </div>
-          <p className="mt-5 max-w-2xl text-xs leading-5 text-stone-400">
-            Requesting portal access is for administrative review only and does not create a lawyer-client relationship,
-            retainer, engagement, or obligation on the part of Levine Law.
-          </p>
         </div>
       </section>
 
