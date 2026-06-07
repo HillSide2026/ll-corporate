@@ -25,11 +25,6 @@ export default async function PortalAppPage({ searchParams }: PortalAppPageProps
   const filterSearch = typeof sp.search === "string" ? sp.search : undefined
 
   return (
-    <PortalShell
-      session={session}
-      accessToken={accessToken}
-      filterState={filterState}
-      filterSearch={filterSearch}
-    />
+    <PortalShell session={session} accessToken={accessToken} filterState={filterState} filterSearch={filterSearch} />
   )
 }

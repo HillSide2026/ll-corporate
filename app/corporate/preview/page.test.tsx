@@ -17,7 +17,7 @@ vi.mock("src/lib/auth/config", () => ({
     identity: {
       subject: "preview-client",
       displayName: "Preview Client",
-      email: "preview.client@levinellp.example",
+      email: "preview.client@levinelaw.example",
     },
   })),
   isPreviewPortalAccessEnabled: vi.fn(),
@@ -58,6 +58,6 @@ describe("PreviewPortalPage", () => {
 
     expect(screen.getByRole("heading", { name: "Preview portal shell" })).toBeInTheDocument()
     expect(screen.getByText("preview enabled")).toBeInTheDocument()
-    expect(screen.getByText("preview.client@levinellp.example")).toBeInTheDocument()
+    expect(screen.getByText("preview.client@levinelaw.example")).toBeInTheDocument()
   })
 })

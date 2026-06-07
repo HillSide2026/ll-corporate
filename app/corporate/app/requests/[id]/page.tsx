@@ -1,7 +1,16 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 
+import {
+  PortalBadge,
+  PortalButton,
+  PortalCard,
+  PortalCardContent,
+  PortalCardHeader,
+  PortalCardTitle,
+  PortalPageHeader,
+} from "src/components/portal/PortalDesignSystem"
+import { PortalWorkspaceShell } from "src/components/portal/PortalWorkspaceShell"
 import { getPreviewPortalSession, isPreviewPortalAccessEnabled } from "src/lib/auth/config"
 import { getPortalSession } from "src/lib/auth/session"
 import { getRequestById, type RequestStatus } from "src/lib/portal/requestStore"
@@ -20,9 +29,7 @@ export async function generateMetadata({ params }: RequestDetailPageProps): Prom
 
 function formatDate(iso: string): string {
   const d = new Date(iso)
-  return isNaN(d.getTime())
-    ? iso
-    : d.toLocaleDateString("en-CA", { year: "numeric", month: "short", day: "numeric" })
+  return isNaN(d.getTime()) ? iso : d.toLocaleDateString("en-CA", { year: "numeric", month: "short", day: "numeric" })
 }
 
 function formatDateTime(iso: string): string {
@@ -38,14 +45,14 @@ function formatDateTime(iso: string): string {
       })
 }
 
-function statusBadge(status: RequestStatus): string {
+function statusTone(status: RequestStatus): "navy" | "gold" | "green" {
   switch (status) {
     case "Received":
-      return "bg-amber-50 text-amber-700"
+      return "gold"
     case "In Review":
-      return "bg-brand-navy/10 text-brand-navy"
+      return "navy"
     case "Complete":
-      return "bg-stone-100 text-stone-500"
+      return "green"
   }
 }
 
@@ -54,14 +61,13 @@ export default async function RequestDetailPage({ params, searchParams }: Reques
   const sp = await searchParams
   const justSubmitted = sp.submitted === "1"
 
-  const session =
-    (await getPortalSession()) ?? (isPreviewPortalAccessEnabled() ? getPreviewPortalSession() : null)
+  const session = (await getPortalSession()) ?? (isPreviewPortalAccessEnabled() ? getPreviewPortalSession() : null)
 
   if (!session) {
     redirect("/corporate")
   }
 
-  const req = getRequestById(id)
+  const req = await getRequestById(id, session.identity)
   if (!req) {
     notFound()
   }
@@ -72,19 +78,10 @@ export default async function RequestDetailPage({ params, searchParams }: Reques
   }>
 
   return (
-    <main className="min-h-dvh bg-stone-50 text-stone-900">
-      <section className="mx-auto max-w-5xl px-6 py-10">
-        <nav className="text-sm">
-          <Link
-            href="/corporate/app/requests"
-            className="font-semibold text-brand-navy transition-colors hover:text-brand-navy-dark"
-          >
-            ← All requests
-          </Link>
-        </nav>
-
+    <PortalWorkspaceShell active="requests" session={session}>
+      <div className="space-y-6">
         {justSubmitted ? (
-          <div className="mt-6 rounded border border-green-200 bg-green-50 px-5 py-4 text-sm">
+          <div className="rounded-lg border border-green-200 bg-green-50 px-5 py-4 text-sm">
             <p className="font-semibold text-green-900">Request submitted</p>
             <p className="mt-1 text-green-700">
               Your request has been received. We&apos;ll follow up with next steps shortly.
@@ -92,81 +89,97 @@ export default async function RequestDetailPage({ params, searchParams }: Reques
           </div>
         ) : null}
 
-        <div className="mt-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-navy">
-            Service Request
-          </p>
-          <div className="mt-3 flex flex-wrap items-center gap-3">
-            <h1 className="text-3xl font-semibold text-stone-900">{req.contract.serviceTitle}</h1>
-            <span className={`rounded px-2 py-1 text-xs font-medium ${statusBadge(req.status)}`}>
-              {req.status}
-            </span>
-          </div>
-          <p className="mt-2 text-xs text-stone-400">
-            {req.id} · Submitted {formatDate(req.contract.createdAt)}
-          </p>
-        </div>
+        <PortalPageHeader
+          eyebrow="Service request"
+          title={req.contract.serviceTitle}
+          description={`${req.id} · Submitted ${formatDate(req.contract.createdAt)}`}
+          action={
+            <PortalButton href="/corporate/app/requests" tone="secondary">
+              All requests
+            </PortalButton>
+          }
+        />
 
-        <div className="mt-8 grid gap-4 sm:grid-cols-2">
+        <PortalBadge tone={statusTone(req.status)}>{req.status}</PortalBadge>
+
+        <div className="grid gap-4 sm:grid-cols-2">
           {/* Pricing */}
-          <div className="rounded border border-stone-200 bg-white px-5 py-5">
-            <h2 className="text-sm font-semibold text-stone-900">Pricing</h2>
-            <p className="mt-2 text-sm text-stone-500">{req.contract.pricingSnapshot.priceDisplay}</p>
-          </div>
+          <PortalCard>
+            <PortalCardHeader>
+              <PortalCardTitle>Pricing</PortalCardTitle>
+            </PortalCardHeader>
+            <PortalCardContent>
+              <p className="text-sm text-stone-600">{req.contract.pricingSnapshot.priceDisplay}</p>
+            </PortalCardContent>
+          </PortalCard>
 
           {/* Acknowledgement */}
-          <div className="rounded border border-stone-200 bg-white px-5 py-5">
-            <h2 className="text-sm font-semibold text-stone-900">Engagement acknowledged</h2>
-            <p className="mt-2 text-sm text-stone-500">
-              {formatDateTime(req.contract.engagementAcknowledgedAt)}
-            </p>
-          </div>
+          <PortalCard>
+            <PortalCardHeader>
+              <PortalCardTitle>Engagement acknowledged</PortalCardTitle>
+            </PortalCardHeader>
+            <PortalCardContent>
+              <p className="text-sm text-stone-600">{formatDateTime(req.contract.engagementAcknowledgedAt)}</p>
+            </PortalCardContent>
+          </PortalCard>
         </div>
 
         {/* Scope */}
-        <div className="mt-4 rounded border border-stone-200 bg-white px-5 py-5">
-          <h2 className="text-sm font-semibold text-stone-900">Scope</h2>
-          <ul className="mt-3 space-y-1">
-            {req.contract.scopeSnapshot.map((item, i) => (
-              <li key={i} className="flex gap-2 text-sm text-stone-500">
-                <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-navy/40" />
-                {item}
-              </li>
-            ))}
-          </ul>
-        </div>
+        <PortalCard>
+          <PortalCardHeader>
+            <PortalCardTitle>Scope</PortalCardTitle>
+          </PortalCardHeader>
+          <PortalCardContent>
+            <ul className="space-y-1">
+              {req.contract.scopeSnapshot.map((item, i) => (
+                <li key={i} className="flex gap-2 text-sm text-stone-500">
+                  <span className="bg-brand-navy/40 mt-1 h-1.5 w-1.5 shrink-0 rounded-full" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </PortalCardContent>
+        </PortalCard>
 
         {/* Submitted information */}
         {inputEntries.length > 0 ? (
-          <div className="mt-4 rounded border border-stone-200 bg-white px-5 py-5">
-            <h2 className="text-sm font-semibold text-stone-900">Submitted information</h2>
-            <dl className="mt-4 space-y-4">
-              {inputEntries.map((entry, i) => (
-                <div key={i}>
-                  <dt className="text-xs font-medium text-stone-400">{entry.label}</dt>
-                  <dd className="mt-1 text-sm text-stone-700 whitespace-pre-wrap">
-                    {entry.value || <span className="italic text-stone-300">Not provided</span>}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </div>
+          <PortalCard>
+            <PortalCardHeader>
+              <PortalCardTitle>Submitted information</PortalCardTitle>
+            </PortalCardHeader>
+            <PortalCardContent>
+              <dl className="space-y-4">
+                {inputEntries.map((entry, i) => (
+                  <div key={i}>
+                    <dt className="text-xs font-medium text-stone-400">{entry.label}</dt>
+                    <dd className="mt-1 text-sm whitespace-pre-wrap text-stone-700">
+                      {entry.value || <span className="text-stone-300 italic">Not provided</span>}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </PortalCardContent>
+          </PortalCard>
         ) : null}
 
         {/* Attachment */}
         {req.attachment ? (
-          <div className="mt-4 rounded border border-stone-200 bg-white px-5 py-5">
-            <h2 className="text-sm font-semibold text-stone-900">Attached document</h2>
-            <div className="mt-3 flex items-center gap-3 rounded border border-stone-100 bg-stone-50 px-4 py-3">
-              <span className="text-sm font-medium text-stone-700">{req.attachment.filename}</span>
-              <span className="text-xs text-stone-400">{formatDate(req.attachment.addedAt)}</span>
-            </div>
-            <p className="mt-2 text-xs text-stone-400">
-              File received. Your counsel will review the attachment alongside your request.
-            </p>
-          </div>
+          <PortalCard>
+            <PortalCardHeader>
+              <PortalCardTitle>Attached document</PortalCardTitle>
+            </PortalCardHeader>
+            <PortalCardContent>
+              <div className="mt-3 flex items-center gap-3 rounded border border-stone-100 bg-stone-50 px-4 py-3">
+                <span className="text-sm font-medium text-stone-700">{req.attachment.filename}</span>
+                <span className="text-xs text-stone-400">{formatDate(req.attachment.addedAt)}</span>
+              </div>
+              <p className="mt-2 text-xs text-stone-400">
+                File received. Your counsel will review the attachment alongside your request.
+              </p>
+            </PortalCardContent>
+          </PortalCard>
         ) : null}
-      </section>
-    </main>
+      </div>
+    </PortalWorkspaceShell>
   )
 }

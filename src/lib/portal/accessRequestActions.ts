@@ -2,6 +2,14 @@
 
 import { env } from "env.mjs"
 
+import {
+  createPortalAccessRequest,
+  isPortalAccessRequestApiConfigured,
+  PortalAccessRequestApiError,
+  PortalAccessRequestApiNotConfiguredError,
+} from "./accessRequestApi"
+import { sendPortalNotification } from "./portalNotifications"
+
 export type PortalAccessRequestState = {
   status: "idle" | "submitted" | "not_configured" | "error"
   message?: string
@@ -36,9 +44,36 @@ function buildMailtoHref(payload: {
   return `mailto:matthew@levinelegal.ca?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
 }
 
+async function submitLegacyWebhook(payload: {
+  company: string
+  description: string
+  email: string
+  fullName: string
+  legalAcknowledgedAt: string
+  phone: string
+}): Promise<boolean> {
+  if (!env.PORTAL_ACCESS_REQUEST_WEBHOOK_URL) return false
+
+  const response = await fetch(env.PORTAL_ACCESS_REQUEST_WEBHOOK_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(env.PORTAL_ACCESS_REQUEST_WEBHOOK_SECRET
+        ? { Authorization: `Bearer ${env.PORTAL_ACCESS_REQUEST_WEBHOOK_SECRET}` }
+        : {}),
+    },
+    body: JSON.stringify({
+      type: "portal_access_request",
+      ...payload,
+    }),
+  })
+
+  return response.ok
+}
+
 export async function submitPortalAccessRequest(
   _previousState: PortalAccessRequestState,
-  formData: FormData,
+  formData: FormData
 ): Promise<PortalAccessRequestState> {
   const fullName = String(formData.get("fullName") ?? "").trim()
   const email = String(formData.get("email") ?? "").trim()
@@ -59,42 +94,66 @@ export async function submitPortalAccessRequest(
   }
 
   const mailtoHref = buildMailtoHref({ company, description, email, fullName, phone })
+  const payload = {
+    company,
+    description,
+    email,
+    fullName,
+    legalAcknowledgedAt: new Date().toISOString(),
+    phone,
+  }
 
-  if (!env.PORTAL_ACCESS_REQUEST_WEBHOOK_URL) {
-    return {
-      status: "not_configured",
-      message:
-        "Portal access request submission is not configured yet. Use the email handoff below to send this request directly to Levine Law.",
-      mailtoHref,
+  if (isPortalAccessRequestApiConfigured()) {
+    try {
+      const request = await createPortalAccessRequest(payload)
+      await sendPortalNotification({
+        type: "portal_access_request_created",
+        requestId: request.id,
+        email: request.email,
+        fullName: request.fullName,
+        status: request.status,
+      })
+
+      return {
+        status: "submitted",
+        message:
+          "Your portal access request has been submitted. This does not create a lawyer-client relationship. Levine Law will review your request and contact you if appropriate.",
+      }
+    } catch (error) {
+      if (error instanceof PortalAccessRequestApiNotConfiguredError || error instanceof PortalAccessRequestApiError) {
+        return {
+          status: "error",
+          message:
+            "Portal access request submission failed. Use the email handoff below or contact Levine Law directly.",
+          mailtoHref,
+        }
+      }
+
+      throw error
     }
   }
 
-  const response = await fetch(env.PORTAL_ACCESS_REQUEST_WEBHOOK_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      type: "portal_access_request",
-      fullName,
-      email,
-      company,
-      phone,
-      description,
-      legalAcknowledgedAt: new Date().toISOString(),
-    }),
-  })
+  if (env.PORTAL_ACCESS_REQUEST_WEBHOOK_URL) {
+    const submitted = await submitLegacyWebhook(payload)
+    if (submitted) {
+      return {
+        status: "submitted",
+        message:
+          "Your portal access request has been submitted. This does not create a lawyer-client relationship. Levine Law will review your request and contact you if appropriate.",
+      }
+    }
 
-  if (!response.ok) {
     return {
       status: "error",
-      message:
-        "Portal access request submission failed. Use the email handoff below or contact Levine Law directly.",
+      message: "Portal access request submission failed. Use the email handoff below or contact Levine Law directly.",
       mailtoHref,
     }
   }
 
   return {
-    status: "submitted",
+    status: "not_configured",
     message:
-      "Your portal access request has been submitted. This does not create a lawyer-client relationship. Levine Law will review your request and contact you if appropriate.",
+      "Portal access request submission is not configured yet. Use the email handoff below to send this request directly to Levine Law.",
+    mailtoHref,
   }
 }

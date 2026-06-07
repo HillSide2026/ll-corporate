@@ -1,28 +1,23 @@
-/**
- * TEMPORARY — abstraction layer for matter updates.
- * Returns mock data in preview mode; live store data otherwise.
- * Same pattern as matterSource.ts and documentSource.ts.
- *
- * To remove:
- *   1. Call getMatterUpdates() from matterUpdateStore directly, or replace
- *      with a real API call once the lawyer admin surface posts real updates.
- *   2. Delete this file and mockMatterUpdates.ts.
- */
-
 import { MOCK_MATTER_UPDATES } from "./mockMatterUpdates"
 import { getMatterUpdates, type MatterUpdate } from "./matterUpdateStore"
+import { isPortalDatabaseConfigured, isPortalMockFallbackEnabled } from "./portalDb"
 
 export type { MatterUpdate }
 
-export function getMatterUpdateList(
+export async function getMatterUpdateList(
   matterKey: string,
-  isMock: boolean,
-): { updates: MatterUpdate[]; isMock: boolean } {
-  if (isMock) {
+  isMock: boolean
+): Promise<{ updates: MatterUpdate[]; isMock: boolean }> {
+  if (isPortalDatabaseConfigured()) {
+    return { updates: await getMatterUpdates(matterKey), isMock: false }
+  }
+
+  if (isMock && isPortalMockFallbackEnabled()) {
     return {
       updates: MOCK_MATTER_UPDATES.filter((u) => u.matterKey === matterKey),
       isMock: true,
     }
   }
-  return { updates: getMatterUpdates(matterKey), isMock: false }
+
+  return { updates: [], isMock: false }
 }

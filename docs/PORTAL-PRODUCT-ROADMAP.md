@@ -1,11 +1,11 @@
 # Client Portal — Product Roadmap
 
-> Strategic product, UX, and engineering roadmap for the Levine LLP client portal.
-> Last updated: 2026-05-03
+> Strategic product, UX, and engineering roadmap for the Levine Law client portal.
+> Last updated: 2026-06-06
 
 ---
 
-## Current State (as of 2026-05-03)
+## Current State (as of 2026-06-06)
 
 Phase 1, Phase 2, and Phase 3 are complete. The portal is usable for a real fractional counsel client and includes a light lawyer-facing admin surface.
 
@@ -23,11 +23,19 @@ Phase 1, Phase 2, and Phase 3 are complete. The portal is usable for a real frac
 - Intake contract types wired end-to-end
 - Preview mode for development without a live backend
 
-### TEMPORARY — must replace before production scale
+### Stage 3 durable storage path
 
-- `src/lib/portal/mockDocuments.ts` + `documentSource.ts` — mock document records; replace with real document API
-- `src/lib/portal/requestStore.ts` — in-memory Map for submitted requests; resets on server restart; replace with real database or task tracker intake endpoint
-- `src/lib/portal/mockMatters.ts` + `matterSource.ts` — mock matter data; replace when `LL_TASK_TRACKER_API_BASE_URL` is live
+- `src/lib/portal/requestStore.ts` and `matterRequestStore.ts` now persist portal requests to the portal database.
+- `src/lib/portal/matterUpdateStore.ts` now persists counsel/admin updates to the portal database.
+- `src/lib/portal/documentStore.ts` stores document metadata in the portal database and file bytes in private Vercel Blob.
+- `/corporate/api/documents/[id]/download` streams private Blob files after portal/admin authorization checks.
+- `docs/portal-stage3-schema.sql` defines the required portal Postgres schema.
+
+### Preview/dev fallback
+
+- `src/lib/portal/mockDocuments.ts` + `documentSource.ts` — mock document records remain only for explicit preview/dev fallback.
+- `src/lib/portal/mockMatters.ts` + `matterSource.ts` — mock matter data remains only for explicit preview/dev fallback while `LL_TASK_TRACKER_API_BASE_URL` is not live.
+- `PORTAL_ENABLE_MOCK_FALLBACK` should be false or unset in production.
 
 ### Phase 2 — complete
 
@@ -47,17 +55,17 @@ Phase 1, Phase 2, and Phase 3 are complete. The portal is usable for a real frac
 
 - Automated status email notifications (requires email provider)
 - In-app messaging — intentionally deferred (see "What to Avoid")
-- Real S3/R2 file storage (file bytes currently discarded)
-- Replace all TEMPORARY in-memory stores with real backends
+- Production portal database and private Vercel Blob provisioning
+- Document retention/deletion operations and Blob cleanup workflow
 
 ---
 
 ## Strategic Purpose
 
-| Layer | Purpose |
-|---|---|
-| Public site | Positioning, authority, routing prospects to services or the portal |
-| Client portal | Execution layer — delivering legal services digitally |
+| Layer         | Purpose                                                             |
+| ------------- | ------------------------------------------------------------------- |
+| Public site   | Positioning, authority, routing prospects to services or the portal |
+| Client portal | Execution layer — delivering legal services digitally               |
 
 The portal supports:
 
@@ -85,6 +93,7 @@ The portal is **not** a case management system, a billing platform, or a communi
 - Scope, pricing, and assumptions displayed above the form for client context
 
 **Not included (intentional):**
+
 - File attachments on requests
 - Real-time status updates
 - Client-editable requests post-submission
@@ -101,6 +110,7 @@ The portal is **not** a case management system, a billing platform, or a communi
 - Shows "Preview data" notice when mock
 
 **Removal checklist:**
+
 1. Delete `mockDocuments.ts` and `documentSource.ts`
 2. Call real document API directly from `documents/page.tsx`
 3. Remove `isMock` notice
@@ -115,6 +125,7 @@ The portal is **not** a case management system, a billing platform, or a communi
 - Empty state links to service catalog
 
 **Removal checklist:**
+
 1. Replace `addRequest` / `getRequests` in `requestStore.ts` with real DB or task tracker API calls
 2. Wire `submitServiceRequest` to POST to real intake endpoint
 3. Remove `?submitted=1` banner if requests page fetches live status
@@ -149,6 +160,7 @@ No dashboard. The sidebar is the navigation. Clients land on Matters. This is co
 The matter event log today shows admin-generated events only. Add lawyer-posted updates visible to the client.
 
 **Build:**
+
 - `MatterUpdate` type: `{ matterKey, body, addedAt, authorName }`
 - Lawyer posts updates via admin tools or minimal lawyer-facing form (see Phase 3)
 - Client sees updates in the matter detail view, below the event log
@@ -161,9 +173,10 @@ This is the single highest-leverage Phase 2 feature. It turns the matter detail 
 ### Document Upload (Client-side)
 
 **Build:**
+
 - File upload on the matter detail page: "Upload a document for this matter"
 - Accept PDF, DOCX, images — 10 MB limit
-- Store in S3/R2 with `matterKey` prefix
+- Store in private Vercel Blob with a `matterKey` path segment and portal DB metadata
 - Notify lawyer by email or webhook on upload
 - No review or approval flow in portal — lawyer handles it
 
@@ -174,6 +187,7 @@ This is the single highest-leverage Phase 2 feature. It turns the matter detail 
 By Phase 2, the intake flow should feel complete end-to-end.
 
 **Build:**
+
 - Email confirmation to client on submission
 - Email notification to firm on new request
 - Request detail view (not just a list row)
@@ -186,6 +200,7 @@ By Phase 2, the intake flow should feel complete end-to-end.
 If a client has more than 5–6 matters, the flat list breaks down.
 
 **Build:**
+
 - Filter by matterState (Active / Pending / Closed)
 - Simple text search against businessKey and matterType
 - No pagination until >20 matters per client
@@ -207,6 +222,7 @@ The API already supports state filtering via `listCases()` params.
 Beyond fixed-fee services, allow clients to open a new fractional counsel matter directly from the portal.
 
 **Build:**
+
 - "Open a new matter" form: describe the need, select a category (Corporate / Contract / Financial Services), optionally attach a context document
 - Creates an intake record flagged as "Counsel Matter Request" — not a fixed-fee service
 - Lawyer reviews and either accepts into fractional counsel scope or quotes separately
@@ -220,6 +236,7 @@ This is the most important Phase 3 feature for ongoing counsel relationships.
 For fractional counsel clients, the portal should reflect the ongoing relationship — not just individual matters.
 
 **Build:**
+
 - Client-level "Scope" page: current counsel model, active matters in scope, recent activity summary
 - Static / lawyer-maintained initially
 - Sets up future automation without over-engineering now
@@ -231,6 +248,7 @@ This is a positioning feature as much as a functional one — it makes the fract
 ### Automated Status Nudges
 
 **Build:**
+
 - Matter in "waiting on client" state for more than N days → email reminder
 - Document uploaded by lawyer → client email notification
 - Request status changed → client email notification
@@ -242,6 +260,7 @@ This is a positioning feature as much as a functional one — it makes the fract
 ### Light Admin View (Lawyer-Facing)
 
 **Build:**
+
 - List of all active clients with their matters (read from task tracker)
 - Post a MatterUpdate from the portal (text only)
 - Upload a document to a matter
@@ -269,7 +288,7 @@ Do not build a dashboard. The sidebar is the navigation. Every section is a flat
 
 ```
 ┌─────────────────────────────────────────────┐
-│ Levine LLP logo          [User] [Sign out]  │  ← header, fixed
+│ Levine Law logo          [User] [Sign out]  │  ← header, fixed
 ├──────────────┬──────────────────────────────┤
 │              │                              │
 │  Matters     │   [Section content]          │
@@ -288,17 +307,20 @@ On mobile: sidebar collapses to a bottom tab bar (Matters / Docs / Requests). Do
 ### Key Screens
 
 **Matter List**
+
 - Row: businessKey, matterType, matterState badge, nextActionSummary, responsibleLawyerName
 - Group by state: Active first, then Pending, then Closed (collapsible)
 - No search until >10 matters per client
 
 **Matter Detail**
+
 - H1: matter type (e.g., "Share Issuance")
 - Subheading: businessKey + state badge
 - Two columns on desktop: left = next action card + status card; right = event log
 - Below (Phase 2): Documents for this matter, Updates from counsel
 
 **Request Form**
+
 - One service per page
 - Show: scope, assumptions, pricing, turnaround (already in catalog)
 - Form fields from `requiredInputs`
@@ -306,6 +328,7 @@ On mobile: sidebar collapses to a bottom tab bar (Matters / Docs / Requests). Do
 - Confirmation page after submit, not a redirect to a dashboard
 
 **Document List**
+
 - Table: filename | matter | date | download
 - Filter by matter (dropdown)
 - No folders, no tags, no previews
@@ -373,6 +396,7 @@ MatterUpdate                                        ← Phase 2
 ```
 
 **Key constraints:**
+
 - A Request that is accepted becomes or links to a Matter
 - A Document always belongs to a Matter — no free-floating documents
 - A Client has exactly one CounselModel (constant for now; stored in Phase 3)
@@ -419,7 +443,7 @@ Keep notifications surgical: document uploaded, request status changed, matter u
 Resist building lawyer-facing admin tools until Phase 3. Use the task tracker directly for firm-side operations. Add the minimal admin surface (post update, upload document) only when the client-facing product is complete and working.
 
 **Feature parity with legal practice management software.**
-Clio, MyCase, and Practice Panther exist. This portal does not compete on feature count. It competes on experience — a clean, branded, opinionated workspace that feels like Levine LLP, not a generic legal SaaS. Every feature decision should ask: does this make the client relationship better, or does it just make the portal bigger?
+Clio, MyCase, and Practice Panther exist. This portal does not compete on feature count. It competes on experience — a clean, branded, opinionated workspace that feels like Levine Law, not a generic legal SaaS. Every feature decision should ask: does this make the client relationship better, or does it just make the portal bigger?
 
 **Premature onboarding flows.**
 Do not build a multi-step client onboarding wizard in Phase 1 or 2. A lawyer creates the account manually. The client receives credentials. They sign in. That is the onboarding.
@@ -432,6 +456,6 @@ In priority order:
 
 1. **Configure Keycloak** — set `AUTH_KEYCLOAK_ID`, `AUTH_KEYCLOAK_SECRET`, `AUTH_KEYCLOAK_ISSUER` in Vercel production; disable preview mode.
 2. **Set `LL_TASK_TRACKER_API_BASE_URL`** — point to deployed LL-task-tracker; live matter data will flow automatically.
-3. **Wire real document storage** — replace `documentSource.ts` mock and `uploadedDocumentStore.ts` / `adminDocumentStore.ts` metadata stubs with S3/R2 + metadata API.
-4. **Wire real request backend** — replace `requestStore.ts` and `matterRequestStore.ts` in-memory Maps with a real database or task tracker intake endpoint.
+3. **Provision portal database** — apply `docs/portal-stage3-schema.sql` and set `PORTAL_DATABASE_URL` or `POSTGRES_URL`.
+4. **Provision private Vercel Blob** — set `BLOB_READ_WRITE_TOKEN` and verify upload/download flows.
 5. **Replace admin auth** — swap `PORTAL_ADMIN_TOKEN` cookie check in `adminAuth.ts` with a Keycloak lawyer role check once SSO is live.

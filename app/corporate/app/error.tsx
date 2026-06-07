@@ -2,9 +2,9 @@
 
 export default function PortalError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   return (
-    <div className="min-h-dvh bg-stone-50 px-6 py-20">
-      <div className="mx-auto max-w-md">
-        <p className="text-xs font-semibold tracking-[0.18em] text-brand-navy uppercase">Portal</p>
+    <div className="min-h-dvh bg-stone-100 px-6 py-20">
+      <div className="mx-auto max-w-md rounded-xl border border-stone-200 bg-white p-6 shadow-sm">
+        <p className="text-brand-navy text-xs font-semibold tracking-[0.18em] uppercase">Portal</p>
         <h2 className="mt-3 text-2xl font-semibold text-stone-900">Something went wrong</h2>
         <p className="mt-3 text-sm leading-6 text-stone-500">
           {error.message || "An unexpected error occurred while loading the portal."}
@@ -12,7 +12,7 @@ export default function PortalError({ error, reset }: { error: Error & { digest?
         <div className="mt-6 flex gap-3">
           <button
             onClick={reset}
-            className="rounded border border-brand-navy px-4 py-2 text-sm font-semibold text-brand-navy transition-colors hover:bg-brand-navy hover:text-white"
+            className="border-brand-navy text-brand-navy hover:bg-brand-navy rounded border px-4 py-2 text-sm font-semibold transition-colors hover:text-white"
           >
             Try again
           </button>

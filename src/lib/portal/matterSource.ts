@@ -24,6 +24,7 @@ import { env } from "env.mjs"
 import { getCase, listCases } from "src/lib/api/taskTracker"
 import type { CaseInstance } from "src/lib/contracts"
 import { MOCK_MATTERS } from "./mockMatters"
+import { isPortalMockFallbackEnabled } from "./portalDb"
 
 function isLiveApiAvailable(accessToken: string | null): accessToken is string {
   return Boolean(env.LL_TASK_TRACKER_API_BASE_URL) && accessToken !== null
@@ -48,7 +49,10 @@ export async function getMatterList(accessToken: string | null): Promise<MatterL
     const page = await listCases(accessToken, { status: "open" })
     return { matters: page.data, isMock: false }
   }
-  return { matters: [...MOCK_MATTERS], isMock: true }
+  if (isPortalMockFallbackEnabled()) {
+    return { matters: [...MOCK_MATTERS], isMock: true }
+  }
+  throw new Error("LL_TASK_TRACKER_API_BASE_URL and a real access token are required to load matters.")
 }
 
 /**
@@ -64,6 +68,9 @@ export async function getMatterByKey(
     const matter = await getCase(accessToken, businessKey)
     return { matter, isMock: false }
   }
-  const matter = MOCK_MATTERS.find((m) => m.businessKey === businessKey) ?? null
-  return { matter, isMock: true }
+  if (isPortalMockFallbackEnabled()) {
+    const matter = MOCK_MATTERS.find((m) => m.businessKey === businessKey) ?? null
+    return { matter, isMock: true }
+  }
+  throw new Error("LL_TASK_TRACKER_API_BASE_URL and a real access token are required to load matter details.")
 }

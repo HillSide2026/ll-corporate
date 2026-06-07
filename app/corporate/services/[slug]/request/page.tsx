@@ -1,7 +1,16 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 
+import {
+  PortalButton,
+  PortalCard,
+  PortalCardContent,
+  PortalCardDescription,
+  PortalCardHeader,
+  PortalCardTitle,
+  PortalPageHeader,
+} from "src/components/portal/PortalDesignSystem"
+import { PortalWorkspaceShell } from "src/components/portal/PortalWorkspaceShell"
 import { getPreviewPortalSession, isPreviewPortalAccessEnabled } from "src/lib/auth/config"
 import { getPortalSession } from "src/lib/auth/session"
 import { submitServiceRequest } from "src/lib/services/actions"
@@ -44,140 +53,155 @@ export default async function ServiceRequestPage({ params }: ServiceRequestPageP
   }
 
   return (
-    <main className="min-h-dvh bg-stone-50 text-stone-900">
-      <section className="mx-auto max-w-5xl px-6 py-10">
-        <nav className="flex flex-wrap items-center justify-between gap-4 text-sm">
-          <Link
-            href="/corporate/app/requests"
-            className="font-semibold text-brand-navy transition-colors hover:text-brand-navy-dark"
-          >
-            ← Requests
-          </Link>
-          <Link
-            href="/corporate/app"
-            className="rounded-md border border-stone-300 bg-white px-4 py-2 font-medium text-stone-700 transition-colors hover:border-stone-400"
-          >
-            Portal home
-          </Link>
-        </nav>
-
-        <div className="mt-10">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-navy">Request service</p>
-          <h1 className="mt-3 max-w-3xl text-4xl font-semibold tracking-tight text-stone-900">{service.title}</h1>
-          <p className="mt-4 max-w-3xl text-base leading-7 text-stone-500">{service.description}</p>
-        </div>
+    <PortalWorkspaceShell active="requests" session={session}>
+      <div className="space-y-6">
+        <PortalPageHeader
+          eyebrow="Request service"
+          title={service.title}
+          description={service.description}
+          action={
+            <PortalButton href="/corporate/app/requests" tone="secondary">
+              All requests
+            </PortalButton>
+          }
+        />
 
         {/* Service summary */}
-        <div className="mt-8 grid gap-4 md:grid-cols-2">
-          <div className="rounded-md border border-stone-200 bg-white px-5 py-5">
-            <h2 className="text-sm font-semibold text-stone-900">Pricing snapshot</h2>
-            <p className="mt-2 text-sm text-stone-500">{getServicePriceDisplay(service)}</p>
-            <h2 className="mt-4 text-sm font-semibold text-stone-900">Turnaround</h2>
-            <p className="mt-2 text-sm text-stone-500">{service.turnaround}</p>
-          </div>
+        <div className="grid gap-4 md:grid-cols-2">
+          <PortalCard>
+            <PortalCardHeader>
+              <PortalCardTitle>Pricing and turnaround</PortalCardTitle>
+            </PortalCardHeader>
+            <PortalCardContent>
+              <dl className="space-y-4">
+                <div>
+                  <dt className="text-xs font-semibold tracking-[0.12em] text-stone-400 uppercase">Pricing snapshot</dt>
+                  <dd className="mt-1 text-sm text-stone-600">{getServicePriceDisplay(service)}</dd>
+                </div>
+                <div>
+                  <dt className="text-xs font-semibold tracking-[0.12em] text-stone-400 uppercase">Turnaround</dt>
+                  <dd className="mt-1 text-sm text-stone-600">{service.turnaround}</dd>
+                </div>
+              </dl>
+            </PortalCardContent>
+          </PortalCard>
 
-          <div className="rounded-md border border-stone-200 bg-white px-5 py-5">
-            <h2 className="text-sm font-semibold text-stone-900">Scope</h2>
-            <ul className="mt-2 space-y-1">
-              {service.scope.map((item) => (
+          <PortalCard>
+            <PortalCardHeader>
+              <PortalCardTitle>Scope</PortalCardTitle>
+            </PortalCardHeader>
+            <PortalCardContent>
+              <ul className="space-y-2">
+                {service.scope.map((item) => (
+                  <li key={item} className="flex gap-2 text-sm text-stone-500">
+                    <span className="bg-brand-navy mt-2 h-1.5 w-1.5 shrink-0 rounded-full" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </PortalCardContent>
+          </PortalCard>
+        </div>
+
+        {/* Assumptions */}
+        <PortalCard>
+          <PortalCardHeader>
+            <PortalCardTitle>Assumptions and exclusions</PortalCardTitle>
+          </PortalCardHeader>
+          <PortalCardContent>
+            <ul className="space-y-2">
+              {service.assumptions.map((item) => (
                 <li key={item} className="flex gap-2 text-sm text-stone-500">
-                  <span className="mt-0.5 shrink-0 text-brand-navy">—</span>
+                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-stone-300" />
                   {item}
                 </li>
               ))}
             </ul>
-          </div>
-        </div>
-
-        {/* Assumptions */}
-        <div className="mt-4 rounded-md border border-stone-200 bg-white px-5 py-5">
-          <h2 className="text-sm font-semibold text-stone-900">Assumptions and exclusions</h2>
-          <ul className="mt-2 space-y-1">
-            {service.assumptions.map((item) => (
-              <li key={item} className="flex gap-2 text-sm text-stone-500">
-                <span className="mt-0.5 shrink-0 text-stone-300">—</span>
-                {item}
-              </li>
-            ))}
-          </ul>
-        </div>
+          </PortalCardContent>
+        </PortalCard>
 
         {/* Request form */}
-        <form action={submitServiceRequest} className="mt-8">
+        <form action={submitServiceRequest} className="space-y-5">
           <input type="hidden" name="serviceSlug" value={service.slug} />
 
-          <div className="rounded-md border border-stone-200 bg-white px-5 py-5">
-            <h2 className="text-base font-semibold text-stone-900">Provide required information</h2>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-500">
-              Fill in the fields below so your lawyer can begin work once the request is reviewed.
-            </p>
-
-            <div className="mt-6 space-y-5">
-              {service.requiredInputs.map((label, index) => (
-                <div key={index}>
-                  <label
-                    htmlFor={`field_${index}`}
-                    className="mb-1.5 block text-sm font-medium text-stone-700"
-                  >
-                    {label}
-                  </label>
-                  <textarea
-                    id={`field_${index}`}
-                    name={`field_${index}`}
-                    rows={2}
-                    required
-                    className="w-full resize-y rounded-md border border-stone-200 px-4 py-3 text-sm text-stone-900 placeholder:text-stone-400 focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
+          <PortalCard>
+            <PortalCardHeader>
+              <PortalCardTitle>Provide required information</PortalCardTitle>
+              <PortalCardDescription>
+                Fill in the fields below so Levine Law can review the request.
+              </PortalCardDescription>
+            </PortalCardHeader>
+            <PortalCardContent>
+              <div className="space-y-5">
+                {service.requiredInputs.map((label, index) => (
+                  <div key={index}>
+                    <label htmlFor={`field_${index}`} className="mb-1.5 block text-sm font-medium text-stone-700">
+                      {label}
+                    </label>
+                    <textarea
+                      id={`field_${index}`}
+                      name={`field_${index}`}
+                      rows={2}
+                      required
+                      className="focus:border-brand-navy focus:ring-brand-navy w-full resize-y rounded-md border border-stone-200 px-4 py-3 text-sm text-stone-900 placeholder:text-stone-400 focus:ring-1 focus:outline-none"
+                    />
+                  </div>
+                ))}
+              </div>
+            </PortalCardContent>
+          </PortalCard>
 
           {/* Optional attachment */}
-          <div className="mt-5 rounded-md border border-stone-200 bg-white px-5 py-5">
-            <h2 className="text-sm font-semibold text-stone-900">Supporting document</h2>
-            <p className="mt-2 text-sm leading-6 text-stone-500">
-              Optionally attach a document relevant to this request. PDF, DOCX, or image — 10 MB max.
-            </p>
-            <div className="mt-4">
+          <PortalCard>
+            <PortalCardHeader>
+              <PortalCardTitle>Supporting document</PortalCardTitle>
+              <PortalCardDescription>
+                Optionally attach a relevant document. PDF, DOCX, or image, 10 MB max.
+              </PortalCardDescription>
+            </PortalCardHeader>
+            <PortalCardContent>
               <input
                 type="file"
                 name="attachment"
                 accept=".pdf,.docx,image/*"
                 className="block text-sm text-stone-600 file:mr-3 file:rounded file:border file:border-stone-300 file:bg-white file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-stone-700 file:transition-colors file:hover:bg-stone-50"
               />
-            </div>
-          </div>
+            </PortalCardContent>
+          </PortalCard>
 
           {/* Acknowledgement + submit */}
-          <div className="mt-5 rounded-md border border-stone-200 bg-white px-5 py-5">
-            <h2 className="text-sm font-semibold text-stone-900">Acknowledgement</h2>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-500">
-              Submitting this request does not mean work has started. Levine Law will review the request and confirm
-              next steps, pricing, and timeline before proceeding.
-            </p>
-            <label className="mt-4 flex cursor-pointer items-start gap-3">
-              <input
-                type="checkbox"
-                name="acknowledged"
-                required
-                className="mt-0.5 h-4 w-4 shrink-0 accent-brand-navy"
-              />
-              <span className="text-sm text-stone-700">
-                I understand the scope and assumptions above, and that this is a request for review — not a
-                confirmed engagement.
-              </span>
-            </label>
+          <PortalCard>
+            <PortalCardHeader>
+              <PortalCardTitle>Acknowledgement</PortalCardTitle>
+              <PortalCardDescription>
+                Submitting this request does not mean work has started. Levine Law will confirm next steps before
+                proceeding.
+              </PortalCardDescription>
+            </PortalCardHeader>
+            <PortalCardContent>
+              <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-stone-200 bg-stone-50 px-4 py-4">
+                <input
+                  type="checkbox"
+                  name="acknowledged"
+                  required
+                  className="accent-brand-navy mt-0.5 h-4 w-4 shrink-0"
+                />
+                <span className="text-sm text-stone-700">
+                  I understand the scope and assumptions above, and that this is a request for review — not a confirmed
+                  engagement.
+                </span>
+              </label>
 
-            <button
-              type="submit"
-              className="mt-6 rounded-md bg-brand-navy px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-dark"
-            >
-              {service.ctaLabel}
-            </button>
-          </div>
+              <button
+                type="submit"
+                className="bg-brand-navy hover:bg-brand-navy-dark mt-6 rounded-md px-6 py-3 text-sm font-semibold text-white transition-colors"
+              >
+                {service.ctaLabel}
+              </button>
+            </PortalCardContent>
+          </PortalCard>
         </form>
-      </section>
-    </main>
+      </div>
+    </PortalWorkspaceShell>
   )
 }

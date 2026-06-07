@@ -17,12 +17,13 @@ describe("PortalEntry", () => {
   it("renders the public login entry without domain data", () => {
     render(<PortalEntry />)
 
-    expect(screen.getByText("Levine Law")).toBeInTheDocument()
-    expect(screen.getByRole("heading", { name: "Client Portal" })).toBeInTheDocument()
+    expect(screen.getAllByText("Levine Law").length).toBeGreaterThan(0)
+    expect(screen.getByRole("heading", { name: "Access your Levine Law workspace" })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "Sign in" })).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Sign in" })).toBeInTheDocument()
     expect(screen.queryByRole("button", { name: "Preview portal" })).not.toBeInTheDocument()
     expect(screen.queryByRole("link", { name: "NDA Generator" })).not.toBeInTheDocument()
-    expect(screen.getByText("Sign in to view your matters, documents, and requests.")).toBeInTheDocument()
+    expect(screen.getByText("Sign in to view matters, documents, requests, and secure workspace updates from Levine Law.")).toBeInTheDocument()
   })
 
   it("renders a plain-language sign-in error without provider details", () => {

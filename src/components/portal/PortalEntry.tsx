@@ -26,76 +26,92 @@ export function PortalEntry({ authError, previewAccessEnabled = false }: PortalE
   const keycloakConfigured = isKeycloakConfigured()
 
   return (
-    <main className="min-h-dvh bg-stone-50 text-stone-900">
-      <section className="mx-auto flex min-h-dvh max-w-md flex-col justify-center px-6 py-12">
-        <p className="text-sm font-medium text-brand-navy">Levine Law</p>
-        <h1 className="mt-3 text-3xl font-semibold tracking-tight">Client Portal</h1>
-        <p className="mt-3 text-sm leading-6 text-stone-500">
-          Sign in to view your matters, documents, and requests.
-        </p>
-
-        {authErrorMessage ? (
-          <div
-            role="alert"
-            className="mt-5 rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-950"
-          >
-            {authErrorMessage}
+    <main className="min-h-dvh bg-stone-100 text-stone-950">
+      <section className="mx-auto grid min-h-dvh max-w-6xl items-center gap-8 px-6 py-12 lg:grid-cols-[0.95fr_1.05fr]">
+        <div className="max-w-xl">
+          <p className="text-brand-navy text-xs font-semibold tracking-[0.2em] uppercase">Secure Client Portal</p>
+          <h1 className="mt-4 text-4xl font-semibold tracking-tight text-stone-950 md:text-5xl">
+            Access your Levine Law workspace
+          </h1>
+          <p className="mt-5 text-base leading-7 text-stone-600">
+            Sign in to view matters, documents, requests, and secure workspace updates from Levine Law.
+          </p>
+          <div className="mt-8 grid gap-3 sm:grid-cols-3">
+            {["Matters", "Documents", "Requests"].map((item) => (
+              <div key={item} className="rounded-lg border border-stone-200 bg-white px-4 py-3 shadow-sm">
+                <p className="text-sm font-semibold text-stone-950">{item}</p>
+                <p className="mt-1 text-xs text-stone-500">Secure access</p>
+              </div>
+            ))}
           </div>
-        ) : null}
+        </div>
 
-        <form action={signInWithCredentials} className="mt-6 space-y-4">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-stone-700">
-              Email
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              autoComplete="email"
-              required
-              className="mt-1 block w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 placeholder-stone-400 focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
-              placeholder="you@example.com"
-            />
-          </div>
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-stone-700">
-              Password
-            </label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              autoComplete="current-password"
-              required
-              className="mt-1 block w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 placeholder-stone-400 focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
-            />
-          </div>
-          <SignInButton label="Sign in" pendingLabel="Signing in..." />
-        </form>
+        <div className="rounded-xl border border-stone-200 bg-white p-6 shadow-sm md:p-8">
+          <p className="text-brand-navy text-sm font-semibold">Levine Law</p>
+          <h2 className="mt-2 text-2xl font-semibold tracking-tight text-stone-950">Sign in</h2>
+          <p className="mt-2 text-sm leading-6 text-stone-500">Use your portal credentials or SSO account.</p>
 
-        {keycloakConfigured ? (
-          <div className="mt-5 border-t border-stone-200 pt-5">
-            <p className="mb-3 text-xs text-stone-400">Or sign in with your organisation account</p>
-            <form action={signInWithKeycloak}>
-              <SignInButton label="Sign in with SSO" pendingLabel="Opening secure sign-in..." />
-            </form>
-          </div>
-        ) : null}
-
-        {previewAccessEnabled ? (
-          <form action={previewPortalAccess} className="mt-4">
-            <button
-              type="submit"
-              className="rounded-md border border-stone-300 bg-white px-5 py-2 text-sm font-medium text-stone-600 transition-colors hover:border-stone-400"
+          {authErrorMessage ? (
+            <div
+              role="alert"
+              className="mt-5 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-950"
             >
-              Preview portal
-            </button>
-            <p className="mt-2 text-xs leading-5 text-stone-400">
-              Preview mode uses a mock session for review only.
-            </p>
+              {authErrorMessage}
+            </div>
+          ) : null}
+
+          <form action={signInWithCredentials} className="mt-6 space-y-4">
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-stone-700">
+                Email
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                className="focus:border-brand-navy focus:ring-brand-navy mt-1 block w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 placeholder-stone-400 focus:ring-1 focus:outline-none"
+                placeholder="you@example.com"
+              />
+            </div>
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-stone-700">
+                Password
+              </label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                required
+                className="focus:border-brand-navy focus:ring-brand-navy mt-1 block w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 placeholder-stone-400 focus:ring-1 focus:outline-none"
+              />
+            </div>
+            <SignInButton label="Sign in" pendingLabel="Signing in..." />
           </form>
-        ) : null}
+
+          {keycloakConfigured ? (
+            <div className="mt-5 border-t border-stone-200 pt-5">
+              <p className="mb-3 text-xs text-stone-400">Or sign in with your organisation account</p>
+              <form action={signInWithKeycloak}>
+                <SignInButton label="Sign in with SSO" pendingLabel="Opening secure sign-in..." />
+              </form>
+            </div>
+          ) : null}
+
+          {previewAccessEnabled ? (
+            <form action={previewPortalAccess} className="mt-4">
+              <button
+                type="submit"
+                className="rounded-md border border-stone-300 bg-white px-5 py-2 text-sm font-medium text-stone-600 transition-colors hover:border-stone-400"
+              >
+                Preview portal
+              </button>
+              <p className="mt-2 text-xs leading-5 text-stone-400">Preview mode uses a mock session for review only.</p>
+            </form>
+          ) : null}
+        </div>
       </section>
     </main>
   )

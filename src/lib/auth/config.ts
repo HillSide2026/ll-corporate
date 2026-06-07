@@ -15,7 +15,7 @@ export function getPreviewPortalSession(): PortalSession {
     identity: {
       subject: "preview-client",
       displayName: "Preview Client",
-      email: "preview.client@levinellp.example",
+      email: "preview.client@levinelaw.example",
     },
   }
 }

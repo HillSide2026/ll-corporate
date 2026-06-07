@@ -6,6 +6,8 @@ import { getPreviewPortalSession, isPreviewPortalAccessEnabled } from "src/lib/a
 import { getPortalSession } from "src/lib/auth/session"
 import { createIntakeRequestContract } from "src/lib/contracts/intake"
 import { addRequest } from "src/lib/portal/requestStore"
+import { uploadAndStorePortalDocument } from "src/lib/portal/documentStore"
+import { validatePortalDocumentFile } from "src/lib/portal/uploadValidation"
 import { getServiceBySlug } from "src/lib/services/catalog"
 
 export async function submitServiceRequest(formData: FormData) {
@@ -45,14 +47,29 @@ export async function submitServiceRequest(formData: FormData) {
     createdAt: now,
   })
 
-  // Capture optional file attachment metadata (bytes are not persisted — TEMPORARY).
   const file = formData.get("attachment")
-  const attachment =
-    file instanceof File && file.name && file.size > 0
-      ? { filename: file.name, addedAt: now }
-      : undefined
+  let attachment
+  if (file instanceof File && file.name && file.size > 0) {
+    validatePortalDocumentFile(file)
+    attachment = await uploadAndStorePortalDocument({
+      file,
+      matterKey: `service-request/${service.slug}`,
+      uploadedByClient: true,
+      uploader: session.identity,
+    })
+  }
 
-  const stored = addRequest(contract, attachment)
+  const stored = await addRequest(
+    contract,
+    attachment
+      ? {
+          documentId: attachment.id,
+          filename: attachment.filename,
+          addedAt: attachment.addedAt,
+        }
+      : undefined,
+    session.identity
+  )
 
   redirect(`/corporate/app/requests/${stored.id}?submitted=1`)
 }

@@ -2,14 +2,18 @@
 
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
-import { redirect } from "next/navigation"
-import { signIn, signOut } from "./auth"
-import { isKeycloakConfigured, isPreviewPortalAccessEnabled } from "./config"
-import { previewPortalAccess, signInWithKeycloak, signOutFromPortal } from "./actions"
-
-vi.mock("./auth", () => ({
+const authMocks = vi.hoisted(() => ({
   signIn: vi.fn(),
   signOut: vi.fn(),
+}))
+
+vi.mock("./auth", () => ({
+  signIn: authMocks.signIn,
+  signOut: authMocks.signOut,
+}))
+
+vi.mock("next-auth", () => ({
+  AuthError: class AuthError extends Error {},
 }))
 
 vi.mock("./config", () => ({
@@ -23,6 +27,10 @@ vi.mock("next/navigation", () => ({
   }),
 }))
 
+const { redirect } = await import("next/navigation")
+const { isKeycloakConfigured, isPreviewPortalAccessEnabled } = await import("./config")
+const { previewPortalAccess, signInWithKeycloak, signOutFromPortal } = await import("./actions")
+
 describe("auth actions", () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -33,7 +41,7 @@ describe("auth actions", () => {
   it("starts the Keycloak sign-in flow for the protected portal", async () => {
     await signInWithKeycloak()
 
-    expect(signIn).toHaveBeenCalledWith("keycloak", { redirectTo: "/corporate/app" })
+    expect(authMocks.signIn).toHaveBeenCalledWith("keycloak", { redirectTo: "/corporate/app" })
   })
 
   it("redirects to the public portal with a friendly configuration error when Keycloak is not configured", async () => {
@@ -41,7 +49,7 @@ describe("auth actions", () => {
 
     await expect(signInWithKeycloak()).rejects.toThrow("redirect:/corporate?error=Configuration")
     expect(redirect).toHaveBeenCalledWith("/corporate?error=Configuration")
-    expect(signIn).not.toHaveBeenCalled()
+    expect(authMocks.signIn).not.toHaveBeenCalled()
   })
 
   it("routes preview access to the preview shell when enabled", async () => {
@@ -61,6 +69,6 @@ describe("auth actions", () => {
   it("signs out to the public portal entry", async () => {
     await signOutFromPortal()
 
-    expect(signOut).toHaveBeenCalledWith({ redirectTo: "/corporate" })
+    expect(authMocks.signOut).toHaveBeenCalledWith({ redirectTo: "/corporate" })
   })
 })

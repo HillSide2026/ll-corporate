@@ -39,7 +39,7 @@ export default async function AdminMatterPage({ params, searchParams }: AdminMat
   if (!result.matter) notFound()
 
   const { matter, isMock } = result
-  const { updates } = getMatterUpdateList(businessKey, isMock)
+  const { updates } = await getMatterUpdateList(businessKey, isMock)
 
   return (
     <main className="min-h-dvh bg-stone-50 text-stone-900">
@@ -47,7 +47,7 @@ export default async function AdminMatterPage({ params, searchParams }: AdminMat
         <nav className="text-sm">
           <Link
             href="/corporate/admin"
-            className="font-semibold text-brand-navy transition-colors hover:text-brand-navy-dark"
+            className="text-brand-navy hover:text-brand-navy-dark font-semibold transition-colors"
           >
             ← Admin home
           </Link>
@@ -72,11 +72,13 @@ export default async function AdminMatterPage({ params, searchParams }: AdminMat
         ) : null}
 
         <div className="mt-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-navy">Matter</p>
+          <p className="text-brand-navy text-xs font-semibold tracking-[0.18em] uppercase">Matter</p>
           <h1 className="mt-3 text-3xl font-semibold text-stone-900">{businessKey}</h1>
           {matter.matterType ? <p className="mt-1 text-sm text-stone-400">{matter.matterType}</p> : null}
           {matter.matterState ? (
-            <p className="mt-2 text-xs text-stone-500">State: {matter.matterState} · {matter.adminState}</p>
+            <p className="mt-2 text-xs text-stone-500">
+              State: {matter.matterState} · {matter.adminState}
+            </p>
           ) : null}
           {matter.nextActionSummary ? (
             <p className="mt-2 text-sm text-stone-600">Next action: {matter.nextActionSummary}</p>
@@ -121,7 +123,7 @@ export default async function AdminMatterPage({ params, searchParams }: AdminMat
                 type="text"
                 defaultValue="M. Levine"
                 required
-                className="w-full max-w-xs rounded border border-stone-200 px-4 py-2.5 text-sm text-stone-900 focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
+                className="focus:border-brand-navy focus:ring-brand-navy w-full max-w-xs rounded border border-stone-200 px-4 py-2.5 text-sm text-stone-900 focus:ring-1 focus:outline-none"
               />
             </div>
             <div>
@@ -134,12 +136,12 @@ export default async function AdminMatterPage({ params, searchParams }: AdminMat
                 rows={4}
                 required
                 placeholder="Describe what's happening with this matter…"
-                className="w-full resize-y rounded border border-stone-200 px-4 py-3 text-sm text-stone-900 placeholder:text-stone-400 focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
+                className="focus:border-brand-navy focus:ring-brand-navy w-full resize-y rounded border border-stone-200 px-4 py-3 text-sm text-stone-900 placeholder:text-stone-400 focus:ring-1 focus:outline-none"
               />
             </div>
             <button
               type="submit"
-              className="rounded bg-brand-navy px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-dark"
+              className="bg-brand-navy hover:bg-brand-navy-dark rounded px-5 py-2.5 text-sm font-semibold text-white transition-colors"
             >
               Post update
             </button>
@@ -164,7 +166,7 @@ export default async function AdminMatterPage({ params, searchParams }: AdminMat
                 type="text"
                 defaultValue="M. Levine"
                 required
-                className="w-full max-w-xs rounded border border-stone-200 px-4 py-2.5 text-sm text-stone-900 focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
+                className="focus:border-brand-navy focus:ring-brand-navy w-full max-w-xs rounded border border-stone-200 px-4 py-2.5 text-sm text-stone-900 focus:ring-1 focus:outline-none"
               />
             </div>
             <div className="flex flex-wrap items-center gap-3">
@@ -177,7 +179,7 @@ export default async function AdminMatterPage({ params, searchParams }: AdminMat
               />
               <button
                 type="submit"
-                className="rounded border border-brand-navy px-4 py-2 text-sm font-semibold text-brand-navy transition-colors hover:bg-brand-navy hover:text-white"
+                className="border-brand-navy text-brand-navy hover:bg-brand-navy rounded border px-4 py-2 text-sm font-semibold transition-colors hover:text-white"
               >
                 Upload
               </button>

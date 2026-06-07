@@ -25,10 +25,14 @@ vi.mock("src/lib/auth/config", () => ({
     identity: {
       subject: "preview-client",
       displayName: "Preview Client",
-      email: "preview.client@levinellp.example",
+      email: "preview.client@levinelaw.example",
     },
   })),
   isPreviewPortalAccessEnabled: vi.fn(() => false),
+}))
+
+vi.mock("src/lib/auth/actions", () => ({
+  signOutFromPortal: vi.fn(),
 }))
 
 vi.mock("src/lib/services/actions", () => ({

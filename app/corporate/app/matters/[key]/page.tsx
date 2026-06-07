@@ -1,12 +1,13 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 
 import type { AdminEvent, CaseInstance } from "src/lib/contracts"
+import { PortalButton, PortalPageHeader } from "src/components/portal/PortalDesignSystem"
+import { PortalWorkspaceShell } from "src/components/portal/PortalWorkspaceShell"
 import { getAccessToken, getPortalSession } from "src/lib/auth/session"
 import { getMatterByKey } from "src/lib/portal/matterSource"
 import { getMatterUpdateList, type MatterUpdate } from "src/lib/portal/matterUpdateSource"
-import { getUploadedDocumentsForMatter } from "src/lib/portal/uploadedDocumentStore"
+import { getPortalDocumentsForMatter } from "src/lib/portal/documentStore"
 import { uploadMatterDocument } from "src/lib/portal/uploadActions"
 
 type MatterDetailPageProps = {
@@ -121,61 +122,52 @@ export default async function MatterDetailPage({ params, searchParams }: MatterD
     notFound()
   }
 
-  const { updates } = getMatterUpdateList(businessKey, isMock)
-  const uploadedDocs = getUploadedDocumentsForMatter(businessKey)
+  const { updates } = await getMatterUpdateList(businessKey, isMock)
+  const uploadedDocs = await getPortalDocumentsForMatter(businessKey)
 
   return (
-    <main className="min-h-dvh bg-stone-50 text-stone-900">
-      <section className="mx-auto max-w-5xl px-6 py-10">
-        <nav className="flex flex-wrap items-center justify-between gap-4 text-sm">
-          <Link
-            href="/corporate/app"
-            className="font-semibold text-brand-navy transition-colors hover:text-brand-navy-dark"
-          >
-            ← Portal home
-          </Link>
-        </nav>
+    <PortalWorkspaceShell active="matters" session={session}>
+      <div className="space-y-6">
+        <PortalPageHeader
+          eyebrow="Matter"
+          title={matter?.businessKey ?? businessKey}
+          description={matter?.matterType ?? "Matter details, next actions, updates, and shared documents."}
+          action={
+            <PortalButton href="/corporate/app/matters" tone="secondary">
+              All matters
+            </PortalButton>
+          }
+        />
 
         {/* TEMPORARY: remove once live API is connected */}
         {isMock ? (
-          <p className="mt-6 text-xs text-stone-400">
-            Preview data — connect LL-task-tracker to show live matter details.
-          </p>
+          <p className="text-xs text-stone-400">Preview data — connect LL-task-tracker to show live matter details.</p>
         ) : null}
 
         {justUploaded ? (
-          <div className="mt-6 rounded border border-green-200 bg-green-50 px-5 py-4 text-sm">
+          <div className="rounded-lg border border-green-200 bg-green-50 px-5 py-4 text-sm">
             <p className="font-semibold text-green-900">Document uploaded</p>
-            <p className="mt-1 text-green-700">
-              Your document has been received and will be reviewed by your counsel.
-            </p>
+            <p className="mt-1 text-green-700">Your document has been received and will be reviewed by your counsel.</p>
           </div>
         ) : null}
 
         {errorMessage ? (
-          <div className="mt-14 rounded border border-amber-200 bg-amber-50 px-5 py-5 text-sm text-amber-900">
+          <div className="rounded-lg border border-amber-200 bg-amber-50 px-5 py-5 text-sm text-amber-900">
             <p className="font-semibold">Unable to load matter</p>
             <p className="mt-1 text-amber-700">{errorMessage}</p>
           </div>
         ) : matter ? (
           <>
-            <div className="mt-8">
-              <p className="text-xs font-semibold tracking-[0.18em] text-brand-navy uppercase">Matter</p>
-              <div className="mt-3 flex flex-wrap items-center gap-3">
-                <h1 className="text-3xl font-semibold text-stone-900">{matter.businessKey ?? businessKey}</h1>
-                {matter.matterState ? (
-                  <span className={`rounded px-2 py-1 text-xs font-medium ${matterStateBadge(matter.matterState)}`}>
-                    {matter.matterState}
-                  </span>
-                ) : null}
-              </div>
-              {matter.matterType ? (
-                <p className="mt-2 text-sm text-stone-400">{matter.matterType}</p>
-              ) : null}
-            </div>
+            {matter.matterState ? (
+              <span
+                className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${matterStateBadge(matter.matterState)}`}
+              >
+                {matter.matterState}
+              </span>
+            ) : null}
 
-            <div className="mt-8 grid gap-4 sm:grid-cols-2">
-              <div className="rounded border border-stone-200 bg-white px-5 py-5">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="rounded-lg border border-stone-200 bg-white px-5 py-5 shadow-sm">
                 <h2 className="text-sm font-semibold text-stone-900">Next action</h2>
                 <p className="mt-2 text-sm leading-6 text-stone-500">
                   {matter.nextActionSummary ?? "No next action on file."}
@@ -188,11 +180,9 @@ export default async function MatterDetailPage({ params, searchParams }: MatterD
                 ) : null}
               </div>
 
-              <div className="rounded border border-stone-200 bg-white px-5 py-5">
+              <div className="rounded-lg border border-stone-200 bg-white px-5 py-5 shadow-sm">
                 <h2 className="text-sm font-semibold text-stone-900">Status</h2>
-                {matter.adminState ? (
-                  <p className="mt-2 text-sm text-stone-500">{matter.adminState}</p>
-                ) : null}
+                {matter.adminState ? <p className="mt-2 text-sm text-stone-500">{matter.adminState}</p> : null}
                 {matter.waitingReasonText ? (
                   <p className="mt-2 text-sm text-stone-500">{matter.waitingReasonText}</p>
                 ) : null}
@@ -206,7 +196,7 @@ export default async function MatterDetailPage({ params, searchParams }: MatterD
             </div>
 
             {/* Event log */}
-            <div className="mt-6 rounded border border-stone-200 bg-white px-5 py-5">
+            <div className="rounded-lg border border-stone-200 bg-white px-5 py-5 shadow-sm">
               <h2 className="text-base font-semibold text-stone-900">Event log</h2>
               <div className="mt-4">
                 <EventLog events={matter.adminEvents ?? []} />
@@ -214,7 +204,7 @@ export default async function MatterDetailPage({ params, searchParams }: MatterD
             </div>
 
             {/* Updates from counsel */}
-            <div className="mt-6 rounded border border-stone-200 bg-white px-5 py-5">
+            <div className="rounded-lg border border-stone-200 bg-white px-5 py-5 shadow-sm">
               <h2 className="text-base font-semibold text-stone-900">Updates from counsel</h2>
               <div className="mt-4">
                 <UpdatesFeed updates={updates} />
@@ -222,7 +212,7 @@ export default async function MatterDetailPage({ params, searchParams }: MatterD
             </div>
 
             {/* Document upload */}
-            <div className="mt-6 rounded border border-stone-200 bg-white px-5 py-5">
+            <div className="rounded-lg border border-stone-200 bg-white px-5 py-5 shadow-sm">
               <h2 className="text-base font-semibold text-stone-900">Upload a document</h2>
               <p className="mt-1 text-sm text-stone-500">
                 Share supporting materials with your counsel. PDF, DOCX, or image — 10 MB max.
@@ -231,7 +221,10 @@ export default async function MatterDetailPage({ params, searchParams }: MatterD
               {uploadedDocs.length > 0 ? (
                 <ul className="mt-4 space-y-2">
                   {uploadedDocs.map((doc) => (
-                    <li key={doc.id} className="flex items-center justify-between gap-3 rounded border border-stone-100 bg-stone-50 px-4 py-3 text-sm">
+                    <li
+                      key={doc.id}
+                      className="flex items-center justify-between gap-3 rounded border border-stone-100 bg-stone-50 px-4 py-3 text-sm"
+                    >
                       <span className="font-medium text-stone-700">{doc.filename}</span>
                       <span className="shrink-0 text-xs text-stone-400">{formatDate(doc.addedAt)}</span>
                     </li>
@@ -251,7 +244,7 @@ export default async function MatterDetailPage({ params, searchParams }: MatterD
                   />
                   <button
                     type="submit"
-                    className="rounded border border-brand-navy px-4 py-2 text-sm font-semibold text-brand-navy transition-colors hover:bg-brand-navy hover:text-white"
+                    className="border-brand-navy text-brand-navy hover:bg-brand-navy rounded border px-4 py-2 text-sm font-semibold transition-colors hover:text-white"
                   >
                     Upload
                   </button>
@@ -260,7 +253,7 @@ export default async function MatterDetailPage({ params, searchParams }: MatterD
             </div>
           </>
         ) : null}
-      </section>
-    </main>
+      </div>
+    </PortalWorkspaceShell>
   )
 }
