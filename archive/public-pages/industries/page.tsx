@@ -7,7 +7,8 @@ import { SiteFooter } from "src/components/SiteFooter"
 
 export const metadata: Metadata = {
   title: "Industries",
-  description: "Levine Law advises operators, fintech platforms, investors, and cross-border businesses on corporate, contract, and financial services matters.",
+  description:
+    "Levine Law advises operators, fintech platforms, investors, and cross-border businesses on corporate, contract, and financial services matters.",
 }
 
 const clientTypes = [
@@ -43,13 +44,19 @@ export default function IndustriesPage() {
       <header className="border-b border-stone-200 bg-white">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
           <Link href="/">
-            <Image src="/logos/levine-law-wordmark-navy-transparent.png" alt="Levine Law" width={1080} height={600} className="h-10 w-auto" />
+            <Image
+              src="/logos/levine-law-wordmark-navy-transparent.png"
+              alt="Levine Law"
+              width={1080}
+              height={600}
+              className="h-10 w-auto"
+            />
           </Link>
           <nav className="flex items-center gap-6 text-sm">
             <Link href="/services" className="text-stone-600 transition-colors hover:text-stone-900">
               Services
             </Link>
-            <Link href="/industries" className="font-medium text-brand-navy">
+            <Link href="/industries" className="text-brand-navy font-medium">
               Industries
             </Link>
             <Link href="/#insights" className="text-stone-600 transition-colors hover:text-stone-900">
@@ -57,7 +64,7 @@ export default function IndustriesPage() {
             </Link>
             <a
               href="/corporate"
-              className="rounded border border-brand-navy px-4 py-2 font-medium text-brand-navy transition-colors hover:bg-brand-navy hover:text-white"
+              className="border-brand-navy text-brand-navy hover:bg-brand-navy rounded border px-4 py-2 font-medium transition-colors hover:text-white"
             >
               Client Portal
             </a>
@@ -68,8 +75,8 @@ export default function IndustriesPage() {
       {/* Hero */}
       <section className="bg-white py-24">
         <div className="mx-auto max-w-6xl px-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-navy">Industries</p>
-          <h1 className="mt-6 max-w-3xl text-5xl font-semibold leading-tight tracking-tight text-stone-900 sm:text-6xl">
+          <p className="text-brand-navy text-xs font-semibold tracking-[0.2em] uppercase">Industries</p>
+          <h1 className="mt-6 max-w-3xl text-5xl leading-tight font-semibold tracking-tight text-stone-900 sm:text-6xl">
             Who We Work With
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-stone-500">
@@ -83,8 +90,8 @@ export default function IndustriesPage() {
       <section className="bg-stone-50 py-20 md:py-24">
         <div className="mx-auto max-w-6xl px-6">
           <div className="mb-12 text-center">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-brand-navy">Client Types</p>
-            <h2 className="mx-auto max-w-2xl text-2xl font-semibold leading-tight tracking-tight text-stone-900">
+            <p className="text-brand-navy mb-3 text-xs font-semibold tracking-[0.2em] uppercase">Client Types</p>
+            <h2 className="mx-auto max-w-2xl text-2xl leading-tight font-semibold tracking-tight text-stone-900">
               The businesses we advise
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-stone-500">
@@ -98,8 +105,8 @@ export default function IndustriesPage() {
                 key={item.title}
                 className="rounded-xl border border-stone-200 bg-white p-6 transition hover:border-stone-300 hover:shadow-md"
               >
-                <h3 className="mb-1 text-lg font-semibold leading-tight text-stone-900">{item.title}</h3>
-                <p className="mb-3 text-xs font-medium uppercase tracking-wide text-brand-navy">{item.description}</p>
+                <h3 className="mb-1 text-lg leading-tight font-semibold text-stone-900">{item.title}</h3>
+                <p className="text-brand-navy mb-3 text-xs font-medium tracking-wide uppercase">{item.description}</p>
                 <p className="text-sm leading-6 text-stone-500">{item.detail}</p>
               </div>
             ))}
@@ -111,27 +118,27 @@ export default function IndustriesPage() {
       <section className="bg-white py-20 md:py-24">
         <div className="mx-auto max-w-6xl px-6">
           <div className="mb-12 text-center">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-brand-navy">Our Work</p>
-            <h2 className="mx-auto max-w-2xl text-2xl font-semibold leading-tight tracking-tight text-stone-900">
+            <p className="text-brand-navy mb-3 text-xs font-semibold tracking-[0.2em] uppercase">Our Work</p>
+            <h2 className="mx-auto max-w-2xl text-2xl leading-tight font-semibold tracking-tight text-stone-900">
               What we help with
             </h2>
           </div>
           <div className="grid gap-6 md:grid-cols-3 md:gap-8">
             <div className="rounded-xl border border-stone-200 bg-stone-50 p-6 transition hover:border-stone-300 hover:shadow-md">
-              <h3 className="mb-2 text-base font-semibold leading-tight text-stone-900">Corporate Governance</h3>
+              <h3 className="mb-2 text-base leading-tight font-semibold text-stone-900">Corporate Governance</h3>
               <p className="text-sm leading-6 text-stone-500">
                 Shareholder agreements, director matters, equity structure, and corporate maintenance for private
                 companies.
               </p>
             </div>
             <div className="rounded-xl border border-stone-200 bg-stone-50 p-6 transition hover:border-stone-300 hover:shadow-md">
-              <h3 className="mb-2 text-base font-semibold leading-tight text-stone-900">Commercial Contracts</h3>
+              <h3 className="mb-2 text-base leading-tight font-semibold text-stone-900">Commercial Contracts</h3>
               <p className="text-sm leading-6 text-stone-500">
                 Drafting and negotiating commercial agreements that allocate risk, revenue, and responsibility clearly.
               </p>
             </div>
             <div className="rounded-xl border border-stone-200 bg-stone-50 p-6 transition hover:border-stone-300 hover:shadow-md">
-              <h3 className="mb-2 text-base font-semibold leading-tight text-stone-900">Fintech & Payments</h3>
+              <h3 className="mb-2 text-base leading-tight font-semibold text-stone-900">Fintech & Payments</h3>
               <p className="text-sm leading-6 text-stone-500">
                 Legal support for businesses operating in regulated payment, banking, and financial services
                 environments.
@@ -153,8 +160,8 @@ export default function IndustriesPage() {
       <section className="bg-gray-50 py-20 md:py-24">
         <div className="mx-auto max-w-6xl px-6">
           <div className="mx-auto mb-10 max-w-2xl text-center">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-brand-navy">Get In Touch</p>
-            <h2 className="text-2xl font-semibold leading-tight tracking-tight text-stone-900">
+            <p className="text-brand-navy mb-3 text-xs font-semibold tracking-[0.2em] uppercase">Get In Touch</p>
+            <h2 className="text-2xl leading-tight font-semibold tracking-tight text-stone-900">
               Discuss your legal setup
             </h2>
             <p className="mt-4 text-stone-500">

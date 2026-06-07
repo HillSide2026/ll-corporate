@@ -12,7 +12,7 @@ const VALID_CATEGORIES: MatterRequestCategory[] = ["Corporate", "Contract", "Fin
 
 export async function submitMatterRequest(formData: FormData): Promise<void> {
   const session = (await getPortalSession()) ?? (isPreviewPortalAccessEnabled() ? getPreviewPortalSession() : null)
-  if (!session) redirect("/corporate")
+  if (!session) redirect("/sign-in")
 
   const category = formData.get("category")
   const description = formData.get("description")

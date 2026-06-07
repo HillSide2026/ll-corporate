@@ -14,7 +14,7 @@ export async function submitServiceRequest(formData: FormData) {
   const session = (await getPortalSession()) ?? (isPreviewPortalAccessEnabled() ? getPreviewPortalSession() : null)
 
   if (!session) {
-    redirect("/corporate")
+    redirect("/sign-in")
   }
 
   const slug = formData.get("serviceSlug")

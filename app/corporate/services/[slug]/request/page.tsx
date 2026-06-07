@@ -49,7 +49,7 @@ export default async function ServiceRequestPage({ params }: ServiceRequestPageP
   const session = (await getPortalSession()) ?? (isPreviewPortalAccessEnabled() ? getPreviewPortalSession() : null)
 
   if (!session) {
-    redirect("/corporate")
+    redirect("/sign-in")
   }
 
   return (

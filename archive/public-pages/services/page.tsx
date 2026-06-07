@@ -87,10 +87,16 @@ export default function ServicesPage() {
       <header className="border-b border-stone-200 bg-white">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
           <Link href="/">
-            <Image src="/logos/levine-law-wordmark-navy-transparent.png" alt="Levine Law" width={1080} height={600} className="h-10 w-auto" />
+            <Image
+              src="/logos/levine-law-wordmark-navy-transparent.png"
+              alt="Levine Law"
+              width={1080}
+              height={600}
+              className="h-10 w-auto"
+            />
           </Link>
           <nav className="flex items-center gap-6 text-sm">
-            <Link href="/services" className="font-medium text-brand-navy">
+            <Link href="/services" className="text-brand-navy font-medium">
               Services
             </Link>
             <Link href="/industries" className="text-stone-600 transition-colors hover:text-stone-900">
@@ -101,7 +107,7 @@ export default function ServicesPage() {
             </Link>
             <a
               href="/corporate"
-              className="rounded border border-brand-navy px-4 py-2 font-medium text-brand-navy transition-colors hover:bg-brand-navy hover:text-white"
+              className="border-brand-navy text-brand-navy hover:bg-brand-navy rounded border px-4 py-2 font-medium transition-colors hover:text-white"
             >
               Client Portal
             </a>
@@ -112,8 +118,8 @@ export default function ServicesPage() {
       {/* Hero */}
       <section className="bg-white py-24">
         <div className="mx-auto max-w-6xl px-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-navy">Fractional Counsel</p>
-          <h1 className="mt-6 max-w-3xl text-5xl font-semibold leading-tight tracking-tight text-stone-900 sm:text-6xl">
+          <p className="text-brand-navy text-xs font-semibold tracking-[0.2em] uppercase">Fractional Counsel</p>
+          <h1 className="mt-6 max-w-3xl text-5xl leading-tight font-semibold tracking-tight text-stone-900 sm:text-6xl">
             Ongoing legal support for businesses that need more than one-off answers.
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-stone-500">
@@ -123,7 +129,7 @@ export default function ServicesPage() {
           <div className="mt-10 flex flex-wrap gap-4">
             <a
               href="mailto:matthew@levinelegal.ca"
-              className="inline-flex items-center justify-center rounded bg-brand-navy px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-dark"
+              className="bg-brand-navy hover:bg-brand-navy-dark inline-flex items-center justify-center rounded px-6 py-3 text-sm font-semibold text-white transition-colors"
             >
               Book a Consultation
             </a>
@@ -141,8 +147,8 @@ export default function ServicesPage() {
       <section className="bg-stone-50 py-20 md:py-24">
         <div className="mx-auto max-w-6xl px-6">
           <div className="mx-auto max-w-2xl text-center">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-brand-navy">Counsel Models</p>
-            <h2 className="text-2xl font-semibold leading-tight tracking-tight text-stone-900">
+            <p className="text-brand-navy mb-3 text-xs font-semibold tracking-[0.2em] uppercase">Counsel Models</p>
+            <h2 className="text-2xl leading-tight font-semibold tracking-tight text-stone-900">
               Choose the counsel model that fits your operating reality.
             </h2>
             <p className="mt-4 text-stone-500">
@@ -163,32 +169,32 @@ export default function ServicesPage() {
                 className={[
                   "relative flex flex-col rounded-2xl border p-8 transition",
                   plan.recommended
-                    ? "border-brand-navy shadow-md hover:border-brand-navy-dark hover:shadow-lg"
+                    ? "border-brand-navy hover:border-brand-navy-dark shadow-md hover:shadow-lg"
                     : "border-stone-200 bg-white hover:border-stone-300 hover:shadow-md",
                 ].join(" ")}
               >
                 {plan.recommended && (
                   <div className="absolute -top-3 left-8">
-                    <span className="rounded-full bg-brand-navy px-3 py-1 text-xs font-semibold text-white">
+                    <span className="bg-brand-navy rounded-full px-3 py-1 text-xs font-semibold text-white">
                       Recommended
                     </span>
                   </div>
                 )}
 
                 <div className="flex-1">
-                  <h3 className="text-lg font-semibold leading-tight text-stone-900">{plan.name}</h3>
+                  <h3 className="text-lg leading-tight font-semibold text-stone-900">{plan.name}</h3>
                   <p className="mt-2 text-sm leading-6 text-stone-500">{plan.tagline}</p>
 
-                  <p className="mt-5 text-xs font-semibold uppercase tracking-wide text-stone-400">Best for</p>
+                  <p className="mt-5 text-xs font-semibold tracking-wide text-stone-400 uppercase">Best for</p>
                   <p className="mt-1 text-sm text-stone-600">{plan.bestFor}</p>
 
-                  <p className="mt-5 text-xs font-semibold uppercase tracking-wide text-stone-400">Engagement</p>
+                  <p className="mt-5 text-xs font-semibold tracking-wide text-stone-400 uppercase">Engagement</p>
                   <p className="mt-1 text-sm font-medium text-stone-700">{plan.engagement}</p>
 
                   <ul className="mt-6 space-y-2">
                     {plan.features.map((feature) => (
                       <li key={feature} className="flex items-start gap-2 text-sm text-stone-600">
-                        <span className="mt-0.5 shrink-0 text-brand-navy">—</span>
+                        <span className="text-brand-navy mt-0.5 shrink-0">—</span>
                         {feature}
                       </li>
                     ))}
@@ -200,7 +206,7 @@ export default function ServicesPage() {
                   className={[
                     "mt-8 inline-flex w-full items-center justify-center rounded px-5 py-3 text-sm font-semibold transition-colors",
                     plan.recommended
-                      ? "bg-brand-navy text-white hover:bg-brand-navy-dark"
+                      ? "bg-brand-navy hover:bg-brand-navy-dark text-white"
                       : "border border-stone-300 text-stone-700 hover:border-stone-400 hover:bg-stone-50",
                   ].join(" ")}
                 >
@@ -216,18 +222,18 @@ export default function ServicesPage() {
       <section className="bg-stone-50 py-20 md:py-24">
         <div className="mx-auto max-w-6xl px-6">
           <div className="mb-12 text-center">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-brand-navy">Process</p>
-            <h2 className="mx-auto max-w-2xl text-2xl font-semibold leading-tight tracking-tight text-stone-900">
+            <p className="text-brand-navy mb-3 text-xs font-semibold tracking-[0.2em] uppercase">Process</p>
+            <h2 className="mx-auto max-w-2xl text-2xl leading-tight font-semibold tracking-tight text-stone-900">
               How fractional counsel works
             </h2>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 md:gap-8 lg:grid-cols-4">
             {steps.map((step) => (
               <div key={step.number} className="rounded-xl border border-stone-200 bg-white p-6">
-                <p className="mb-3 text-2xl font-semibold leading-none tracking-tight text-brand-navy/30">
+                <p className="text-brand-navy/30 mb-3 text-2xl leading-none font-semibold tracking-tight">
                   {step.number}
                 </p>
-                <h3 className="mb-2 text-base font-semibold leading-tight text-stone-900">{step.heading}</h3>
+                <h3 className="mb-2 text-base leading-tight font-semibold text-stone-900">{step.heading}</h3>
                 <p className="text-sm leading-6 text-stone-500">{step.body}</p>
               </div>
             ))}
@@ -240,14 +246,14 @@ export default function ServicesPage() {
         <div className="mx-auto max-w-6xl px-6">
           <div className="flex flex-col items-center justify-between gap-6 rounded-2xl border border-stone-200 bg-stone-50 px-8 py-7 sm:flex-row">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-navy">Corporate Health Check</p>
+              <p className="text-brand-navy text-xs font-semibold tracking-[0.2em] uppercase">Corporate Health Check</p>
               <p className="mt-1 text-sm leading-6 text-stone-600">
                 Not sure whether your existing structure is ready for what&apos;s next? Start with a focused review.
               </p>
             </div>
             <Link
               href="/corporate-health-check"
-              className="shrink-0 inline-flex items-center justify-center rounded border border-brand-navy px-5 py-2.5 text-sm font-semibold text-brand-navy transition-colors hover:bg-brand-navy hover:text-white"
+              className="border-brand-navy text-brand-navy hover:bg-brand-navy inline-flex shrink-0 items-center justify-center rounded border px-5 py-2.5 text-sm font-semibold transition-colors hover:text-white"
             >
               Learn about the Health Check
             </Link>
@@ -259,8 +265,8 @@ export default function ServicesPage() {
       <section className="bg-gray-50 py-20 md:py-24">
         <div className="mx-auto max-w-6xl px-6">
           <div className="mx-auto mb-10 max-w-2xl text-center">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-brand-navy">Get In Touch</p>
-            <h2 className="text-2xl font-semibold leading-tight tracking-tight text-stone-900">
+            <p className="text-brand-navy mb-3 text-xs font-semibold tracking-[0.2em] uppercase">Get In Touch</p>
+            <h2 className="text-2xl leading-tight font-semibold tracking-tight text-stone-900">
               Discuss your legal setup
             </h2>
             <p className="mt-4 text-stone-500">

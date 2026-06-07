@@ -23,7 +23,7 @@ function redirectFriendlyAuthError(request: NextRequest) {
     return null
   }
 
-  const redirectUrl = new URL("/corporate", request.url)
+  const redirectUrl = new URL("/sign-in", request.url)
   redirectUrl.searchParams.set("error", "Configuration")
   return NextResponse.redirect(redirectUrl)
 }

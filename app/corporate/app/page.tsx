@@ -16,7 +16,7 @@ export default async function PortalAppPage({ searchParams }: PortalAppPageProps
   const session = await getPortalSession()
 
   if (!session) {
-    redirect("/corporate")
+    redirect("/sign-in")
   }
 
   const accessToken = await getAccessToken()

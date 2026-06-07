@@ -46,15 +46,21 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
       <header className="border-b border-stone-200 bg-white">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <Link href="/">
-            <Image src="/logos/levine-law-wordmark-navy-transparent.png" alt="Levine Law" width={1080} height={600} className="h-10 w-auto" />
+            <Image
+              src="/logos/levine-law-wordmark-navy-transparent.png"
+              alt="Levine Law"
+              width={1080}
+              height={600}
+              className="h-10 w-auto"
+            />
           </Link>
           <nav className="flex items-center gap-6 text-sm">
-            <Link href="/services" className="font-medium text-brand-navy transition-colors hover:text-brand-navy-dark">
+            <Link href="/services" className="text-brand-navy hover:text-brand-navy-dark font-medium transition-colors">
               Services
             </Link>
             <a
               href="/corporate"
-              className="rounded border border-brand-navy px-4 py-2 font-medium text-brand-navy transition-colors hover:bg-brand-navy hover:text-white"
+              className="border-brand-navy text-brand-navy hover:bg-brand-navy rounded border px-4 py-2 font-medium transition-colors hover:text-white"
             >
               Client Portal
             </a>
@@ -64,7 +70,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
 
       <section className="mx-auto max-w-5xl px-6 py-14">
         <div>
-          <p className="text-xs font-semibold tracking-[0.18em] text-brand-navy uppercase">Corporate Service</p>
+          <p className="text-brand-navy text-xs font-semibold tracking-[0.18em] uppercase">Corporate Service</p>
           <h1 className="mt-4 max-w-3xl text-4xl font-semibold tracking-tight text-stone-900">{service.title}</h1>
           <p className="mt-5 max-w-3xl text-base leading-7 text-stone-500">{service.description}</p>
         </div>
@@ -122,14 +128,14 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
           {session ? (
             <Link
               href={`/corporate/services/${service.slug}/request`}
-              className="mt-5 inline-flex rounded bg-brand-navy px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-dark"
+              className="bg-brand-navy hover:bg-brand-navy-dark mt-5 inline-flex rounded px-4 py-2 text-sm font-semibold text-white transition-colors"
             >
               {service.ctaLabel}
             </Link>
           ) : (
             <a
               href="/corporate"
-              className="mt-5 inline-flex rounded bg-brand-navy px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-dark"
+              className="bg-brand-navy hover:bg-brand-navy-dark mt-5 inline-flex rounded px-4 py-2 text-sm font-semibold text-white transition-colors"
             >
               Sign in to request this service
             </a>

@@ -31,12 +31,12 @@ clients.levine-law.ca -> ll-corporate service
 
 The app is built without a production `basePath`. `next.config.ts` currently avoids `basePath`; leave it that way unless a dev-only reason is documented.
 
-Existing `/corporate` paths are application routes in the Next.js app, not deployment topology.
+Existing protected `/corporate` paths are application routes in the Next.js app, not deployment topology.
 
 Expected current external portal routes:
 
 ```text
-GET  https://clients.levine-law.ca/corporate
+GET  https://clients.levine-law.ca/sign-in
 GET  https://clients.levine-law.ca/corporate/app
 GET  https://clients.levine-law.ca/corporate/api/auth/signin/keycloak
 GET  https://clients.levine-law.ca/corporate/api/auth/callback/keycloak
@@ -47,7 +47,6 @@ GET  https://clients.levine-law.ca/healthz
 Future route simplification may move:
 
 ```text
-/corporate/sign-in -> /sign-in
 /corporate/app -> /app
 /corporate/admin -> /admin
 ```
@@ -78,7 +77,7 @@ https://clients.levine-law.ca/corporate/api/auth/callback/keycloak
 Valid post logout redirect URI:
 
 ```text
-https://clients.levine-law.ca/corporate
+https://clients.levine-law.ca/sign-in
 ```
 
 Web origin:
@@ -104,9 +103,9 @@ AUTH_URL=https://clients.levine-law.ca/corporate/api/auth
 AUTH_KEYCLOAK_ISSUER=https://<keycloak-host>/realms/<realm>
 AUTH_KEYCLOAK_ID=<client-id>
 AUTH_KEYCLOAK_SECRET=<client-secret>
-LL_CORPORATE_APP_BASE_URL=https://clients.levine-law.ca/corporate
+LL_CORPORATE_APP_BASE_URL=https://clients.levine-law.ca/sign-in
 LL_CORPORATE_POST_LOGIN_REDIRECT_URL=https://clients.levine-law.ca/corporate/app
-LL_CORPORATE_LOGOUT_REDIRECT_URL=https://clients.levine-law.ca/corporate
+LL_CORPORATE_LOGOUT_REDIRECT_URL=https://clients.levine-law.ca/sign-in
 LL_TASK_TRACKER_API_BASE_URL=<future backend URL>
 ```
 

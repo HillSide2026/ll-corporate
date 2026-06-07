@@ -128,7 +128,7 @@ export function PortalWorkspaceShell({
                 <div className="border-t border-stone-200 px-3 py-3">
                   {previewMode ? (
                     <a
-                      href="/corporate"
+                      href="/sign-in"
                       className="block rounded-md border border-stone-300 bg-white px-3 py-2 text-center text-sm font-medium text-stone-700 hover:border-stone-400"
                     >
                       Exit preview

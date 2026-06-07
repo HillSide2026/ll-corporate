@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic"
 
 export default function PreviewPortalPage() {
   if (!isPreviewPortalAccessEnabled()) {
-    redirect("/corporate?error=PreviewAccessDisabled")
+    redirect("/sign-in?error=PreviewAccessDisabled")
   }
 
   return <PortalShell previewMode session={getPreviewPortalSession()} />

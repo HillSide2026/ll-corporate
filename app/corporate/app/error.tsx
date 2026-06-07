@@ -17,7 +17,7 @@ export default function PortalError({ error, reset }: { error: Error & { digest?
             Try again
           </button>
           <a
-            href="/corporate"
+            href="/sign-in"
             className="rounded border border-stone-300 px-4 py-2 text-sm font-semibold text-stone-700 transition-colors hover:border-stone-400"
           >
             Back to sign-in

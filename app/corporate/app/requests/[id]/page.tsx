@@ -64,7 +64,7 @@ export default async function RequestDetailPage({ params, searchParams }: Reques
   const session = (await getPortalSession()) ?? (isPreviewPortalAccessEnabled() ? getPreviewPortalSession() : null)
 
   if (!session) {
-    redirect("/corporate")
+    redirect("/sign-in")
   }
 
   const req = await getRequestById(id, session.identity)

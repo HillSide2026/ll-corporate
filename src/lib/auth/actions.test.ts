@@ -47,8 +47,8 @@ describe("auth actions", () => {
   it("redirects to the public portal with a friendly configuration error when Keycloak is not configured", async () => {
     vi.mocked(isKeycloakConfigured).mockReturnValue(false)
 
-    await expect(signInWithKeycloak()).rejects.toThrow("redirect:/corporate?error=Configuration")
-    expect(redirect).toHaveBeenCalledWith("/corporate?error=Configuration")
+    await expect(signInWithKeycloak()).rejects.toThrow("redirect:/sign-in?error=Configuration")
+    expect(redirect).toHaveBeenCalledWith("/sign-in?error=Configuration")
     expect(authMocks.signIn).not.toHaveBeenCalled()
   })
 
@@ -62,13 +62,13 @@ describe("auth actions", () => {
   it("redirects preview access back to sign-in when preview access is disabled", async () => {
     vi.mocked(isPreviewPortalAccessEnabled).mockReturnValue(false)
 
-    await expect(previewPortalAccess()).rejects.toThrow("redirect:/corporate?error=PreviewAccessDisabled")
-    expect(redirect).toHaveBeenCalledWith("/corporate?error=PreviewAccessDisabled")
+    await expect(previewPortalAccess()).rejects.toThrow("redirect:/sign-in?error=PreviewAccessDisabled")
+    expect(redirect).toHaveBeenCalledWith("/sign-in?error=PreviewAccessDisabled")
   })
 
   it("signs out to the public portal entry", async () => {
     await signOutFromPortal()
 
-    expect(authMocks.signOut).toHaveBeenCalledWith({ redirectTo: "/corporate" })
+    expect(authMocks.signOut).toHaveBeenCalledWith({ redirectTo: "/sign-in" })
   })
 })

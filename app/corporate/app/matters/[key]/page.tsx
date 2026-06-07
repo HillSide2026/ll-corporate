@@ -101,7 +101,7 @@ export default async function MatterDetailPage({ params, searchParams }: MatterD
 
   const session = await getPortalSession()
   if (!session) {
-    redirect("/corporate")
+    redirect("/sign-in")
   }
 
   const accessToken = await getAccessToken()

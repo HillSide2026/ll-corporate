@@ -25,7 +25,7 @@ type NewRequestPageProps = {
 
 export default async function NewMatterRequestPage({ searchParams }: NewRequestPageProps) {
   const session = (await getPortalSession()) ?? (isPreviewPortalAccessEnabled() ? getPreviewPortalSession() : null)
-  if (!session) redirect("/corporate")
+  if (!session) redirect("/sign-in")
 
   const sp = await searchParams
   const hasError = sp.error === "1"

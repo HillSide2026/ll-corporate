@@ -13,17 +13,17 @@ export function SiteFooter() {
             <p className="mt-4 text-sm text-stone-400">Toronto, Ontario</p>
           </div>
           <nav className="flex flex-wrap gap-x-8 gap-y-3 text-sm text-stone-500">
-            <Link href="/#portal-capabilities" className="transition-colors hover:text-stone-900">
-              Portal
+            <Link href="/#client-portal" className="transition-colors hover:text-stone-900">
+              Client portal
             </Link>
             <Link href="/#request-access" className="transition-colors hover:text-stone-900">
-              Request Access
+              Request access
             </Link>
             <Link href="/#notice" className="transition-colors hover:text-stone-900">
               Notice
             </Link>
-            <Link href="/corporate" className="transition-colors hover:text-stone-900">
-              Sign In
+            <Link href="/sign-in" className="transition-colors hover:text-stone-900">
+              Sign in
             </Link>
           </nav>
         </div>

@@ -43,8 +43,8 @@ describe("PortalAppPage", () => {
   it("redirects unauthenticated users to the corporate sign-in page", async () => {
     vi.mocked(getPortalSession).mockResolvedValue(null)
 
-    await expect(PortalAppPage({ searchParams: Promise.resolve({}) })).rejects.toThrow("redirect:/corporate")
-    expect(redirect).toHaveBeenCalledWith("/corporate")
+    await expect(PortalAppPage({ searchParams: Promise.resolve({}) })).rejects.toThrow("redirect:/sign-in")
+    expect(redirect).toHaveBeenCalledWith("/sign-in")
   })
 
   it("renders the protected shell for authenticated users", async () => {

@@ -47,8 +47,8 @@ describe("PreviewPortalPage", () => {
   it("redirects when preview access is disabled", () => {
     vi.mocked(isPreviewPortalAccessEnabled).mockReturnValue(false)
 
-    expect(() => PreviewPortalPage()).toThrow("redirect:/corporate?error=PreviewAccessDisabled")
-    expect(redirect).toHaveBeenCalledWith("/corporate?error=PreviewAccessDisabled")
+    expect(() => PreviewPortalPage()).toThrow("redirect:/sign-in?error=PreviewAccessDisabled")
+    expect(redirect).toHaveBeenCalledWith("/sign-in?error=PreviewAccessDisabled")
   })
 
   it("renders the portal shell with the preview session when enabled", () => {

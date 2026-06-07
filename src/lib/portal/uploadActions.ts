@@ -9,7 +9,7 @@ import { validatePortalDocumentFile } from "./uploadValidation"
 
 export async function uploadMatterDocument(formData: FormData): Promise<void> {
   const session = (await getPortalSession()) ?? (isPreviewPortalAccessEnabled() ? getPreviewPortalSession() : null)
-  if (!session) redirect("/corporate")
+  if (!session) redirect("/sign-in")
 
   const matterKey = formData.get("matterKey")
   const file = formData.get("file")

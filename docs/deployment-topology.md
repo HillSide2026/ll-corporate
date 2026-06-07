@@ -20,15 +20,14 @@ Assumed ownership:
 Next.js path behavior:
 
 - Production does not use `basePath`; `next.config.ts` currently avoids `basePath` and should stay that way unless a dev-only reason is documented.
-- Existing `/corporate` paths are application routes in this Next.js app, not deployment topology.
-- The current public portal entry route is `https://clients.levine-law.ca/corporate`.
+- Existing protected `/corporate` paths are application routes in this Next.js app, not deployment topology.
+- The current public portal entry route is `https://clients.levine-law.ca/sign-in`.
 - The current protected shell route is `https://clients.levine-law.ca/corporate/app`.
 - Auth.js handlers are currently exposed at `https://clients.levine-law.ca/corporate/api/auth/*`.
 - Health routes are checked on the client portal origin, for example `https://clients.levine-law.ca/healthz`.
 
 Future route simplification may move:
 
-- `/corporate/sign-in` -> `/sign-in`
 - `/corporate/app` -> `/app`
 - `/corporate/admin` -> `/admin`
 
@@ -48,7 +47,7 @@ The proxy must preserve:
 - `X-Forwarded-Proto`
 - `X-Forwarded-For`
 
-Do not proxy `www.levine-law.ca/corporate/*` to this app in production. If WordPress needs a portal link, it should link to `https://clients.levine-law.ca/corporate` until route simplification is approved.
+Do not proxy `www.levine-law.ca/corporate/*` to this app in production. If WordPress needs a portal link, it should link to `https://clients.levine-law.ca/sign-in`.
 
 Assets:
 

@@ -32,7 +32,7 @@ function formatDate(iso: string): string {
 export default async function DocumentsPage({ searchParams }: DocumentsPageProps) {
   const session = (await getPortalSession()) ?? (isPreviewPortalAccessEnabled() ? getPreviewPortalSession() : null)
 
-  if (!session) redirect("/corporate")
+  if (!session) redirect("/sign-in")
 
   const params = await searchParams
   const query = typeof params.search === "string" ? params.search.trim().toLowerCase() : ""

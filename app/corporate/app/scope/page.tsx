@@ -42,7 +42,7 @@ function formatDate(iso: string): string {
 
 export default async function ScopePage() {
   const session = (await getPortalSession()) ?? (isPreviewPortalAccessEnabled() ? getPreviewPortalSession() : null)
-  if (!session) redirect("/corporate")
+  if (!session) redirect("/sign-in")
 
   const accessToken = await getAccessToken()
   const { profile, isMock: profileMock } = getCounselProfile()

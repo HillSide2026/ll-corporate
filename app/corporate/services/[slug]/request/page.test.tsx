@@ -64,9 +64,9 @@ describe("ServiceRequestPage", () => {
     vi.mocked(getPortalSession).mockResolvedValue(null)
 
     await expect(ServiceRequestPage({ params: Promise.resolve({ slug: "incorporation" }) })).rejects.toThrow(
-      "redirect:/corporate"
+      "redirect:/sign-in"
     )
-    expect(redirect).toHaveBeenCalledWith("/corporate")
+    expect(redirect).toHaveBeenCalledWith("/sign-in")
   })
 
   it("renders the authenticated request form for the selected service", async () => {

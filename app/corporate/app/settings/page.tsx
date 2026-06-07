@@ -18,7 +18,7 @@ export const metadata: Metadata = { title: "Settings" }
 
 export default async function SettingsPage() {
   const session = (await getPortalSession()) ?? (isPreviewPortalAccessEnabled() ? getPreviewPortalSession() : null)
-  if (!session) redirect("/corporate")
+  if (!session) redirect("/sign-in")
 
   return (
     <PortalWorkspaceShell active="settings" session={session}>

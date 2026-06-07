@@ -12,15 +12,14 @@ Production hostname:
 
 Current portal application routes:
 
-- Public portal entry: `https://clients.levine-law.ca/corporate`
+- Public portal entry: `https://clients.levine-law.ca/sign-in`
 - Protected shell: `https://clients.levine-law.ca/corporate/app`
 - Auth handlers: `https://clients.levine-law.ca/corporate/api/auth/*`
 
-These `/corporate` paths are current application routes. They are not a production deployment mount and do not imply a Next.js `basePath`.
+The `/corporate` protected shell and auth paths are current application routes. They are not a production deployment mount and do not imply a Next.js `basePath`.
 
 Future route simplification may move:
 
-- `/corporate/sign-in` -> `/sign-in`
 - `/corporate/app` -> `/app`
 - `/corporate/admin` -> `/admin`
 
@@ -46,7 +45,7 @@ https://clients.levine-law.ca/corporate/api/auth/callback/keycloak
 Keycloak post-logout redirect URI:
 
 ```text
-https://clients.levine-law.ca/corporate
+https://clients.levine-law.ca/sign-in
 ```
 
 Keycloak web origin:

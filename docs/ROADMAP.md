@@ -252,7 +252,7 @@ Authentication is wired through NextAuth v5 + Keycloak but the Keycloak instance
 1. **Confirm production auth shape**: define the Keycloak realm, client roles/groups, client users, lawyer/admin users, and callback/logout URLs for the current `/corporate/api/auth` application route on `clients.levine-law.ca`.
 2. **Configure Keycloak**: create the realm and OIDC client, then register `https://clients.levine-law.ca/corporate/api/auth/callback/keycloak` as the production callback URL.
 3. **Set production auth env vars**: configure `AUTH_SECRET`, `AUTH_TRUST_HOST=true`, `AUTH_URL`, `AUTH_KEYCLOAK_ISSUER`, `AUTH_KEYCLOAK_ID`, `AUTH_KEYCLOAK_SECRET`, and set `LL_CORPORATE_ENABLE_PREVIEW_ACCESS=false`.
-4. **Verify real login**: sign into `https://clients.levine-law.ca/corporate`, reach `/corporate/app`, and confirm `getAccessToken()` returns a Keycloak access token for server-side API calls.
+4. **Verify real login**: sign into `https://clients.levine-law.ca/sign-in`, reach `/corporate/app`, and confirm `getAccessToken()` returns a Keycloak access token for server-side API calls.
 5. **Expose LL-task-tracker API**: deploy or confirm production endpoints for `GET /case`, `GET /case/{businessKey}`, and `GET /task?businessKey=...`, with Keycloak bearer-token validation.
 6. **Wire `LL_TASK_TRACKER_API_BASE_URL`**: set the production API base URL and confirm matter list/detail pages switch from `isMock: true` to live data.
 7. **Validate API contracts**: compare live LL-task-tracker responses against `src/lib/contracts/schemas.ts`; update backend DTOs or frontend contract schemas until Zod validation passes.

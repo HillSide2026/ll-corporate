@@ -16,7 +16,7 @@ export async function signInWithCredentials(formData: FormData) {
     })
   } catch (err) {
     if (err instanceof AuthError) {
-      redirect("/corporate?error=CredentialsSignIn")
+      redirect("/sign-in?error=CredentialsSignIn")
     }
     throw err
   }
@@ -24,7 +24,7 @@ export async function signInWithCredentials(formData: FormData) {
 
 export async function signInWithKeycloak() {
   if (!isKeycloakConfigured()) {
-    redirect("/corporate?error=Configuration")
+    redirect("/sign-in?error=Configuration")
   }
 
   await signIn("keycloak", { redirectTo: env.LL_CORPORATE_POST_LOGIN_REDIRECT_URL ?? "/corporate/app" })
@@ -32,12 +32,12 @@ export async function signInWithKeycloak() {
 
 export async function previewPortalAccess() {
   if (!isPreviewPortalAccessEnabled()) {
-    redirect("/corporate?error=PreviewAccessDisabled")
+    redirect("/sign-in?error=PreviewAccessDisabled")
   }
 
   redirect("/corporate/preview")
 }
 
 export async function signOutFromPortal() {
-  await signOut({ redirectTo: env.LL_CORPORATE_LOGOUT_REDIRECT_URL ?? "/corporate" })
+  await signOut({ redirectTo: env.LL_CORPORATE_LOGOUT_REDIRECT_URL ?? "/sign-in" })
 }

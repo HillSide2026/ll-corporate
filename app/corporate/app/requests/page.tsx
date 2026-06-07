@@ -53,7 +53,7 @@ function requestTone(status: RequestStatus | MatterRequestStatus): "navy" | "gol
 export default async function RequestsPage({ searchParams }: RequestsPageProps) {
   const session = (await getPortalSession()) ?? (isPreviewPortalAccessEnabled() ? getPreviewPortalSession() : null)
 
-  if (!session) redirect("/corporate")
+  if (!session) redirect("/sign-in")
 
   const params = await searchParams
   const justSubmitted = params.submitted === "1"
