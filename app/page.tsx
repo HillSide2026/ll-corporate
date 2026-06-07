@@ -116,25 +116,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 4. How We Work */}
-      <section className="bg-brand-navy py-20 md:py-24">
-        <div className="mx-auto max-w-6xl px-6 text-center">
-          <div className="mx-auto max-w-3xl">
-            <div>
-              <p className="text-[11px] font-semibold tracking-[0.24em] text-white/75 uppercase">How We Work</p>
-              <h2 className="mt-3 text-3xl leading-tight font-semibold tracking-tight text-white">
-                Ongoing legal support and representation
-              </h2>
-            </div>
-            <p className="mt-5 text-lg leading-8 text-white/75">
-              Levine Law supports clients as fractional counsel across corporate, contract, and financial services
-              matters.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* 5. Request Access */}
+      {/* 4. Request Access */}
       <section id="request-access" className="bg-stone-50 py-20 md:py-24">
         <div className="mx-auto max-w-6xl px-6 text-center">
           <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
@@ -159,27 +141,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 6. Notice */}
-      <section id="notice" className="bg-white py-20 md:py-24">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="border-border-subtle mx-auto max-w-3xl border-y py-8">
-            <p className="text-brand-navy text-[11px] font-semibold tracking-[0.24em] uppercase">Notice</p>
-            <h2 className="text-ink mt-3 text-2xl leading-tight font-semibold tracking-tight">Notice</h2>
-            <p className="mt-4 text-sm leading-6 text-stone-600">
-              Levine Law Client Portal access requests are provided for administrative convenience and access to digital
-              services after review.
-            </p>
-            <p className="mt-4 text-sm leading-6 text-stone-600">
-              Requesting portal access does not: Create a lawyer-client relationship; Retain Levine Law as legal
-              counsel; Constitute legal advice; Guarantee representation; Create an engagement agreement. A
-              lawyer-client relationship is established only after Levine Law has completed its intake and conflict
-              review processes and a formal engagement has been accepted.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* 7. Final Portal CTA */}
+      {/* 5. Final Portal CTA */}
       <section className="bg-stone-50 py-20 md:py-24">
         <div className="mx-auto max-w-6xl px-6">
           <div className="mx-auto max-w-xl text-center">
@@ -192,7 +154,7 @@ export default function HomePage() {
                 href="#request-access"
                 className="bg-brand-navy hover:bg-brand-navy-dark inline-flex items-center justify-center rounded-md px-6 py-3 text-sm font-semibold text-white transition-colors"
               >
-                Request Portal Access
+                Request Access
               </a>
               <Link
                 href="/sign-in"
