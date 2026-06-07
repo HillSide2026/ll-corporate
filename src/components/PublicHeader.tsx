@@ -24,7 +24,7 @@ export function PublicHeader({ current }: PublicHeaderProps) {
             href="/#request-access"
             className="hidden text-stone-600 transition-colors hover:text-stone-900 sm:inline"
           >
-            Request access
+            Request Access
           </Link>
           <Link href="/#notice" className="hidden text-stone-600 transition-colors hover:text-stone-900 sm:inline">
             Notice
@@ -34,7 +34,7 @@ export function PublicHeader({ current }: PublicHeaderProps) {
             aria-current={current === "sign-in" ? "page" : undefined}
             className="border-brand-navy text-brand-navy hover:bg-brand-navy rounded-md border px-4 py-2 font-semibold transition-colors hover:text-white"
           >
-            Sign in
+            Sign In
           </Link>
         </nav>
       </div>

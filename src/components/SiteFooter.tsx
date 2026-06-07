@@ -14,16 +14,16 @@ export function SiteFooter() {
           </div>
           <nav className="flex flex-wrap gap-x-8 gap-y-3 text-sm text-stone-500">
             <Link href="/#client-portal" className="transition-colors hover:text-stone-900">
-              Client portal
+              Portal
             </Link>
             <Link href="/#request-access" className="transition-colors hover:text-stone-900">
-              Request access
+              Request Access
             </Link>
             <Link href="/#notice" className="transition-colors hover:text-stone-900">
               Notice
             </Link>
             <Link href="/sign-in" className="transition-colors hover:text-stone-900">
-              Sign in
+              Sign In
             </Link>
           </nav>
         </div>

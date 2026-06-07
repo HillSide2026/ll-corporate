@@ -31,26 +31,26 @@ export default function HomePage() {
       {/* 1. Hero */}
       <section className="bg-white py-20 md:py-28">
         <div className="mx-auto max-w-6xl px-6">
-          <p className="text-brand-navy text-[11px] font-semibold tracking-[0.24em] uppercase">Levine Law</p>
+          <p className="text-brand-navy text-[11px] font-semibold tracking-[0.24em] uppercase">Secure Client Portal</p>
           <h1 className="text-ink mt-5 max-w-4xl text-5xl leading-tight font-semibold tracking-tight sm:text-6xl">
-            Corporate, contract, and financial services counsel for business clients.
+            Access Your Levine Law Workspace
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-stone-600">
-            Levine Law supports operators, executives, investors, and regulated businesses with practical legal counsel
-            and secure access to client matter information.
+            Request portal access to view documents, submit requests, track matters, and communicate securely with
+            Levine Law through our digital client portal.
           </p>
           <div className="mt-10 flex flex-wrap gap-4">
             <a
               href="#request-access"
               className="bg-brand-navy hover:bg-brand-navy-dark inline-flex items-center justify-center rounded-md px-6 py-3 text-sm font-semibold text-white transition-colors"
             >
-              Request portal access
+              Request Portal Access
             </a>
             <a
               href="/sign-in"
               className="inline-flex items-center justify-center rounded-md border border-stone-300 px-6 py-3 text-sm font-semibold text-stone-700 transition-colors hover:border-stone-400 hover:bg-stone-50"
             >
-              Sign in
+              Sign In
             </a>
           </div>
           <p className="mt-5 max-w-2xl text-xs leading-5 text-stone-400">
@@ -64,8 +64,8 @@ export default function HomePage() {
       <section className="border-border-subtle border-y bg-stone-50 py-6">
         <div className="mx-auto max-w-6xl px-6">
           <p className="text-sm leading-6 text-stone-600">
-            Counsel for corporate structures, contracts, governance, transactions, financial services, fintech, and
-            payment-adjacent businesses.
+            Levine Law supports clients as fractional counsel across corporate, contract, and financial services
+            matters.
           </p>
         </div>
       </section>
@@ -74,13 +74,12 @@ export default function HomePage() {
         <div className="mx-auto max-w-6xl px-6">
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-12">
             <div className="lg:col-span-4">
-              <p className="text-brand-navy text-[11px] font-semibold tracking-[0.24em] uppercase">Client portal</p>
+              <p className="text-brand-navy text-[11px] font-semibold tracking-[0.24em] uppercase">Client Workspace</p>
               <h2 className="text-ink mt-3 text-2xl leading-tight font-semibold tracking-tight">
-                Secure access for active and approved clients.
+                What Clients Can Do In The Portal
               </h2>
               <p className="mt-4 text-[15px] leading-7 text-stone-600">
-                The portal supports client administration, document access, requests, and matter updates after Levine
-                Law has reviewed access.
+                Use one secure workspace to manage access, requests, matter updates, and firm communications.
               </p>
             </div>
             <div className="grid gap-6 sm:grid-cols-2 lg:col-span-8">
@@ -103,9 +102,9 @@ export default function HomePage() {
         <div className="mx-auto max-w-6xl px-6">
           <div className="border-border-subtle grid gap-8 border-y py-12 md:grid-cols-[1fr_auto] md:items-center">
             <div>
-              <p className="text-brand-navy text-[11px] font-semibold tracking-[0.24em] uppercase">Account access</p>
+              <p className="text-brand-navy text-[11px] font-semibold tracking-[0.24em] uppercase">Account Access</p>
               <h2 className="text-ink mt-3 text-2xl leading-tight font-semibold tracking-tight">
-                Existing clients can sign in to the portal.
+                Existing Clients Sign In Here
               </h2>
               <p className="mt-3 max-w-2xl text-[15px] leading-7 text-stone-600">
                 Use your portal credentials to access documents, requests, matter updates, and secure communications.
@@ -115,7 +114,7 @@ export default function HomePage() {
               href="/sign-in"
               className="bg-brand-navy hover:bg-brand-navy-dark inline-flex items-center justify-center rounded-md px-6 py-3 text-sm font-semibold text-white transition-colors"
             >
-              Sign in
+              Sign In
             </Link>
           </div>
         </div>
@@ -126,14 +125,14 @@ export default function HomePage() {
         <div className="mx-auto max-w-6xl px-6">
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
             <div className="lg:col-span-4">
-              <p className="text-[11px] font-semibold tracking-[0.24em] text-white/75 uppercase">How we work</p>
+              <p className="text-[11px] font-semibold tracking-[0.24em] text-white/75 uppercase">How We Work</p>
               <h2 className="mt-3 text-3xl leading-tight font-semibold tracking-tight text-white">
-                Ongoing legal support with business context.
+                Ongoing legal support and representation
               </h2>
             </div>
             <p className="text-lg leading-8 text-white/75 lg:col-span-8">
               Levine Law supports clients as fractional counsel across corporate, contract, and financial services
-              matters, with portal access available for administrative workflows and active client matters.
+              matters.
             </p>
           </div>
         </div>
@@ -144,9 +143,9 @@ export default function HomePage() {
         <div className="mx-auto max-w-6xl px-6">
           <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
             <div>
-              <p className="text-brand-navy text-[11px] font-semibold tracking-[0.24em] uppercase">Request access</p>
+              <p className="text-brand-navy text-[11px] font-semibold tracking-[0.24em] uppercase">Request Access</p>
               <h2 className="text-ink mt-3 text-3xl leading-tight font-semibold tracking-tight">
-                Request portal access.
+                Request portal access
               </h2>
               <p className="mt-4 text-sm leading-6 text-stone-600">
                 Use this form to request access to the client portal. Levine Law reviews requests before granting access
@@ -188,22 +187,22 @@ export default function HomePage() {
       <section className="bg-stone-50 py-20 md:py-24">
         <div className="mx-auto max-w-6xl px-6">
           <div className="mx-auto max-w-xl text-center">
-            <p className="text-brand-navy text-[11px] font-semibold tracking-[0.24em] uppercase">Client portal</p>
+            <p className="text-brand-navy text-[11px] font-semibold tracking-[0.24em] uppercase">Client Portal</p>
             <h2 className="text-ink mt-3 text-2xl leading-tight font-semibold tracking-tight">
-              Ready to access your Levine Law client portal?
+              Ready to access your Levine Law workspace?
             </h2>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               <a
                 href="#request-access"
                 className="bg-brand-navy hover:bg-brand-navy-dark inline-flex items-center justify-center rounded-md px-6 py-3 text-sm font-semibold text-white transition-colors"
               >
-                Request portal access
+                Request Portal Access
               </a>
               <Link
                 href="/sign-in"
                 className="inline-flex items-center justify-center rounded-md border border-stone-300 px-6 py-3 text-sm font-semibold text-stone-700 transition-colors hover:border-stone-400 hover:bg-white"
               >
-                Sign in
+                Sign In
               </Link>
             </div>
           </div>

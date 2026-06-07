@@ -32,13 +32,13 @@ export function PortalEntry({ authError, previewAccessEnabled = false }: PortalE
       <PublicHeader current="sign-in" />
       <section className="mx-auto grid min-h-[calc(100dvh-82px)] max-w-6xl items-center gap-10 px-6 py-16 lg:grid-cols-[0.95fr_1.05fr]">
         <div className="max-w-xl">
-          <p className="text-brand-navy text-[11px] font-semibold tracking-[0.24em] uppercase">Client portal</p>
+          <p className="text-brand-navy text-[11px] font-semibold tracking-[0.24em] uppercase">Secure Client Portal</p>
           <h1 className="text-ink mt-4 text-4xl leading-tight font-semibold tracking-tight md:text-5xl">
-            Sign in to your Levine Law client portal.
+            Manage Legal Matters in One Secure Location
           </h1>
           <p className="mt-5 text-base leading-7 text-stone-600">
-            Access documents, submit requests, and stay informed about active legal matters through a secure client
-            portal.
+            Access documents, submit requests, and stay informed about the status of legal matters through the Levine
+            Law platform.
           </p>
           <div className="border-border-subtle mt-8 grid gap-3 border-y py-6 sm:grid-cols-3">
             {[
@@ -56,7 +56,7 @@ export function PortalEntry({ authError, previewAccessEnabled = false }: PortalE
 
         <div className="rounded border border-stone-200 bg-white p-6 md:p-8">
           <p className="text-brand-navy text-[11px] font-semibold tracking-[0.24em] uppercase">Levine Law</p>
-          <h2 className="text-ink mt-3 text-2xl font-semibold tracking-tight">Existing clients</h2>
+          <h2 className="text-ink mt-3 text-2xl font-semibold tracking-tight">Existing Clients</h2>
           <p className="mt-2 text-sm leading-6 text-stone-500">
             Sign in to access documents, requests, matter updates, and communications through the Levine Law platform.
           </p>
@@ -98,14 +98,14 @@ export function PortalEntry({ authError, previewAccessEnabled = false }: PortalE
                 className="focus:border-brand-navy focus:ring-brand-navy mt-1 block w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 placeholder-stone-400 focus:ring-1 focus:outline-none"
               />
             </div>
-            <SignInButton label="Sign in" pendingLabel="Signing in..." />
+            <SignInButton label="Sign In" pendingLabel="Signing in..." />
           </form>
 
           {keycloakConfigured ? (
             <div className="mt-5 border-t border-stone-200 pt-5">
               <p className="mb-3 text-xs text-stone-400">Or sign in with your organisation account</p>
               <form action={signInWithKeycloak}>
-                <SignInButton label="Sign in with SSO" pendingLabel="Opening secure sign-in..." />
+                <SignInButton label="Sign In with SSO" pendingLabel="Opening secure sign-in..." />
               </form>
             </div>
           ) : null}
