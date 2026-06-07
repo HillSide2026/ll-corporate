@@ -5,7 +5,7 @@ import { isPreviewPortalAccessEnabled } from "src/lib/auth/config"
 
 export const metadata: Metadata = {
   title: "Corporate Portal",
-  description: "Secure Levine Law client portal access for corporate matters, documents, and requests.",
+  description: "Access documents, submit requests, and monitor legal matters through the Levine Law platform.",
 }
 
 type PageProps = {

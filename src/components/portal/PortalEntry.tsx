@@ -31,16 +31,21 @@ export function PortalEntry({ authError, previewAccessEnabled = false }: PortalE
         <div className="max-w-xl">
           <p className="text-brand-navy text-xs font-semibold tracking-[0.2em] uppercase">Secure Client Portal</p>
           <h1 className="mt-4 text-4xl font-semibold tracking-tight text-stone-950 md:text-5xl">
-            Access your Levine Law workspace
+            Manage Legal Matters in One Secure Location
           </h1>
           <p className="mt-5 text-base leading-7 text-stone-600">
-            Sign in to view matters, documents, requests, and secure workspace updates from Levine Law.
+            Access documents, submit requests, and stay informed about the status of legal matters through the Levine
+            Law platform.
           </p>
           <div className="mt-8 grid gap-3 sm:grid-cols-3">
-            {["Matters", "Documents", "Requests"].map((item) => (
-              <div key={item} className="rounded-lg border border-stone-200 bg-white px-4 py-3 shadow-sm">
-                <p className="text-sm font-semibold text-stone-950">{item}</p>
-                <p className="mt-1 text-xs text-stone-500">Secure access</p>
+            {[
+              { title: "Document Access", detail: "Access documents shared through the platform." },
+              { title: "Submit Requests", detail: "Complete forms and provide information online." },
+              { title: "Matter Updates", detail: "Real-time visibility into active legal matters." },
+            ].map((item) => (
+              <div key={item.title} className="rounded-lg border border-stone-200 bg-white px-4 py-3 shadow-sm">
+                <p className="text-sm font-semibold text-stone-950">{item.title}</p>
+                <p className="mt-1 text-xs text-stone-500">{item.detail}</p>
               </div>
             ))}
           </div>
@@ -48,8 +53,10 @@ export function PortalEntry({ authError, previewAccessEnabled = false }: PortalE
 
         <div className="rounded-xl border border-stone-200 bg-white p-6 shadow-sm md:p-8">
           <p className="text-brand-navy text-sm font-semibold">Levine Law</p>
-          <h2 className="mt-2 text-2xl font-semibold tracking-tight text-stone-950">Sign in</h2>
-          <p className="mt-2 text-sm leading-6 text-stone-500">Use your portal credentials or SSO account.</p>
+          <h2 className="mt-2 text-2xl font-semibold tracking-tight text-stone-950">Existing Clients</h2>
+          <p className="mt-2 text-sm leading-6 text-stone-500">
+            Sign in to access documents, requests, matter updates, and communications through the Levine Law platform.
+          </p>
 
           {authErrorMessage ? (
             <div
@@ -88,14 +95,14 @@ export function PortalEntry({ authError, previewAccessEnabled = false }: PortalE
                 className="focus:border-brand-navy focus:ring-brand-navy mt-1 block w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 placeholder-stone-400 focus:ring-1 focus:outline-none"
               />
             </div>
-            <SignInButton label="Sign in" pendingLabel="Signing in..." />
+            <SignInButton label="Sign In" pendingLabel="Signing in..." />
           </form>
 
           {keycloakConfigured ? (
             <div className="mt-5 border-t border-stone-200 pt-5">
               <p className="mb-3 text-xs text-stone-400">Or sign in with your organisation account</p>
               <form action={signInWithKeycloak}>
-                <SignInButton label="Sign in with SSO" pendingLabel="Opening secure sign-in..." />
+                <SignInButton label="Sign In with SSO" pendingLabel="Opening secure sign-in..." />
               </form>
             </div>
           ) : null}
