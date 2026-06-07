@@ -21,15 +21,6 @@ export function PublicHeader({ current }: PublicHeaderProps) {
         </Link>
         <nav className="flex items-center gap-5 text-sm">
           <Link
-            href="/#request-access"
-            className="hidden text-stone-600 transition-colors hover:text-stone-900 sm:inline"
-          >
-            Request Access
-          </Link>
-          <Link href="/#notice" className="hidden text-stone-600 transition-colors hover:text-stone-900 sm:inline">
-            Notice
-          </Link>
-          <Link
             href="/sign-in"
             aria-current={current === "sign-in" ? "page" : undefined}
             className="border-brand-navy text-brand-navy hover:bg-brand-navy rounded-md border px-4 py-2 font-semibold transition-colors hover:text-white"

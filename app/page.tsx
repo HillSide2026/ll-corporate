@@ -30,16 +30,16 @@ export default function HomePage() {
 
       {/* 1. Hero */}
       <section className="bg-white py-20 md:py-28">
-        <div className="mx-auto max-w-6xl px-6">
+        <div className="mx-auto max-w-6xl px-6 text-center">
           <p className="text-brand-navy text-[11px] font-semibold tracking-[0.24em] uppercase">Client Access</p>
-          <h1 className="text-ink mt-5 max-w-4xl text-5xl leading-tight font-semibold tracking-tight sm:text-6xl">
+          <h1 className="text-ink mx-auto mt-5 max-w-4xl text-5xl leading-tight font-semibold tracking-tight sm:text-6xl">
             Access The Levine Law Workspace
           </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-stone-600">
+          <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-stone-600">
             Request portal access to view documents, submit requests, track matters, and communicate securely with
             Levine Law through our digital client portal.
           </p>
-          <div className="mt-10 flex flex-wrap gap-4">
+          <div className="mt-10 flex flex-wrap justify-center gap-4">
             <a
               href="#request-access"
               className="bg-brand-navy hover:bg-brand-navy-dark inline-flex items-center justify-center rounded-md px-6 py-3 text-sm font-semibold text-white transition-colors"
@@ -57,9 +57,9 @@ export default function HomePage() {
       </section>
 
       {/* 2. Portal Capabilities */}
-      <section className="border-border-subtle border-y bg-stone-50 py-6">
+      <section className="border-y border-brand-blue bg-brand-blue py-6">
         <div className="mx-auto max-w-6xl px-6">
-          <p className="text-sm leading-6 text-stone-600">
+          <p className="text-center text-sm leading-6 text-white">
             Levine Law supports clients as fractional counsel across corporate, contract, and financial services
             matters.
           </p>
@@ -67,7 +67,7 @@ export default function HomePage() {
       </section>
 
       <section id="client-portal" className="bg-white py-20 md:py-24">
-        <div className="mx-auto max-w-6xl px-6">
+        <div className="mx-auto max-w-6xl px-6 text-center">
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-12">
             <div className="lg:col-span-4">
               <p className="text-brand-navy text-[11px] font-semibold tracking-[0.24em] uppercase">Client Workspace</p>
@@ -82,7 +82,7 @@ export default function HomePage() {
               {portalCapabilities.map((item) => (
                 <div
                   key={item.title}
-                  className="rounded border border-stone-200 bg-white p-6 transition hover:border-stone-300"
+                  className="rounded border border-stone-200 bg-white p-6 text-center transition hover:border-stone-300"
                 >
                   <h3 className="text-ink text-base leading-tight font-semibold">{item.title}</h3>
                   <p className="mt-2 text-sm leading-6 text-stone-500">{item.description}</p>
@@ -95,14 +95,14 @@ export default function HomePage() {
 
       {/* 3. Digital First */}
       <section className="bg-stone-50 py-20 md:py-24">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="border-border-subtle grid gap-8 border-y py-12 md:grid-cols-[1fr_auto] md:items-center">
+        <div className="mx-auto max-w-6xl px-6 text-center">
+          <div className="border-border-subtle grid justify-items-center gap-8 border-y py-12 md:items-center">
             <div>
               <p className="text-brand-navy text-[11px] font-semibold tracking-[0.24em] uppercase">Account Access</p>
               <h2 className="text-ink mt-3 text-2xl leading-tight font-semibold tracking-tight">
                 Existing Clients Sign In Here
               </h2>
-              <p className="mt-3 max-w-2xl text-[15px] leading-7 text-stone-600">
+              <p className="mx-auto mt-3 max-w-2xl text-[15px] leading-7 text-stone-600">
                 Use your portal credentials to access documents, requests, matter updates, and secure communications.
               </p>
             </div>
@@ -118,15 +118,15 @@ export default function HomePage() {
 
       {/* 4. How We Work */}
       <section className="bg-brand-navy py-20 md:py-24">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
-            <div className="lg:col-span-4">
+        <div className="mx-auto max-w-6xl px-6 text-center">
+          <div className="mx-auto max-w-3xl">
+            <div>
               <p className="text-[11px] font-semibold tracking-[0.24em] text-white/75 uppercase">How We Work</p>
               <h2 className="mt-3 text-3xl leading-tight font-semibold tracking-tight text-white">
                 Ongoing legal support and representation
               </h2>
             </div>
-            <p className="text-lg leading-8 text-white/75 lg:col-span-8">
+            <p className="mt-5 text-lg leading-8 text-white/75">
               Levine Law supports clients as fractional counsel across corporate, contract, and financial services
               matters.
             </p>
@@ -136,7 +136,7 @@ export default function HomePage() {
 
       {/* 5. Request Access */}
       <section id="request-access" className="bg-stone-50 py-20 md:py-24">
-        <div className="mx-auto max-w-6xl px-6">
+        <div className="mx-auto max-w-6xl px-6 text-center">
           <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
             <div>
               <p className="text-brand-navy text-[11px] font-semibold tracking-[0.24em] uppercase">Request Access</p>
