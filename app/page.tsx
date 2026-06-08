@@ -60,8 +60,8 @@ export default function HomePage() {
       <section className="border-y border-brand-navy bg-brand-navy py-6">
         <div className="mx-auto max-w-6xl px-6">
           <p className="text-center text-sm leading-6 text-white">
-            Levine Law supports clients as fractional counsel across corporate, contract, and financial services
-            matters.
+            Levine Law empowers fractional counsel clients through corporate governance and financial services advice
+            and representation.
           </p>
         </div>
       </section>
@@ -104,8 +104,8 @@ export default function HomePage() {
               </h2>
             </div>
             <p className="mt-5 text-lg leading-8 text-white/75">
-              Levine Law supports clients as fractional counsel across corporate, contract, and financial services
-              matters.
+              Levine Law empowers fractional counsel clients through corporate governance and financial services advice
+              and representation.
             </p>
           </div>
         </div>

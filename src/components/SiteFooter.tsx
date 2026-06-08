@@ -8,7 +8,7 @@ export function SiteFooter() {
           <div className="max-w-xs">
             <p className="text-sm font-semibold text-white">Levine Law</p>
             <p className="mt-2 text-sm leading-6 text-white/60">
-              Corporate, contract, and financial services counsel for growing businesses.
+              Corporate Governance and Financial Services Counsel to Valued Clients
             </p>
             <p className="mt-4 text-sm text-white/40">Toronto, Ontario</p>
           </div>
