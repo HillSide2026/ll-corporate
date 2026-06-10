@@ -1,51 +1,55 @@
 import type { Metadata } from "next"
+import Image from "next/image"
 import Link from "next/link"
 
-import { PortalAccessRequestForm } from "src/components/PortalAccessRequestForm"
+import { SignUpForm } from "src/components/SignUpForm"
 
 export const metadata: Metadata = {
-  title: "Portal Access Request",
+  title: "Create Account — Levine Law",
 }
 
 export default function SignUpPage() {
   return (
-    <main className="min-h-dvh bg-stone-50 text-stone-900">
-      <section className="mx-auto max-w-6xl px-6 py-16 md:py-20">
-        <Link href="/" className="text-brand-navy text-sm font-semibold underline-offset-2 hover:underline">
-          Levine Law Client Portal
-        </Link>
-
-        <div className="mt-8 grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
-          <div className="rounded border border-stone-200 bg-white px-6 py-6 shadow-sm md:px-8 md:py-8">
-            <p className="text-brand-navy text-xs font-semibold tracking-[0.18em] uppercase">Portal access</p>
-            <h1 className="mt-3 text-3xl font-semibold text-stone-900">Request portal access.</h1>
-            <p className="mt-4 text-sm leading-6 text-stone-500">
-              Requesting portal access does not create a lawyer-client relationship. Levine Law reviews requests before
-              granting access or accepting an engagement.
-            </p>
-            <div className="mt-6 border-t border-stone-200 pt-5">
-              <p className="text-sm font-medium text-stone-900">Already have access?</p>
-              <Link
-                href="/sign-in"
-                className="text-brand-navy mt-2 inline-flex text-sm font-semibold underline-offset-4 hover:underline"
-              >
-                Sign in to the client portal
-              </Link>
-            </div>
-          </div>
-
-          <div className="rounded border border-stone-200 bg-white px-6 py-6 shadow-sm md:px-8 md:py-8">
-            <div className="mb-6 border-b border-stone-200 pb-5">
-              <p className="text-brand-navy text-xs font-semibold tracking-[0.18em] uppercase">Access request</p>
-              <h2 className="mt-3 text-2xl font-semibold text-stone-900">Tell us who needs portal access.</h2>
-              <p className="mt-3 text-sm leading-6 text-stone-500">
-                Levine Law will review the request and follow up if portal access is appropriate.
-              </p>
-            </div>
-            <PortalAccessRequestForm />
-          </div>
+    <main className="min-h-dvh bg-stone-50">
+      <header className="border-b border-stone-200 bg-white px-6 py-4">
+        <div className="mx-auto flex max-w-6xl items-center justify-between">
+          <Link href="/" className="shrink-0">
+            <Image
+              src="/logos/levine-law-wordmark-navy-transparent-2.png"
+              alt="Levine Law"
+              width={1080}
+              height={600}
+              className="h-8 w-auto"
+            />
+          </Link>
+          <Link href="/sign-in" className="text-sm font-medium text-stone-500 hover:text-stone-900">
+            Sign in
+          </Link>
         </div>
-      </section>
+      </header>
+
+      <div className="flex min-h-[calc(100dvh-57px)] items-center justify-center px-6 py-16">
+        <div className="w-full max-w-sm">
+          <div className="mb-8 text-center">
+            <p className="text-[11px] font-semibold tracking-[0.24em] text-brand-navy uppercase">Levine Law</p>
+            <h1 className="mt-3 text-2xl font-semibold tracking-tight text-stone-900">Create your account</h1>
+            <p className="mt-2 text-sm leading-6 text-stone-500">
+              Access the Levine Law portal to browse services, complete intake, and manage matters.
+            </p>
+          </div>
+
+          <div className="rounded border border-stone-200 bg-white px-6 py-7 shadow-sm">
+            <SignUpForm />
+          </div>
+
+          <p className="mt-5 text-center text-sm text-stone-500">
+            Already have an account?{" "}
+            <Link href="/sign-in" className="font-semibold text-brand-navy underline-offset-4 hover:underline">
+              Sign in
+            </Link>
+          </p>
+        </div>
+      </div>
     </main>
   )
 }
