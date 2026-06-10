@@ -2,6 +2,7 @@
 
 import { AuthError } from "next-auth"
 
+import { env } from "env.mjs"
 import { createUser, getUserByEmail } from "src/lib/db/users"
 import { signIn } from "./auth"
 
@@ -35,7 +36,7 @@ export async function registerAction(_prev: RegisterState, formData: FormData): 
   await createUser({ email, name, password })
 
   try {
-    await signIn("credentials", { email, password, redirectTo: "/intake/catalog" })
+    await signIn("credentials", { email, password, redirectTo: env.LL_CORPORATE_POST_LOGIN_REDIRECT_URL ?? "/corporate/app" })
   } catch (err) {
     if (err instanceof AuthError) {
       return { error: "Account created but sign-in failed. Please sign in to continue." }
