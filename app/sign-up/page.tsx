@@ -12,7 +12,7 @@ export default function SignUpPage() {
   return (
     <main className="min-h-dvh bg-stone-50">
       <header className="border-b border-stone-200 bg-white px-6 py-4">
-        <div className="mx-auto flex max-w-6xl items-center justify-between">
+        <div className="mx-auto max-w-6xl">
           <Link href="/" className="shrink-0">
             <Image
               src="/logos/levine-law-wordmark-navy-transparent-2.png"
@@ -21,9 +21,6 @@ export default function SignUpPage() {
               height={600}
               className="h-8 w-auto"
             />
-          </Link>
-          <Link href="/sign-in" className="text-sm font-medium text-stone-500 hover:text-stone-900">
-            Sign in
           </Link>
         </div>
       </header>

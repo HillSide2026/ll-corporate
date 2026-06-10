@@ -29,7 +29,7 @@ export function PortalEntry({ authError, previewAccessEnabled = false }: PortalE
   return (
     <main className="min-h-dvh bg-stone-50">
       <header className="border-b border-stone-200 bg-white px-6 py-4">
-        <div className="mx-auto flex max-w-6xl items-center justify-between">
+        <div className="mx-auto max-w-6xl">
           <Link href="/" className="shrink-0">
             <Image
               src="/logos/levine-law-wordmark-navy-transparent-2.png"
@@ -38,9 +38,6 @@ export function PortalEntry({ authError, previewAccessEnabled = false }: PortalE
               height={600}
               className="h-8 w-auto"
             />
-          </Link>
-          <Link href="/sign-up" className="text-sm font-medium text-stone-500 hover:text-stone-900">
-            Create account
           </Link>
         </div>
       </header>
