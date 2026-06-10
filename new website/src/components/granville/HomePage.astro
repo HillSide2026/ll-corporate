@@ -1,0 +1,210 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import Header from '~/components/widgets/Header.astro';
+import Hero from '~/components/widgets/Hero.astro';
+import Features2 from '~/components/widgets/Features2.astro';
+import Content from '~/components/widgets/Content.astro';
+import FAQs from '~/components/widgets/FAQs.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+import InfrastructureVisual from '~/components/granville/InfrastructureVisual.astro';
+
+import { getPermalink } from '~/utils/permalinks';
+import { homepage as defaultHomepage } from '~/data/homepage';
+
+interface Props {
+  data?: typeof defaultHomepage | Record<string, unknown>;
+  lang?: string;
+}
+
+const { data = defaultHomepage, lang } = Astro.props;
+const homepage = data as typeof defaultHomepage;
+
+const metadata = {
+  title: 'Levine Law',
+  ignoreTitleTemplate: true,
+  description: homepage.hero.subtitle,
+  ...(lang ? { lang } : {}),
+};
+
+const headerLinks = homepage.navigation.links.map((link) => ({
+  text: link.text,
+  href: getPermalink(link.href),
+}));
+
+const headerActions = [homepage.navigation.primaryAction];
+---
+
+<Layout metadata={metadata}>
+  <Fragment slot="header">
+    <Header links={headerLinks} actions={headerActions} isSticky />
+  </Fragment>
+
+  <div
+    class="relative"
+    style="background: radial-gradient(circle at 50% 0%, rgba(29,71,113,0.12), transparent 34%), linear-gradient(180deg, #ffffff 0%, #fafaf9 100%);"
+  >
+    <Hero
+      tagline={homepage.hero.tagline}
+      actions={[
+        { variant: 'primary', ...homepage.hero.primaryAction },
+        {
+          variant: 'secondary',
+          ...homepage.hero.secondaryAction,
+          href: getPermalink(homepage.hero.secondaryAction.href),
+        },
+      ]}
+    >
+      <Fragment slot="title">{homepage.hero.title}</Fragment>
+
+      <Fragment slot="subtitle">{homepage.hero.subtitle}</Fragment>
+
+      <Fragment slot="content">
+        <div class="mt-8 flex flex-wrap justify-center gap-3 text-sm text-muted lg:justify-center">
+          {
+            homepage.hero.highlights.map((item) => (
+              <span class="rounded-full border border-stone-300 px-4 py-2">{item}</span>
+            ))
+          }
+        </div>
+      </Fragment>
+
+      <Fragment slot="bg">
+        <div
+          class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(29,71,113,0.08),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(3,101,178,0.08),transparent_26%)]"
+        >
+        </div>
+      </Fragment>
+    </Hero>
+
+    <Features2
+      id="platform"
+      tagline={homepage.products.tagline}
+      title={homepage.products.title}
+      subtitle={homepage.products.subtitle}
+      items={[...homepage.products.items]}
+      classes={{ container: 'pt-24 md:pt-32 lg:pt-36' }}
+    >
+      <Fragment slot="bg">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_0%,rgba(29,71,113,0.05),transparent_40%)]"></div>
+      </Fragment>
+    </Features2>
+  </div>
+
+  <Content
+    id="payments"
+    tagline={homepage.operatingModel.tagline}
+    title={homepage.operatingModel.title}
+    subtitle={homepage.operatingModel.subtitle}
+    isReversed
+    items={[...homepage.operatingModel.items]}
+    classes={{
+      container: 'pt-20 md:pt-24 lg:pt-28',
+      contentCol: 'md:basis-3/5',
+      imageCol: 'md:basis-2/5',
+      headline: {
+        title: 'text-4xl md:text-5xl font-semibold tracking-tight mb-4 font-heading text-[#2E2E2E]',
+        subtitle: 'max-w-3xl mx-auto sm:text-center text-xl text-stone-600',
+      },
+      content: 'text-lg text-stone-600',
+      itemTitle: 'text-xl font-semibold leading-snug text-[#2E2E2E] ml-2 rtl:ml-0 rtl:mr-2',
+      itemDescription: 'text-stone-600 ml-2 rtl:ml-0 rtl:mr-2',
+    }}
+  >
+    <Fragment slot="bg">
+      <div
+        class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(29,71,113,0.07),transparent_24%),radial-gradient(circle_at_top_right,rgba(3,101,178,0.06),transparent_32%),linear-gradient(180deg,#fafaf9,#ffffff)]"
+      >
+      </div>
+    </Fragment>
+
+    <Fragment slot="content">
+      <h3 class="mb-4 text-2xl font-semibold tracking-tight text-[#2E2E2E] sm:text-3xl">
+        {homepage.operatingModel.contentTitle}
+      </h3>
+      <p class="text-stone-600">{homepage.operatingModel.contentBody}</p>
+    </Fragment>
+
+    <Fragment slot="image">
+      <div class="py-2 md:py-4">
+        <InfrastructureVisual />
+      </div>
+    </Fragment>
+  </Content>
+
+  <FAQs
+    id="company"
+    title={homepage.company.title}
+    columns={2}
+    items={[...homepage.company.items]}
+    classes={{
+      container: 'pt-6 md:pt-8 lg:pt-10 pb-2 md:pb-4',
+      headline: {
+        container: 'mx-auto max-w-5xl text-center md:mb-10',
+        title: 'text-4xl font-bold tracking-tighter text-page md:text-5xl',
+      },
+      items: 'max-w-5xl gap-6 md:gap-7',
+      itemWrapper:
+        'h-full items-start gap-4 rounded-md border border-stone-200 bg-white px-6 py-7 shadow-sm transition duration-200 ease-out hover:border-[rgba(29,71,113,0.28)] hover:shadow-md',
+      iconWrapper:
+        'mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-[rgba(29,71,113,0.16)] bg-[rgba(29,71,113,0.06)]',
+      icon: 'mr-0 mt-0 h-5 w-5 text-secondary',
+      body: 'flex-1',
+      itemTitle: 'text-2xl font-semibold leading-tight tracking-tight text-[#2E2E2E] md:text-[1.72rem]',
+      itemDescription: 'max-w-md text-stone-600',
+    }}
+  >
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-[linear-gradient(180deg,#ffffff,#fafaf9)]"></div>
+    </Fragment>
+  </FAQs>
+
+  <CallToAction
+    id="contact"
+    tagline={homepage.closing.tagline}
+    title={homepage.closing.title}
+    subtitle={homepage.closing.subtitle}
+    classes={{
+      container: '-mt-4 md:-mt-6 lg:-mt-8 pt-2 md:pt-4 pb-10 md:pb-12 lg:pb-14',
+      panel:
+        'relative isolate mx-auto w-full max-w-5xl overflow-hidden rounded-md border border-[rgba(29,71,113,0.22)] bg-[linear-gradient(180deg,#1D4771,#0d3d7c)] p-9 shadow-[0_28px_80px_rgba(29,71,113,0.22)] md:p-14',
+      inner: 'flex flex-col items-center gap-8',
+      headline: {
+        container: 'mb-0 mx-auto max-w-[660px] text-center',
+        tagline: 'text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-white/75',
+        title: 'mb-4 text-4xl font-semibold tracking-tight text-white md:text-[3.35rem]',
+        subtitle: 'mx-auto max-w-[580px] text-center text-lg text-white/75 md:text-xl',
+      },
+      actions: 'm-0 mt-0 max-w-none flex-col gap-3 sm:flex-row sm:justify-center',
+      actionWrap: 'w-full sm:w-auto',
+    }}
+    actions={[
+      {
+        variant: 'primary',
+        class:
+          'border-white bg-white px-8 text-[#1D4771] ring-1 ring-white/20 shadow-[0_18px_40px_rgba(0,0,0,0.12)] hover:border-white hover:bg-stone-100 hover:text-[#0d3d7c]',
+        ...homepage.closing.primaryAction,
+      },
+      {
+        variant: 'secondary',
+        class: 'border-white/55 bg-transparent text-white hover:border-white hover:bg-white/10 hover:text-white',
+        ...homepage.closing.secondaryAction,
+      },
+    ]}
+  >
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-[linear-gradient(180deg,#fafaf9,#ffffff)]"></div>
+      <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-white"></div>
+    </Fragment>
+    <Fragment slot="panelBg">
+      <div
+        class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.18),transparent_24%),radial-gradient(circle_at_bottom_right,rgba(255,255,255,0.12),transparent_22%)]"
+      >
+      </div>
+      <div
+        class="absolute inset-[1px] rounded-md bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0)_36%)] opacity-80"
+      >
+      </div>
+      <div class="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
+    </Fragment>
+  </CallToAction>
+</Layout>

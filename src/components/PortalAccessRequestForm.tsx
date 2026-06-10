@@ -77,7 +77,7 @@ export function PortalAccessRequestForm() {
         disabled={pending}
         className="inline-flex w-full items-center justify-center rounded bg-brand-navy px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-dark disabled:cursor-not-allowed disabled:opacity-70 md:w-auto"
       >
-        {pending ? "Submitting..." : "Access Now"}
+        {pending ? "Submitting..." : "Submit Access Request"}
       </button>
     </form>
   )

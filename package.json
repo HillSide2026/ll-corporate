@@ -5,8 +5,9 @@
   "license": "UNLICENSED",
   "scripts": {
     "dev": "next dev --turbo",
-    "build": "next build",
+    "build": "pnpm run astro:sync && next build",
     "start": "next start",
+    "astro:sync": "node scripts/sync-astro-home.mjs",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prettier": "prettier --check \"**/*.{js,jsx,ts,tsx,md}\"",

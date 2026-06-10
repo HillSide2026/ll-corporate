@@ -1,0 +1,15 @@
+export const granville = {
+  siteName: 'Levine Law',
+  siteUrl: 'https://clients.levine-law.ca',
+  appSignUpUrl: '/sign-up',
+  requestAccessUrl: '/sign-up',
+  companyName: 'Levine Law',
+  tradingName: 'Levine Law',
+  generalEmail: '{{GENERAL_EMAIL}}',
+  salesEmail: '{{SALES_EMAIL}}',
+  supportEmail: '{{SUPPORT_EMAIL}}',
+  privacyEmail: '{{PRIVACY_EMAIL}}',
+  legalEmail: '{{LEGAL_EMAIL}}',
+  complianceEmail: '{{COMPLIANCE_EMAIL}}',
+  linkedinUrl: '{{LINKEDIN_URL}}',
+} as const;

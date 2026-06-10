@@ -1,0 +1,374 @@
+---
+import globeNetwork from '~/assets/images/globe-network.png';
+---
+
+<div
+  aria-hidden="true"
+  class="infrastructure-visual relative isolate overflow-hidden rounded-md border border-[rgba(29,71,113,0.18)] shadow-[0_24px_60px_rgba(29,71,113,0.16)]"
+>
+  <!-- Background -->
+  <div
+    class="absolute inset-0 bg-[radial-gradient(ellipse_at_48%_46%,rgba(3,101,178,0.12),transparent_52%),linear-gradient(152deg,#1D4771_0%,#0d3d7c_54%,#0365B2_100%)]"
+  >
+  </div>
+
+  <!-- Dot grid -->
+  <div
+    class="absolute inset-0 opacity-[0.18] [background-image:radial-gradient(circle,rgba(255,255,255,0.55)_1px,transparent_1px)] [background-size:36px_36px]"
+  >
+  </div>
+
+  <!-- Edge fades -->
+  <div class="absolute inset-x-0 top-0 h-14 bg-gradient-to-b from-[#1D4771] to-transparent"></div>
+  <div class="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-[#1D4771] to-transparent"></div>
+  <div class="absolute inset-y-0 left-0 w-10 bg-gradient-to-r from-[#1D4771] to-transparent"></div>
+  <div class="absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-[#1D4771] to-transparent"></div>
+
+  <!-- Globe graphic -->
+  <img
+    src={globeNetwork.src}
+    alt=""
+    loading="lazy"
+    decoding="async"
+    class="absolute inset-0 h-full w-full scale-[1.2] object-contain opacity-90 [filter:drop-shadow(0_18px_42px_rgba(3,101,178,0.18))]"
+  />
+
+  <!-- Legacy network diagram retained hidden while the globe graphic replaces it visually. -->
+  <svg class="hidden" viewBox="0 0 640 520" fill="none" preserveAspectRatio="xMidYMid meet">
+    <defs>
+      <radialGradient id="iv-hub-glow" cx="50%" cy="50%" r="50%">
+        <stop stop-color="#FFFFFF" stop-opacity="0.22"></stop>
+        <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"></stop>
+      </radialGradient>
+      <radialGradient id="iv-node-glow" cx="50%" cy="50%" r="50%">
+        <stop stop-color="#FFFFFF" stop-opacity="0.14"></stop>
+        <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"></stop>
+      </radialGradient>
+      <filter id="iv-hub-f" x="-60%" y="-60%" width="220%" height="220%">
+        <feGaussianBlur stdDeviation="8"></feGaussianBlur>
+      </filter>
+      <filter id="iv-node-f" x="-60%" y="-60%" width="220%" height="220%">
+        <feGaussianBlur stdDeviation="5"></feGaussianBlur>
+      </filter>
+      <!-- Rail paths (in defs so animateMotion mpath can reference them) -->
+      <path id="iv-rN" d="M320,268 C320,208 320,148 320,80"></path>
+      <path id="iv-rNE" d="M320,268 C392,224 462,190 510,160"></path>
+      <path id="iv-rSE" d="M320,268 C392,312 462,346 510,376"></path>
+      <path id="iv-rS" d="M320,268 C320,328 320,388 320,455"></path>
+      <path id="iv-rSW" d="M320,268 C248,312 178,346 130,376"></path>
+      <path id="iv-rNW" d="M320,268 C248,224 178,190 130,160"></path>
+    </defs>
+
+    <!-- Visible rail strokes -->
+    <g stroke="#FFFFFF" stroke-width="0.9" fill="none" stroke-dasharray="3 9" opacity="0.38">
+      <use href="#iv-rN"></use>
+      <use href="#iv-rNE"></use>
+      <use href="#iv-rSE"></use>
+      <use href="#iv-rS"></use>
+      <use href="#iv-rSW"></use>
+      <use href="#iv-rNW"></use>
+    </g>
+
+    <!-- Outbound flow dots (hub → node) -->
+    <circle r="2.2" fill="#FFFFFF" fill-opacity="0.78">
+      <animateMotion dur="3.8s" repeatCount="indefinite" begin="0s" calcMode="linear"
+        ><mpath href="#iv-rN"></mpath></animateMotion
+      >
+    </circle>
+    <circle r="2.2" fill="#FFFFFF" fill-opacity="0.78">
+      <animateMotion dur="4.2s" repeatCount="indefinite" begin="0.6s" calcMode="linear"
+        ><mpath href="#iv-rNE"></mpath></animateMotion
+      >
+    </circle>
+    <circle r="2.2" fill="#FFFFFF" fill-opacity="0.78">
+      <animateMotion dur="3.6s" repeatCount="indefinite" begin="1.4s" calcMode="linear"
+        ><mpath href="#iv-rSE"></mpath></animateMotion
+      >
+    </circle>
+    <circle r="2.2" fill="#FFFFFF" fill-opacity="0.78">
+      <animateMotion dur="4.5s" repeatCount="indefinite" begin="0.9s" calcMode="linear"
+        ><mpath href="#iv-rS"></mpath></animateMotion
+      >
+    </circle>
+    <circle r="2.2" fill="#FFFFFF" fill-opacity="0.78">
+      <animateMotion dur="3.9s" repeatCount="indefinite" begin="0.3s" calcMode="linear"
+        ><mpath href="#iv-rSW"></mpath></animateMotion
+      >
+    </circle>
+    <circle r="2.2" fill="#FFFFFF" fill-opacity="0.78">
+      <animateMotion dur="4.1s" repeatCount="indefinite" begin="1.8s" calcMode="linear"
+        ><mpath href="#iv-rNW"></mpath></animateMotion
+      >
+    </circle>
+
+    <!-- Inbound flow dots (node → hub) -->
+    <circle r="1.7" fill="#FFFFFF" fill-opacity="0.36">
+      <animateMotion dur="4.4s" repeatCount="indefinite" begin="2s" calcMode="linear" keyPoints="1;0" keyTimes="0;1"
+        ><mpath href="#iv-rNE"></mpath></animateMotion
+      >
+    </circle>
+    <circle r="1.7" fill="#FFFFFF" fill-opacity="0.36">
+      <animateMotion dur="5.0s" repeatCount="indefinite" begin="3s" calcMode="linear" keyPoints="1;0" keyTimes="0;1"
+        ><mpath href="#iv-rSW"></mpath></animateMotion
+      >
+    </circle>
+    <circle r="1.7" fill="#FFFFFF" fill-opacity="0.36">
+      <animateMotion dur="4.8s" repeatCount="indefinite" begin="1.2s" calcMode="linear" keyPoints="1;0" keyTimes="0;1"
+        ><mpath href="#iv-rN"></mpath></animateMotion
+      >
+    </circle>
+
+    <!-- Hub glow aura -->
+    <circle cx="320" cy="268" r="58" fill="url(#iv-hub-glow)" filter="url(#iv-hub-f)"></circle>
+
+    <!-- Hub outer ring (slow rotation) -->
+    <circle
+      cx="320"
+      cy="268"
+      r="44"
+      stroke="#FFFFFF"
+      stroke-width="0.8"
+      stroke-opacity="0.2"
+      stroke-dasharray="5 9"
+      fill="none"
+    >
+      <animateTransform
+        attributeName="transform"
+        type="rotate"
+        from="0 320 268"
+        to="360 320 268"
+        dur="40s"
+        repeatCount="indefinite"></animateTransform>
+    </circle>
+
+    <!-- Hub middle ring (breathing) -->
+    <circle cx="320" cy="268" r="32" stroke="#FFFFFF" stroke-width="1.2" stroke-opacity="0.48" fill="none">
+      <animate attributeName="stroke-opacity" values="0.48;0.68;0.48" dur="5s" repeatCount="indefinite"></animate>
+    </circle>
+
+    <!-- Hub inner circle -->
+    <circle
+      cx="320"
+      cy="268"
+      r="20"
+      fill="rgba(255,255,255,0.11)"
+      stroke="#FFFFFF"
+      stroke-width="1.5"
+      stroke-opacity="0.72"></circle>
+
+    <!-- Hub label -->
+    <text
+      x="320"
+      y="272"
+      text-anchor="middle"
+      fill="#FFFFFF"
+      fill-opacity="0.88"
+      font-size="8"
+      font-family="'Courier New', Courier, monospace"
+      letter-spacing="1.5"
+      font-weight="700">GVL</text
+    >
+
+    <!-- Node: SWIFT/Settlement (top center) -->
+    <circle cx="320" cy="80" r="28" fill="url(#iv-node-glow)" filter="url(#iv-node-f)"></circle>
+    <circle
+      cx="320"
+      cy="80"
+      r="17"
+      fill="#1D4771"
+      fill-opacity="0.95"
+      stroke="#FFFFFF"
+      stroke-width="1"
+      stroke-opacity="0.45"
+      fill-rule="nonzero"
+    >
+      <animate attributeName="stroke-opacity" values="0.45;0.65;0.45" dur="6s" repeatCount="indefinite" begin="0.4s"
+      ></animate>
+    </circle>
+    <text
+      x="320"
+      y="76"
+      text-anchor="middle"
+      fill="#FFFFFF"
+      fill-opacity="0.9"
+      font-size="7.5"
+      font-family="'Courier New', Courier, monospace"
+      font-weight="700">SWIFT</text
+    >
+    <text
+      x="320"
+      y="86"
+      text-anchor="middle"
+      fill="rgba(255,255,255,0.42)"
+      font-size="5.5"
+      font-family="'Courier New', Courier, monospace">SETTLE</text
+    >
+
+    <!-- Node: GBP (top right) -->
+    <circle cx="510" cy="160" r="26" fill="url(#iv-node-glow)" filter="url(#iv-node-f)"></circle>
+    <circle
+      cx="510"
+      cy="160"
+      r="16"
+      fill="#1D4771"
+      fill-opacity="0.95"
+      stroke="#FFFFFF"
+      stroke-width="1"
+      stroke-opacity="0.45"
+    >
+      <animate attributeName="stroke-opacity" values="0.45;0.65;0.45" dur="5s" repeatCount="indefinite" begin="1.2s"
+      ></animate>
+    </circle>
+    <text
+      x="510"
+      y="164"
+      text-anchor="middle"
+      fill="#FFFFFF"
+      fill-opacity="0.9"
+      font-size="8.5"
+      font-family="'Courier New', Courier, monospace"
+      font-weight="700">GBP</text
+    >
+
+    <!-- Node: Treasury (bottom right) -->
+    <circle cx="510" cy="376" r="26" fill="url(#iv-node-glow)" filter="url(#iv-node-f)"></circle>
+    <circle
+      cx="510"
+      cy="376"
+      r="16"
+      fill="#1D4771"
+      fill-opacity="0.95"
+      stroke="#FFFFFF"
+      stroke-width="1"
+      stroke-opacity="0.45"
+    >
+      <animate attributeName="stroke-opacity" values="0.45;0.65;0.45" dur="7s" repeatCount="indefinite" begin="0.8s"
+      ></animate>
+    </circle>
+    <text
+      x="510"
+      y="373"
+      text-anchor="middle"
+      fill="#FFFFFF"
+      fill-opacity="0.9"
+      font-size="6.5"
+      font-family="'Courier New', Courier, monospace"
+      font-weight="700">TRSRY</text
+    >
+    <text
+      x="510"
+      y="382"
+      text-anchor="middle"
+      fill="rgba(255,255,255,0.42)"
+      font-size="5"
+      font-family="'Courier New', Courier, monospace">OPS</text
+    >
+
+    <!-- Node: Approval (bottom center) -->
+    <circle cx="320" cy="455" r="26" fill="url(#iv-node-glow)" filter="url(#iv-node-f)"></circle>
+    <circle
+      cx="320"
+      cy="455"
+      r="16"
+      fill="#1D4771"
+      fill-opacity="0.95"
+      stroke="#FFFFFF"
+      stroke-width="1"
+      stroke-opacity="0.45"
+    >
+      <animate attributeName="stroke-opacity" values="0.45;0.65;0.45" dur="4.5s" repeatCount="indefinite" begin="2s"
+      ></animate>
+    </circle>
+    <text
+      x="320"
+      y="452"
+      text-anchor="middle"
+      fill="#FFFFFF"
+      fill-opacity="0.9"
+      font-size="6.5"
+      font-family="'Courier New', Courier, monospace"
+      font-weight="700">APPRV</text
+    >
+    <text
+      x="320"
+      y="461"
+      text-anchor="middle"
+      fill="rgba(255,255,255,0.42)"
+      font-size="5"
+      font-family="'Courier New', Courier, monospace">FLOW</text
+    >
+
+    <!-- Node: EUR (bottom left) -->
+    <circle cx="130" cy="376" r="26" fill="url(#iv-node-glow)" filter="url(#iv-node-f)"></circle>
+    <circle
+      cx="130"
+      cy="376"
+      r="16"
+      fill="#1D4771"
+      fill-opacity="0.95"
+      stroke="#FFFFFF"
+      stroke-width="1"
+      stroke-opacity="0.45"
+    >
+      <animate attributeName="stroke-opacity" values="0.45;0.65;0.45" dur="5.5s" repeatCount="indefinite" begin="0.2s"
+      ></animate>
+    </circle>
+    <text
+      x="130"
+      y="380"
+      text-anchor="middle"
+      fill="#FFFFFF"
+      fill-opacity="0.9"
+      font-size="8.5"
+      font-family="'Courier New', Courier, monospace"
+      font-weight="700">EUR</text
+    >
+
+    <!-- Node: USD (top left) -->
+    <circle cx="130" cy="160" r="26" fill="url(#iv-node-glow)" filter="url(#iv-node-f)"></circle>
+    <circle
+      cx="130"
+      cy="160"
+      r="16"
+      fill="#1D4771"
+      fill-opacity="0.95"
+      stroke="#FFFFFF"
+      stroke-width="1"
+      stroke-opacity="0.45"
+    >
+      <animate attributeName="stroke-opacity" values="0.45;0.65;0.45" dur="6.5s" repeatCount="indefinite" begin="1s"
+      ></animate>
+    </circle>
+    <text
+      x="130"
+      y="164"
+      text-anchor="middle"
+      fill="#FFFFFF"
+      fill-opacity="0.9"
+      font-size="8.5"
+      font-family="'Courier New', Courier, monospace"
+      font-weight="700">USD</text
+    >
+  </svg>
+</div>
+
+<style>
+  .infrastructure-visual {
+    aspect-ratio: 1.08 / 1;
+    min-height: 320px;
+  }
+
+  @media (max-width: 640px) {
+    .infrastructure-visual {
+      min-height: 280px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .infrastructure-visual circle,
+    .infrastructure-visual animateMotion,
+    .infrastructure-visual animateTransform {
+      animation: none;
+    }
+  }
+</style>

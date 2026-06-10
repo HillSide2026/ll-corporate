@@ -28,7 +28,7 @@ export function PortalEntry({ authError, previewAccessEnabled = false }: PortalE
   const keycloakConfigured = isKeycloakConfigured()
 
   return (
-    <main className="min-h-dvh bg-white text-stone-950">
+    <main className="min-h-dvh bg-stone-50 text-stone-950">
       <PublicHeader current="sign-in" />
       <section className="mx-auto grid min-h-[calc(100dvh-82px)] max-w-6xl items-center gap-10 px-6 py-16 lg:grid-cols-[0.95fr_1.05fr]">
         <div className="max-w-xl">
@@ -52,9 +52,21 @@ export function PortalEntry({ authError, previewAccessEnabled = false }: PortalE
               </div>
             ))}
           </div>
+          <div className="mt-8 rounded border border-stone-200 bg-white px-5 py-4 shadow-sm">
+            <p className="text-sm font-semibold text-stone-900">Need access?</p>
+            <p className="mt-1 text-sm leading-6 text-stone-600">
+              Portal access is reviewed before an account is created or enabled.
+            </p>
+            <a
+              href="/sign-up"
+              className="text-brand-navy mt-3 inline-flex text-sm font-semibold underline-offset-4 hover:underline"
+            >
+              Request portal access
+            </a>
+          </div>
         </div>
 
-        <div className="rounded border border-stone-200 bg-white p-6 md:p-8">
+        <div className="rounded border border-stone-200 bg-white p-6 shadow-sm md:p-8 lg:justify-self-end lg:w-full lg:max-w-md">
           <p className="text-brand-navy text-[11px] font-semibold tracking-[0.24em] uppercase">Levine Law</p>
           <h2 className="text-ink mt-3 text-2xl font-semibold tracking-tight">Existing Clients</h2>
           <p className="mt-2 text-sm leading-6 text-stone-500">
@@ -121,6 +133,22 @@ export function PortalEntry({ authError, previewAccessEnabled = false }: PortalE
               <p className="mt-2 text-xs leading-5 text-stone-400">Preview mode uses a mock session for review only.</p>
             </form>
           ) : null}
+
+          <div className="mt-6 border-t border-stone-200 pt-5">
+            <p className="text-sm font-medium text-stone-900">Trouble signing in?</p>
+            <p className="mt-1 text-sm leading-6 text-stone-500">
+              If your account has not been enabled yet, request portal access. If you expected access, contact Levine Law
+              and we will help verify your account.
+            </p>
+            <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold">
+              <a href="/sign-up" className="text-brand-navy underline-offset-4 hover:underline">
+                Request access
+              </a>
+              <a href="mailto:matthew@levinelegal.ca" className="text-brand-navy underline-offset-4 hover:underline">
+                Email Levine Law
+              </a>
+            </div>
+          </div>
         </div>
       </section>
       <SiteFooter />

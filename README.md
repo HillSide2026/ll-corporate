@@ -76,6 +76,24 @@ pnpm run build
 pnpm run e2e:headless
 ```
 
+## Public Homepage
+
+The public `/` route is served by the Next.js route handler in `app/route.ts`, which returns the Astro-generated homepage HTML from `public/astro-home/index.html`. The Astro source app lives in `new website`.
+
+After changing the Astro homepage, run:
+
+```sh
+pnpm run astro:sync
+```
+
+This builds `new website`, copies `new website/dist/index.html` to `public/astro-home/index.html`, and refreshes generated assets in `public/_astro`. The regular production build also runs this sync first:
+
+```sh
+pnpm run build
+```
+
+Request-access links should point to `/sign-up`. The legacy `/corporate/onboarding` route remains as a redirect to `/sign-up` for old links.
+
 ## Implementation Phasing
 
 1. Shell: auth boundary, layout, routing, and contract-shaped placeholders.

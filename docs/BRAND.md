@@ -13,7 +13,7 @@
 **Informal:** Levine Law
 
 **Positioning:**
-Fractional corporate, contract, and financial services counsel for operators, investors, and regulated businesses.
+Fractional corporate governance and financial services counsel for executives and investors.
 
 **Tone:**
 
@@ -24,7 +24,7 @@ Fractional corporate, contract, and financial services counsel for operators, in
 
 **Not:**
 
-- Institutional
+
 - Academic
 - Startup-casual
 - Over-explained
@@ -38,20 +38,9 @@ Fractional corporate, contract, and financial services counsel for operators, in
 
 ### Public front-end brand position
 
-The public front end should feel like Levine Law first and a digital product second. It should align with the live Levine Law domain's professional-services posture: business counsel for entrepreneurs, operators, executives, investors, private companies, and regulated or payment-adjacent businesses.
+The public front end should feel like Levine Law first and a digital product second. It should align with the live Levine Law domain's professional-services posture: business counsel for executives and investors who are regulated or regulation-adjacent.
 
-Lead with the firm's advisory value, not the portal. The homepage and public service pages should foreground corporate, contract, financial services, fintech, payments, governance, private M&A, reorganizations, shareholder matters, and recurring fractional counsel. Portal access, chat, intake, and workflow features are supporting conveniences, not the core brand promise.
 
-Preferred public-site framing:
-
-- Who we help: operators, executives, investors, private companies, regulated businesses, fintech and payments teams
-- What we do: corporate law, contract law, financial services counsel, governance, transaction support, risk-aware commercial advice
-- Where we do it: Toronto, Ontario, and Canada-facing business clients
-- Why we do it: protect and empower business clients to move with confidence
-
-Public marketing pages should avoid SaaS-first language where legal-service language is clearer. Use "counsel", "legal support", "contracts", "governance", "transactions", "risk", "payment services", and "financial services" before "workspace", "capabilities", "dashboard", or "platform". Keep portal and client-workflow copy precise, quiet, and secondary.
-
-Do not import generic Next.js, Chatbase, or marketplace template pages into the brand experience. Borrow integration patterns only. The visual and content system should come from Levine Law's existing domain and this document.
 
 ---
 

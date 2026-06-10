@@ -21,6 +21,14 @@ describe("PortalEntry", () => {
     expect(screen.getByRole("heading", { name: "Manage Legal Matters in One Secure Location" })).toBeInTheDocument()
     expect(screen.getByRole("heading", { name: "Existing Clients" })).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Sign In" })).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Request portal access" })).toHaveAttribute(
+      "href",
+      "/sign-up"
+    )
+    expect(screen.getByRole("link", { name: "Email Levine Law" })).toHaveAttribute(
+      "href",
+      "mailto:matthew@levinelegal.ca"
+    )
     expect(screen.queryByRole("button", { name: "Preview portal" })).not.toBeInTheDocument()
     expect(screen.queryByRole("link", { name: "NDA Generator" })).not.toBeInTheDocument()
     expect(
