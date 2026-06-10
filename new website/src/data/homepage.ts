@@ -4,7 +4,7 @@ export const homepage = {
   navigation: {
     links: [
       { text: 'Platform', href: '/#platform' },
-      { text: 'Payments', href: '/#payments' },
+      { text: 'Infrastructure', href: '/#payments' },
       { text: 'Contact', href: '/#contact' },
     ],
     primaryAction: {
