@@ -2,6 +2,8 @@
 
 import { useFormStatus } from "react-dom"
 
+import { Button } from "@/components/ui/button"
+
 type SignInButtonProps = {
   label?: string
   pendingLabel?: string
@@ -11,13 +13,8 @@ export function SignInButton({ label = "Sign in securely", pendingLabel = "Signi
   const { pending } = useFormStatus()
 
   return (
-    <button
-      type="submit"
-      aria-busy={pending}
-      disabled={pending}
-      className="w-full rounded bg-brand-navy px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-dark disabled:cursor-not-allowed disabled:opacity-70"
-    >
+    <Button type="submit" aria-busy={pending} disabled={pending} className="h-10 w-full">
       {pending ? pendingLabel : label}
-    </button>
+    </Button>
   )
 }

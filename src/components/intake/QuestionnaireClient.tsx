@@ -2,8 +2,14 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { ChevronLeft } from "lucide-react"
 
 import type { CorporateService } from "src/lib/services/catalog"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
+import { Label } from "@/components/ui/label"
+import { Progress } from "@/components/ui/progress"
+import { Textarea } from "@/components/ui/textarea"
 
 export function QuestionnaireClient({ service }: { service: CorporateService }) {
   const [step, setStep] = useState(0)
@@ -12,7 +18,7 @@ export function QuestionnaireClient({ service }: { service: CorporateService }) 
   const total = service.requiredInputs.length
   const currentPrompt = service.requiredInputs[step]
   const isLast = step === total - 1
-  const progress = Math.round((step / total) * 100)
+  const progress = Math.round(((step + 1) / total) * 100)
 
   function handleNext(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -20,7 +26,6 @@ export function QuestionnaireClient({ service }: { service: CorporateService }) 
     setAnswers((prev) => ({ ...prev, [step]: value }))
 
     if (isLast) {
-      // TODO: submit answers to server → redirect to engagement
       window.location.href = `/intake/engagement?service=${service.slug}`
     } else {
       setStep((s) => s + 1)
@@ -30,89 +35,78 @@ export function QuestionnaireClient({ service }: { service: CorporateService }) 
   return (
     <div className="mx-auto max-w-xl">
       <div className="mb-8">
-        <Link href="/intake/catalog" className="text-sm font-medium text-stone-500 hover:text-stone-700">
-          ← Back to catalog
+        <Link
+          href="/intake/catalog"
+          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+        >
+          <ChevronLeft className="size-4" />
+          Back to catalog
         </Link>
-        <p className="mt-4 text-[11px] font-semibold tracking-[0.24em] text-brand-navy uppercase">
+        <p className="mt-4 text-[11px] font-semibold tracking-[0.22em] text-primary uppercase">
           {service.title}
         </p>
-        <h1 className="mt-2 text-2xl font-semibold tracking-tight text-stone-900">Intake questionnaire</h1>
-        <p className="mt-2 text-sm leading-6 text-stone-500">
+        <h1 className="mt-2 text-2xl font-semibold tracking-tight">Intake questionnaire</h1>
+        <p className="mt-1.5 text-sm text-muted-foreground">
           Answer each question to the best of your ability. Levine Law will follow up if more detail is needed.
         </p>
       </div>
 
-      {/* Progress */}
-      <div className="mb-6">
-        <div className="mb-2 flex items-center justify-between">
-          <p className="text-sm font-medium text-stone-700">
-            Question {step + 1} of {total}
-          </p>
-          <p className="text-sm text-stone-400">{progress}% complete</p>
+      <div className="mb-6 space-y-2">
+        <div className="flex items-center justify-between text-xs text-muted-foreground">
+          <span>Question {step + 1} of {total}</span>
+          <span>{progress}% complete</span>
         </div>
-        <div className="h-1.5 w-full overflow-hidden rounded-full bg-stone-200">
-          <div
-            className="h-full rounded-full bg-brand-navy transition-all duration-300"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
+        <Progress value={progress} />
       </div>
 
-      {/* Question card */}
-      <div className="rounded border border-stone-200 bg-white px-6 py-7 shadow-sm">
-        <form onSubmit={handleNext} className="space-y-5">
-          <div>
-            <label htmlFor="answer" className="block text-base font-medium text-stone-900">
+      <Card>
+        <form onSubmit={handleNext}>
+          <CardHeader>
+            <Label htmlFor="answer" className="text-base font-medium text-foreground">
               {currentPrompt}
-            </label>
-            <textarea
+            </Label>
+          </CardHeader>
+          <CardContent>
+            <Textarea
               id="answer"
               name="answer"
               rows={4}
               defaultValue={answers[step] ?? ""}
               required
-              className="mt-4 w-full resize-y rounded border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 placeholder:text-stone-400 focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
               placeholder="Enter your answer here..."
+              className="resize-y"
             />
-          </div>
-
-          <div className="flex items-center justify-between gap-4 border-t border-stone-100 pt-4">
+          </CardContent>
+          <CardFooter className="flex items-center justify-between">
             {step > 0 ? (
-              <button
-                type="button"
-                onClick={() => setStep((s) => s - 1)}
-                className="text-sm font-medium text-stone-500 hover:text-stone-700"
-              >
-                ← Back
-              </button>
+              <Button type="button" variant="ghost" size="sm" onClick={() => setStep((s) => s - 1)}>
+                <ChevronLeft />
+                Back
+              </Button>
             ) : (
               <div />
             )}
-            <button
-              type="submit"
-              className="rounded bg-brand-navy px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-dark"
-            >
-              {isLast ? "Review and continue →" : "Continue →"}
-            </button>
-          </div>
+            <Button type="submit">
+              {isLast ? "Review and continue" : "Continue"}
+            </Button>
+          </CardFooter>
         </form>
-      </div>
+      </Card>
 
-      {/* Scope reference */}
-      <details className="mt-4 rounded border border-stone-200 bg-white shadow-sm">
-        <summary className="cursor-pointer px-5 py-3.5 text-sm font-medium text-stone-700 hover:text-stone-900">
+      <details className="mt-4">
+        <summary className="cursor-pointer rounded-lg border bg-card px-4 py-3 text-sm font-medium ring-1 ring-foreground/10 hover:bg-muted/50">
           What does {service.title} include?
         </summary>
-        <ul className="space-y-1.5 border-t border-stone-100 px-5 py-4">
-          {service.scope.map((item) => (
-            <li key={item} className="flex gap-2.5 text-sm text-stone-600">
-              <span className="mt-0.5 shrink-0 text-brand-navy" aria-hidden="true">
-                ·
-              </span>
-              {item}
-            </li>
-          ))}
-        </ul>
+        <div className="mt-1 rounded-lg border bg-card px-4 py-4 ring-1 ring-foreground/10">
+          <ul className="space-y-1.5">
+            {service.scope.map((item) => (
+              <li key={item} className="flex gap-2.5 text-sm text-muted-foreground">
+                <span className="mt-0.5 shrink-0 text-primary" aria-hidden="true">·</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
       </details>
     </div>
   )

@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation"
 
-import { cx } from "src/components/portal/PortalDesignSystem"
+import { cn } from "@/lib/utils"
 
 const steps = [
   { id: 1, label: "Browse" },
@@ -22,8 +22,8 @@ export function IntakeFunnelBar() {
   const activeStep = getActiveStep(pathname)
 
   return (
-    <div className="border-b border-stone-200 bg-white px-6 py-4">
-      <ol className="mx-auto flex max-w-3xl items-center">
+    <div className="border-b bg-background px-6 py-3">
+      <ol className="mx-auto flex max-w-3xl items-center gap-0">
         {steps.map((step, index) => {
           const isDone = step.id < activeStep
           const isActive = step.id === activeStep
@@ -33,24 +33,30 @@ export function IntakeFunnelBar() {
             <li key={step.id} className="flex flex-1 items-center">
               <div className="flex items-center gap-2">
                 <span
-                  className={cx(
-                    "flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold",
-                    isDone || isActive ? "bg-brand-navy text-white" : "bg-stone-100 text-stone-400"
+                  className={cn(
+                    "flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-semibold",
+                    isDone
+                      ? "bg-primary text-primary-foreground"
+                      : isActive
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted text-muted-foreground"
                   )}
                 >
                   {isDone ? "✓" : step.id}
                 </span>
                 <span
-                  className={cx(
-                    "hidden whitespace-nowrap text-sm font-medium sm:block",
-                    isActive ? "text-stone-900" : isDone ? "text-stone-500" : "text-stone-400"
+                  className={cn(
+                    "hidden whitespace-nowrap text-xs font-medium sm:block",
+                    isActive ? "text-foreground" : isDone ? "text-muted-foreground" : "text-muted-foreground/50"
                   )}
                 >
                   {step.label}
                 </span>
               </div>
               {!isLast && (
-                <div className={cx("mx-3 h-px flex-1", isDone ? "bg-brand-navy" : "bg-stone-200")} />
+                <div
+                  className={cn("mx-3 h-px flex-1", isDone ? "bg-primary/40" : "bg-border")}
+                />
               )}
             </li>
           )
