@@ -18,24 +18,15 @@ describe("PortalEntry", () => {
     render(<PortalEntry />)
 
     expect(screen.getAllByText("Levine Law").length).toBeGreaterThan(0)
-    expect(screen.getByRole("heading", { name: "Manage Legal Matters in One Secure Location" })).toBeInTheDocument()
-    expect(screen.getByRole("heading", { name: "Existing Clients" })).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Sign In" })).toBeInTheDocument()
-    expect(screen.getByRole("link", { name: "Request portal access" })).toHaveAttribute(
-      "href",
-      "/sign-up"
-    )
+    expect(screen.getByRole("heading", { name: "Sign in to your account" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Sign in" })).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Create one" })).toHaveAttribute("href", "/sign-up")
     expect(screen.getByRole("link", { name: "Email Levine Law" })).toHaveAttribute(
       "href",
       "mailto:matthew@levinelegal.ca"
     )
     expect(screen.queryByRole("button", { name: "Preview portal" })).not.toBeInTheDocument()
     expect(screen.queryByRole("link", { name: "NDA Generator" })).not.toBeInTheDocument()
-    expect(
-      screen.getByText(
-        "Access documents, submit requests, and stay informed about the status of legal matters through the Levine Law platform."
-      )
-    ).toBeInTheDocument()
   })
 
   it("renders a plain-language sign-in error without provider details", () => {

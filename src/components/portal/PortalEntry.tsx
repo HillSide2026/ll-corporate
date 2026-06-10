@@ -1,7 +1,8 @@
+import Image from "next/image"
+import Link from "next/link"
+
 import { previewPortalAccess, signInWithCredentials, signInWithKeycloak } from "src/lib/auth/actions"
 import { isKeycloakConfigured } from "src/lib/auth/config"
-import { PublicHeader } from "src/components/PublicHeader"
-import { SiteFooter } from "src/components/SiteFooter"
 import { SignInButton } from "./SignInButton"
 
 type PortalEntryProps = {
@@ -13,11 +14,9 @@ function getAuthErrorMessage(authError?: string) {
   if (authError === "CredentialsSignIn") {
     return "Incorrect email or password. Please try again."
   }
-
   if (authError === "PreviewAccessDisabled") {
     return "Preview access is not enabled for this environment."
   }
-
   return authError
     ? "We could not complete sign-in. Please try again, or contact Levine Law if this keeps happening."
     : undefined
@@ -28,130 +27,116 @@ export function PortalEntry({ authError, previewAccessEnabled = false }: PortalE
   const keycloakConfigured = isKeycloakConfigured()
 
   return (
-    <main className="min-h-dvh bg-stone-50 text-stone-950">
-      <PublicHeader current="sign-in" />
-      <section className="mx-auto grid min-h-[calc(100dvh-82px)] max-w-6xl items-center gap-10 px-6 py-16 lg:grid-cols-[0.95fr_1.05fr]">
-        <div className="max-w-xl">
-          <p className="text-brand-navy text-[11px] font-semibold tracking-[0.24em] uppercase">Secure Client Portal</p>
-          <h1 className="text-ink mt-4 text-4xl leading-tight font-semibold tracking-tight md:text-5xl">
-            Manage Legal Matters in One Secure Location
-          </h1>
-          <p className="mt-5 text-base leading-7 text-stone-600">
-            Access documents, submit requests, and stay informed about the status of legal matters through the Levine
-            Law platform.
-          </p>
-          <div className="border-border-subtle mt-8 grid gap-3 border-y py-6 sm:grid-cols-3">
-            {[
-              { title: "Document Access", detail: "Access documents shared through the platform." },
-              { title: "Submit Requests", detail: "Complete forms and provide information online." },
-              { title: "Matter Updates", detail: "Real-time visibility into active legal matters." },
-            ].map((item) => (
-              <div key={item.title}>
-                <p className="text-ink text-sm font-semibold">{item.title}</p>
-                <p className="mt-1 text-xs text-stone-500">{item.detail}</p>
-              </div>
-            ))}
-          </div>
-          <div className="mt-8 rounded border border-stone-200 bg-white px-5 py-4 shadow-sm">
-            <p className="text-sm font-semibold text-stone-900">Need access?</p>
-            <p className="mt-1 text-sm leading-6 text-stone-600">
-              Portal access is reviewed before an account is created or enabled.
-            </p>
-            <a
-              href="/sign-up"
-              className="text-brand-navy mt-3 inline-flex text-sm font-semibold underline-offset-4 hover:underline"
-            >
-              Request portal access
-            </a>
-          </div>
+    <main className="min-h-dvh bg-stone-50">
+      <header className="border-b border-stone-200 bg-white px-6 py-4">
+        <div className="mx-auto flex max-w-6xl items-center justify-between">
+          <Link href="/" className="shrink-0">
+            <Image
+              src="/logos/levine-law-wordmark-navy-transparent-2.png"
+              alt="Levine Law"
+              width={1080}
+              height={600}
+              className="h-8 w-auto"
+            />
+          </Link>
+          <Link href="/sign-up" className="text-sm font-medium text-stone-500 hover:text-stone-900">
+            Create account
+          </Link>
         </div>
+      </header>
 
-        <div className="rounded border border-stone-200 bg-white p-6 shadow-sm md:p-8 lg:justify-self-end lg:w-full lg:max-w-md">
-          <p className="text-brand-navy text-[11px] font-semibold tracking-[0.24em] uppercase">Levine Law</p>
-          <h2 className="text-ink mt-3 text-2xl font-semibold tracking-tight">Existing Clients</h2>
-          <p className="mt-2 text-sm leading-6 text-stone-500">
-            Sign in to access documents, requests, matter updates, and communications through the Levine Law platform.
-          </p>
+      <div className="flex min-h-[calc(100dvh-57px)] items-center justify-center px-6 py-16">
+        <div className="w-full max-w-sm">
+          <div className="mb-8 text-center">
+            <p className="text-[11px] font-semibold tracking-[0.24em] text-brand-navy uppercase">Levine Law</p>
+            <h1 className="mt-3 text-2xl font-semibold tracking-tight text-stone-900">Sign in to your account</h1>
+          </div>
 
-          {authErrorMessage ? (
-            <div
-              role="alert"
-              className="mt-5 rounded border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-950"
-            >
-              {authErrorMessage}
-            </div>
-          ) : null}
-
-          <form action={signInWithCredentials} className="mt-6 space-y-4">
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-stone-700">
-                Email
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                className="focus:border-brand-navy focus:ring-brand-navy mt-1 block w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 placeholder-stone-400 focus:ring-1 focus:outline-none"
-                placeholder="you@example.com"
-              />
-            </div>
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-stone-700">
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                required
-                className="focus:border-brand-navy focus:ring-brand-navy mt-1 block w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 placeholder-stone-400 focus:ring-1 focus:outline-none"
-              />
-            </div>
-            <SignInButton label="Sign In" pendingLabel="Signing in..." />
-          </form>
-
-          {keycloakConfigured ? (
-            <div className="mt-5 border-t border-stone-200 pt-5">
-              <p className="mb-3 text-xs text-stone-400">Or sign in with your organisation account</p>
-              <form action={signInWithKeycloak}>
-                <SignInButton label="Sign In with SSO" pendingLabel="Opening secure sign-in..." />
-              </form>
-            </div>
-          ) : null}
-
-          {previewAccessEnabled ? (
-            <form action={previewPortalAccess} className="mt-4">
-              <button
-                type="submit"
-                className="rounded-md border border-stone-300 bg-white px-5 py-2 text-sm font-medium text-stone-600 transition-colors hover:border-stone-400"
+          <div className="rounded border border-stone-200 bg-white px-6 py-7 shadow-sm">
+            {authErrorMessage ? (
+              <div
+                role="alert"
+                className="mb-5 rounded border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-950"
               >
-                Preview portal
-              </button>
-              <p className="mt-2 text-xs leading-5 text-stone-400">Preview mode uses a mock session for review only.</p>
-            </form>
-          ) : null}
+                {authErrorMessage}
+              </div>
+            ) : null}
 
-          <div className="mt-6 border-t border-stone-200 pt-5">
-            <p className="text-sm font-medium text-stone-900">Trouble signing in?</p>
-            <p className="mt-1 text-sm leading-6 text-stone-500">
-              If your account has not been enabled yet, request portal access. If you expected access, contact Levine Law
-              and we will help verify your account.
+            <form action={signInWithCredentials} className="space-y-4">
+              <div>
+                <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-stone-700">
+                  Email address
+                </label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  className="w-full rounded border border-stone-200 bg-white px-4 py-2.5 text-sm text-stone-900 focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
+                />
+              </div>
+              <div>
+                <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-stone-700">
+                  Password
+                </label>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                  className="w-full rounded border border-stone-200 bg-white px-4 py-2.5 text-sm text-stone-900 focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
+                />
+              </div>
+              <div className="pt-1">
+                <SignInButton label="Sign in" pendingLabel="Signing in..." />
+              </div>
+            </form>
+
+            {keycloakConfigured ? (
+              <div className="mt-5 border-t border-stone-200 pt-5">
+                <p className="mb-3 text-xs text-stone-400">Or sign in with your organisation account</p>
+                <form action={signInWithKeycloak}>
+                  <SignInButton label="Sign in with SSO" pendingLabel="Opening secure sign-in..." />
+                </form>
+              </div>
+            ) : null}
+
+            {previewAccessEnabled ? (
+              <div className="mt-4 border-t border-stone-200 pt-4">
+                <form action={previewPortalAccess}>
+                  <button
+                    type="submit"
+                    className="w-full rounded border border-stone-300 bg-white px-5 py-2 text-sm font-medium text-stone-600 transition-colors hover:border-stone-400"
+                  >
+                    Preview portal
+                  </button>
+                </form>
+                <p className="mt-2 text-xs leading-5 text-stone-400">Preview mode uses a mock session for review only.</p>
+              </div>
+            ) : null}
+          </div>
+
+          <div className="mt-5 space-y-2 text-center text-sm text-stone-500">
+            <p>
+              Don&apos;t have an account?{" "}
+              <Link href="/sign-up" className="font-semibold text-brand-navy underline-offset-4 hover:underline">
+                Create one
+              </Link>
             </p>
-            <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold">
-              <a href="/sign-up" className="text-brand-navy underline-offset-4 hover:underline">
-                Request access
-              </a>
-              <a href="mailto:matthew@levinelegal.ca" className="text-brand-navy underline-offset-4 hover:underline">
+            <p>
+              Trouble signing in?{" "}
+              <a
+                href="mailto:matthew@levinelegal.ca"
+                className="font-semibold text-brand-navy underline-offset-4 hover:underline"
+              >
                 Email Levine Law
               </a>
-            </div>
+            </p>
           </div>
         </div>
-      </section>
-      <SiteFooter />
+      </div>
     </main>
   )
 }

@@ -15,7 +15,7 @@ export function SignInButton({ label = "Sign in securely", pendingLabel = "Signi
       type="submit"
       aria-busy={pending}
       disabled={pending}
-      className="bg-brand-navy hover:bg-brand-navy-dark inline-flex items-center justify-center rounded-md px-5 py-3 text-sm font-semibold text-white transition-colors disabled:cursor-wait disabled:opacity-60"
+      className="w-full rounded bg-brand-navy px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-dark disabled:cursor-not-allowed disabled:opacity-70"
     >
       {pending ? pendingLabel : label}
     </button>
