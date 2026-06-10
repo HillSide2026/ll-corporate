@@ -1,19 +1,30 @@
 "use client"
 
-import { useActionState } from "react"
+import { useActionState, useRef } from "react"
 
-type SignUpState = { error?: string } | null
+import { registerAction, RegisterState } from "src/lib/auth/registerAction"
 
-async function stubRegisterAction(_prev: SignUpState, _data: FormData): Promise<SignUpState> {
-  return { error: "Account creation will be enabled shortly." }
+const inputClass =
+  "w-full rounded border border-stone-200 bg-white px-4 py-2.5 text-sm text-stone-900 focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
+
+function fieldError(state: RegisterState, field: string) {
+  return state?.field === field ? "border-red-400 focus:border-red-400 focus:ring-red-400" : ""
 }
 
 export function SignUpForm() {
-  const [state, action, pending] = useActionState(stubRegisterAction, null)
+  const [state, action, pending] = useActionState(registerAction, null)
+  const passwordRef = useRef<HTMLInputElement>(null)
+  const confirmRef = useRef<HTMLInputElement>(null)
+
+  function checkMatch() {
+    if (!confirmRef.current || !passwordRef.current) return
+    const match = passwordRef.current.value === confirmRef.current.value
+    confirmRef.current.setCustomValidity(match ? "" : "Passwords do not match.")
+  }
 
   return (
     <form action={action} className="space-y-4">
-      {state?.error ? (
+      {state?.error && !state.field ? (
         <div className="rounded border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
           {state.error}
         </div>
@@ -29,8 +40,9 @@ export function SignUpForm() {
           type="text"
           autoComplete="name"
           required
-          className="w-full rounded border border-stone-200 bg-white px-4 py-2.5 text-sm text-stone-900 focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
+          className={`${inputClass} ${fieldError(state, "name")}`}
         />
+        {state?.field === "name" ? <p className="mt-1.5 text-xs text-red-500">{state.error}</p> : null}
       </div>
 
       <div>
@@ -43,8 +55,9 @@ export function SignUpForm() {
           type="email"
           autoComplete="email"
           required
-          className="w-full rounded border border-stone-200 bg-white px-4 py-2.5 text-sm text-stone-900 focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
+          className={`${inputClass} ${fieldError(state, "email")}`}
         />
+        {state?.field === "email" ? <p className="mt-1.5 text-xs text-red-500">{state.error}</p> : null}
       </div>
 
       <div>
@@ -58,9 +71,34 @@ export function SignUpForm() {
           autoComplete="new-password"
           required
           minLength={8}
-          className="w-full rounded border border-stone-200 bg-white px-4 py-2.5 text-sm text-stone-900 focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
+          ref={passwordRef}
+          onChange={checkMatch}
+          className={`${inputClass} ${fieldError(state, "password")}`}
         />
-        <p className="mt-1.5 text-xs text-stone-400">At least 8 characters.</p>
+        {state?.field === "password" ? (
+          <p className="mt-1.5 text-xs text-red-500">{state.error}</p>
+        ) : (
+          <p className="mt-1.5 text-xs text-stone-400">At least 8 characters.</p>
+        )}
+      </div>
+
+      <div>
+        <label htmlFor="su-confirm" className="mb-1.5 block text-sm font-medium text-stone-700">
+          Confirm password
+        </label>
+        <input
+          id="su-confirm"
+          name="confirmPassword"
+          type="password"
+          autoComplete="new-password"
+          required
+          ref={confirmRef}
+          onChange={checkMatch}
+          className={`${inputClass} ${fieldError(state, "confirmPassword")}`}
+        />
+        {state?.field === "confirmPassword" ? (
+          <p className="mt-1.5 text-xs text-red-500">{state.error}</p>
+        ) : null}
       </div>
 
       <button
