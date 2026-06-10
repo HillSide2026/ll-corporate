@@ -38,3 +38,5 @@ yarn-error.log*
 # prevent nested sibling repos / local records stacks
 /ll-corporate_records/
 /ll-corporate-records/
+.vercel
+.env*
