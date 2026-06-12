@@ -15,6 +15,7 @@ vi.mock("next/navigation", () => ({
 vi.mock("src/lib/auth/session", () => ({
   getPortalSession: vi.fn(),
   getAccessToken: vi.fn().mockResolvedValue(null),
+  isClientPortalSession: (session: PortalSession) => session.identity.role === "client",
 }))
 
 vi.mock("src/components/portal/PortalShell", () => ({
@@ -32,6 +33,16 @@ const session: PortalSession = {
     subject: "user-123",
     displayName: "Client User",
     email: "client@example.com",
+    role: "client",
+  },
+}
+
+const prospectSession: PortalSession = {
+  identity: {
+    subject: "user-456",
+    displayName: "Prospect User",
+    email: "prospect@example.com",
+    role: "prospect",
   },
 }
 
@@ -56,5 +67,12 @@ describe("PortalAppPage", () => {
     expect(screen.getByRole("heading", { name: "Protected portal shell" })).toBeInTheDocument()
     expect(screen.getByText("client@example.com")).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Sign out" })).toBeInTheDocument()
+  })
+
+  it("redirects non-client users to intake", async () => {
+    vi.mocked(getPortalSession).mockResolvedValue(prospectSession)
+
+    await expect(PortalAppPage({ searchParams: Promise.resolve({}) })).rejects.toThrow("redirect:/intake")
+    expect(redirect).toHaveBeenCalledWith("/intake")
   })
 })

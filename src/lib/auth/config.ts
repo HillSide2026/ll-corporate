@@ -16,6 +16,7 @@ export function getPreviewPortalSession(): PortalSession {
       subject: "preview-client",
       displayName: "Preview Client",
       email: "preview.client@levinelaw.example",
+      role: "client",
     },
   }
 }

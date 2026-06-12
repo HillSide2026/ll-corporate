@@ -38,7 +38,7 @@ describe("PortalShell", () => {
     expect(screen.getByRole("status")).toHaveTextContent(
       "Preview mode: this portal is using a mock session for development review only."
     )
-    expect(screen.getByRole("link", { name: "Exit preview" })).toHaveAttribute("href", "/corporate")
+    expect(screen.getByRole("link", { name: "Exit preview" })).toHaveAttribute("href", "/sign-in")
     expect(screen.queryByRole("button", { name: "Sign out" })).not.toBeInTheDocument()
   })
 })

@@ -16,7 +16,7 @@ import {
 } from "src/components/portal/PortalDesignSystem"
 import { PortalWorkspaceShell } from "src/components/portal/PortalWorkspaceShell"
 import { getPreviewPortalSession, isPreviewPortalAccessEnabled } from "src/lib/auth/config"
-import { getAccessToken, getPortalSession } from "src/lib/auth/session"
+import { getAccessToken, getPortalSession, isClientPortalSession } from "src/lib/auth/session"
 import { type CounselModel, getCounselProfile } from "src/lib/portal/counselProfileSource"
 import { getMatterList } from "src/lib/portal/matterSource"
 
@@ -43,6 +43,7 @@ function formatDate(iso: string): string {
 export default async function ScopePage() {
   const session = (await getPortalSession()) ?? (isPreviewPortalAccessEnabled() ? getPreviewPortalSession() : null)
   if (!session) redirect("/sign-in")
+  if (!isClientPortalSession(session)) redirect("/intake")
 
   const accessToken = await getAccessToken()
   const { profile, isMock: profileMock } = getCounselProfile()

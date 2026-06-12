@@ -6,7 +6,7 @@ import { MatterList } from "src/components/portal/MatterList"
 import { PortalButton, PortalCard, PortalCardContent, PortalPageHeader } from "src/components/portal/PortalDesignSystem"
 import { PortalWorkspaceShell } from "src/components/portal/PortalWorkspaceShell"
 import { getPreviewPortalSession, isPreviewPortalAccessEnabled } from "src/lib/auth/config"
-import { getAccessToken, getPortalSession } from "src/lib/auth/session"
+import { getAccessToken, getPortalSession, isClientPortalSession } from "src/lib/auth/session"
 
 export const metadata: Metadata = { title: "Matters" }
 
@@ -30,6 +30,7 @@ export default async function MattersPage({ searchParams }: MattersPageProps) {
   const session = (await getPortalSession()) ?? (isPreviewPortalAccessEnabled() ? getPreviewPortalSession() : null)
 
   if (!session) redirect("/sign-in")
+  if (!isClientPortalSession(session)) redirect("/intake")
 
   const accessToken = await getAccessToken()
   const params = await searchParams

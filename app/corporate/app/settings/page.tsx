@@ -12,13 +12,14 @@ import {
 } from "src/components/portal/PortalDesignSystem"
 import { PortalWorkspaceShell } from "src/components/portal/PortalWorkspaceShell"
 import { getPreviewPortalSession, isPreviewPortalAccessEnabled } from "src/lib/auth/config"
-import { getPortalSession } from "src/lib/auth/session"
+import { getPortalSession, isClientPortalSession } from "src/lib/auth/session"
 
 export const metadata: Metadata = { title: "Settings" }
 
 export default async function SettingsPage() {
   const session = (await getPortalSession()) ?? (isPreviewPortalAccessEnabled() ? getPreviewPortalSession() : null)
   if (!session) redirect("/sign-in")
+  if (!isClientPortalSession(session)) redirect("/intake")
 
   return (
     <PortalWorkspaceShell active="settings" session={session}>

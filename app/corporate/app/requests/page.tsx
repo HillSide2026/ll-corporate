@@ -16,7 +16,7 @@ import {
 } from "src/components/portal/PortalDesignSystem"
 import { PortalWorkspaceShell } from "src/components/portal/PortalWorkspaceShell"
 import { getPreviewPortalSession, isPreviewPortalAccessEnabled } from "src/lib/auth/config"
-import { getPortalSession } from "src/lib/auth/session"
+import { getPortalSession, isClientPortalSession } from "src/lib/auth/session"
 import { getMatterRequests, type MatterRequestStatus } from "src/lib/portal/matterRequestStore"
 import { getRequests, type RequestStatus } from "src/lib/portal/requestStore"
 import { serviceCatalog } from "src/lib/services/catalog"
@@ -54,6 +54,7 @@ export default async function RequestsPage({ searchParams }: RequestsPageProps) 
   const session = (await getPortalSession()) ?? (isPreviewPortalAccessEnabled() ? getPreviewPortalSession() : null)
 
   if (!session) redirect("/sign-in")
+  if (!isClientPortalSession(session)) redirect("/intake")
 
   const params = await searchParams
   const justSubmitted = params.submitted === "1"

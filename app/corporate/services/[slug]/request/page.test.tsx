@@ -18,6 +18,7 @@ vi.mock("next/navigation", () => ({
 
 vi.mock("src/lib/auth/session", () => ({
   getPortalSession: vi.fn(),
+  isClientPortalSession: (session: PortalSession) => session.identity.role === "client",
 }))
 
 vi.mock("src/lib/auth/config", () => ({
@@ -26,6 +27,7 @@ vi.mock("src/lib/auth/config", () => ({
       subject: "preview-client",
       displayName: "Preview Client",
       email: "preview.client@levinelaw.example",
+      role: "client",
     },
   })),
   isPreviewPortalAccessEnabled: vi.fn(() => false),
@@ -44,6 +46,7 @@ const session: PortalSession = {
     subject: "user-123",
     displayName: "Client User",
     email: "client@example.com",
+    role: "client",
   },
 }
 

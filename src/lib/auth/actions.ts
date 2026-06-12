@@ -12,7 +12,7 @@ export async function signInWithCredentials(formData: FormData) {
     await signIn("credentials", {
       email: formData.get("email"),
       password: formData.get("password"),
-      redirectTo: env.LL_CORPORATE_POST_LOGIN_REDIRECT_URL ?? "/corporate/app",
+      redirectTo: "/auth/after-sign-in",
     })
   } catch (err) {
     if (err instanceof AuthError) {
@@ -27,7 +27,7 @@ export async function signInWithKeycloak() {
     redirect("/sign-in?error=Configuration")
   }
 
-  await signIn("keycloak", { redirectTo: env.LL_CORPORATE_POST_LOGIN_REDIRECT_URL ?? "/corporate/app" })
+  await signIn("keycloak", { redirectTo: "/auth/after-sign-in" })
 }
 
 export async function previewPortalAccess() {

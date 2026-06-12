@@ -31,7 +31,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         // Env-var credentials kept for admin/preview access
         if (env.PORTAL_CLIENT_EMAIL && env.PORTAL_CLIENT_PASSWORD) {
           if (email === env.PORTAL_CLIENT_EMAIL && password === env.PORTAL_CLIENT_PASSWORD) {
-            return { id: "portal-client", email: env.PORTAL_CLIENT_EMAIL, name: "Client" }
+            return { id: "portal-client", email: env.PORTAL_CLIENT_EMAIL, name: "Client", role: "client" }
           }
         }
 
@@ -42,23 +42,29 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const valid = await verifyPassword(password, user.password_hash)
         if (!valid) return null
 
-        return { id: user.id, email: user.email, name: user.name }
+        return { id: user.id, email: user.email, name: user.name, role: user.role }
       },
     }),
     ...keycloakProvider,
   ],
   callbacks: {
-    jwt({ token, account }) {
+    jwt({ token, account, user }) {
       // Capture the Keycloak access token on initial sign-in.
       // Stored only in the encrypted server-side JWT — never sent to the client.
       if (account?.access_token) {
         token.accessToken = account.access_token
+      }
+      if (user?.role) {
+        token.role = user.role
       }
       return token
     },
     session({ session, token }) {
       if (session.user && token.sub) {
         session.user.id = token.sub
+      }
+      if (session.user && token.role) {
+        session.user.role = token.role
       }
       return session
     },

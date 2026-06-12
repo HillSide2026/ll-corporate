@@ -6,6 +6,7 @@ export type PortalIdentity = {
   subject: string
   displayName?: string
   email?: string
+  role?: string
 }
 
 export type PortalSession = {
@@ -25,8 +26,13 @@ export async function getPortalSession(): Promise<PortalSession | null> {
       subject,
       displayName: session.user?.name ?? undefined,
       email: session.user?.email ?? undefined,
+      role: session.user?.role ?? undefined,
     },
   }
+}
+
+export function isClientPortalSession(session: PortalSession): boolean {
+  return session.identity.role === "client"
 }
 
 /**

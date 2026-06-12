@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation"
 
 import { getPreviewPortalSession, isPreviewPortalAccessEnabled } from "src/lib/auth/config"
-import { getPortalSession } from "src/lib/auth/session"
+import { getPortalSession, isClientPortalSession } from "src/lib/auth/session"
 import { uploadAndStorePortalDocument } from "src/lib/portal/documentStore"
 import { addMatterRequest, type MatterRequestCategory } from "src/lib/portal/matterRequestStore"
 import { validatePortalDocumentFile } from "src/lib/portal/uploadValidation"
@@ -13,6 +13,7 @@ const VALID_CATEGORIES: MatterRequestCategory[] = ["Corporate", "Contract", "Fin
 export async function submitMatterRequest(formData: FormData): Promise<void> {
   const session = (await getPortalSession()) ?? (isPreviewPortalAccessEnabled() ? getPreviewPortalSession() : null)
   if (!session) redirect("/sign-in")
+  if (!isClientPortalSession(session)) redirect("/intake")
 
   const category = formData.get("category")
   const description = formData.get("description")

@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation"
 
 import { getPreviewPortalSession, isPreviewPortalAccessEnabled } from "src/lib/auth/config"
-import { getPortalSession } from "src/lib/auth/session"
+import { getPortalSession, isClientPortalSession } from "src/lib/auth/session"
 import { createIntakeRequestContract } from "src/lib/contracts/intake"
 import { addRequest } from "src/lib/portal/requestStore"
 import { uploadAndStorePortalDocument } from "src/lib/portal/documentStore"
@@ -16,15 +16,18 @@ export async function submitServiceRequest(formData: FormData) {
   if (!session) {
     redirect("/sign-in")
   }
+  if (!isClientPortalSession(session)) {
+    redirect("/intake")
+  }
 
   const slug = formData.get("serviceSlug")
   if (typeof slug !== "string" || !slug) {
-    redirect("/corporate/app")
+    redirect("/intake")
   }
 
   const service = getServiceBySlug(slug)
   if (!service) {
-    redirect("/corporate/app")
+    redirect("/intake")
   }
 
   const now = new Date().toISOString()

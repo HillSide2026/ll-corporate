@@ -3,13 +3,14 @@
 import { redirect } from "next/navigation"
 
 import { getPreviewPortalSession, isPreviewPortalAccessEnabled } from "src/lib/auth/config"
-import { getPortalSession } from "src/lib/auth/session"
+import { getPortalSession, isClientPortalSession } from "src/lib/auth/session"
 import { uploadAndStorePortalDocument } from "./documentStore"
 import { validatePortalDocumentFile } from "./uploadValidation"
 
 export async function uploadMatterDocument(formData: FormData): Promise<void> {
   const session = (await getPortalSession()) ?? (isPreviewPortalAccessEnabled() ? getPreviewPortalSession() : null)
   if (!session) redirect("/sign-in")
+  if (!isClientPortalSession(session)) redirect("/intake")
 
   const matterKey = formData.get("matterKey")
   const file = formData.get("file")

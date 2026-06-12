@@ -41,7 +41,7 @@ describe("auth actions", () => {
   it("starts the Keycloak sign-in flow for the protected portal", async () => {
     await signInWithKeycloak()
 
-    expect(authMocks.signIn).toHaveBeenCalledWith("keycloak", { redirectTo: "/corporate/app" })
+    expect(authMocks.signIn).toHaveBeenCalledWith("keycloak", { redirectTo: "/auth/after-sign-in" })
   })
 
   it("redirects to the public portal with a friendly configuration error when Keycloak is not configured", async () => {

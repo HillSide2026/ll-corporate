@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 
 import { getAdminSession } from "src/lib/auth/adminAuth"
-import { getAccessToken, getPortalSession } from "src/lib/auth/session"
+import { getAccessToken, getPortalSession, isClientPortalSession } from "src/lib/auth/session"
 import { getPortalDocumentBlob } from "src/lib/portal/blobStorage"
 import { getPortalDocumentById } from "src/lib/portal/documentStore"
 import { getMatterByKey } from "src/lib/portal/matterSource"
@@ -18,6 +18,9 @@ export async function GET(_request: NextRequest, { params }: DownloadRouteProps)
 
   if (!session && !isRealAdmin) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  }
+  if (session && !isRealAdmin && !isClientPortalSession(session)) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
   }
 
   const document = await getPortalDocumentById(id)
