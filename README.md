@@ -72,6 +72,7 @@ Useful checks:
 pnpm run lint
 pnpm run prettier
 pnpm run test
+pnpm run prod:check
 pnpm run build
 pnpm run e2e:headless
 ```
@@ -93,6 +94,15 @@ pnpm run build
 ```
 
 Request-access links should point to `/sign-up`. The legacy `/corporate/onboarding` route remains as a redirect to `/sign-up` for old links.
+
+Production readiness checks are environment-driven:
+
+```sh
+pnpm run prod:check
+pnpm run db:migrate
+```
+
+`prod:check` validates required production environment variables. `db:migrate` creates the credentials `users` table and applies the portal Stage 3 schema from `docs/portal-stage3-schema.sql`.
 
 ## Implementation Phasing
 

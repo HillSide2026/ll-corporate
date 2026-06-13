@@ -18,7 +18,8 @@
     "test:coverage": "vitest --coverage",
     "e2e:headless": "playwright test",
     "e2e:ui": "playwright test --ui",
-    "db:migrate": "node --env-file=.env.local scripts/db-migrate.mjs"
+    "db:migrate": "node --env-file=.env.local scripts/db-migrate.mjs",
+    "prod:check": "node scripts/production-readiness.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",

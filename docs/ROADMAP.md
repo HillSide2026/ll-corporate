@@ -20,7 +20,7 @@ The public site (`levinellp.ca`) and client portal (`/corporate/app`) are featur
 - `auth.ts` credentials provider reads DB; env-var pair kept as admin fallback
 
 **Remaining:**
-- `role` not yet in JWT/session — needed for middleware gating Tier 2 to `client` only
+- Intake routes still need authenticated-user gating once Phase C persistence is in place.
 
 ### Phase B — Intake workspace UI ✓ complete
 
@@ -53,7 +53,7 @@ Close the loop between UI and real state.
 
 3. **Engagement acceptance** — write to `engagement_acceptances`, flip `users.role = 'client'`, redirect to `/corporate/app`
 
-4. **Role in JWT/session** — include `role` in `callbacks.jwt` and `callbacks.session`; middleware gate `/corporate/app` to `client` role only
+4. **Role enforcement audit** — role is now in JWT/session and `/corporate/app` routes require `client`; keep this contract covered as intake and admin features expand
 
 5. **Intake gating** — `/intake` routes require authenticated user (prospect or client); `/corporate/app` requires `client` role
 
@@ -118,6 +118,7 @@ Everything below is configuration/infrastructure — the code is ready.
 4. **Apply portal DB schema** — run `docs/portal-stage3-schema.sql`, set `PORTAL_DATABASE_URL`
 5. **Configure Vercel Blob** — set `BLOB_READ_WRITE_TOKEN`; verify uploads/downloads
 6. **Replace admin token auth** — gate `/corporate/admin` on Keycloak lawyer/admin role; remove `PORTAL_ADMIN_TOKEN` login page
+7. **Run production readiness check** — set production environment variables, then run `pnpm run prod:check`
 
 ### Full backlog
 
@@ -133,7 +134,7 @@ Everything below is configuration/infrastructure — the code is ready.
 | 8 | Set `PORTAL_ENABLE_MOCK_FALLBACK=false` in production | 5, 7 |
 | 9 | Replace `PORTAL_ADMIN_TOKEN` with Keycloak lawyer role | 2 |
 | 10 | Add email provider (Resend/SendGrid); wire request + upload notifications | — |
-| 11 | Run `pnpm db:migrate` for `users` table in production | — |
+| 11 | Run `pnpm db:migrate` for `users` table and portal Stage 3 schema in production | 6 |
 | 12 | Intake Phase C — DB persistence + auto-promote | — |
 | 13 | Stripe integration for service payment gate | 12 |
 | 14 | Admin prospect visibility | 12 |
