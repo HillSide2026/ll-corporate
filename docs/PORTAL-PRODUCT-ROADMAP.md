@@ -36,7 +36,7 @@ No portal role means the user is treated as a prospect and routed to intake.
 2. **Clio for Clients hand-off.** Client tier only: a link out to `clients.clio.com` for e-signature and bill payment. Clio for Clients has no API, no embed and no custom domain, so this is a link, not an integration.
 3. **Clio Connect is out of scope.** Clio now positions it as "Clio for Co-Counsel", for outside counsel, not clients.
 
-Open before Phase 5 can start: whether Clio for Clients is on LL's plan and on the Canadian instance (OI-24); Clio SSO for client users (OI-22); the classification source and staleness tolerance (OI-26).
+Questions on OI-24 and OI-22 sent to Clio support 2026-10-20; awaiting reply. Open before Phase 5 can start: whether Clio for Clients is on LL's plan and on the Canadian instance (OI-24); Clio SSO for client users (OI-22); the classification source and staleness tolerance (OI-26).
 
 ---
 
