@@ -28,6 +28,14 @@
       }
     ]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.mjs", "vitest.config.ts", ".next/types/**/*.ts", "eslint.config.mjs"],
-  "exclude": ["node_modules", "new website"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.mjs",
+    "vitest.config.ts",
+    ".next/types/**/*.ts",
+    "eslint.config.mjs"
+  ],
+  "exclude": ["node_modules"]
 }

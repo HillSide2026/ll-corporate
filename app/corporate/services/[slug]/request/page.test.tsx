@@ -19,6 +19,13 @@ vi.mock("next/navigation", () => ({
 vi.mock("src/lib/auth/session", () => ({
   getPortalSession: vi.fn(),
   isClientPortalSession: (session: PortalSession) => session.identity.role === "client",
+  isTeammatePortalSession: (session: PortalSession) => session.identity.role === "teammate",
+  isWorkspacePortalSession: (session: PortalSession) =>
+    session.identity.role === "client" || session.identity.role === "teammate",
+}))
+
+vi.mock("src/lib/portal/features", () => ({
+  isMattersAndDocumentsEnabled: () => false,
 }))
 
 vi.mock("src/lib/auth/config", () => ({

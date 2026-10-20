@@ -19,5 +19,7 @@ declare module "next-auth/jwt" {
     /** Keycloak access token. Available server-side only — not exposed to the client session. */
     accessToken?: string
     role?: string
+    /** Keycloak realm and client roles from the access token. Server-side only. */
+    keycloakRoles?: string[]
   }
 }

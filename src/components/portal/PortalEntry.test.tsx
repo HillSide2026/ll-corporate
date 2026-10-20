@@ -17,7 +17,7 @@ describe("PortalEntry", () => {
   it("renders the public login entry without domain data", () => {
     render(<PortalEntry />)
 
-    expect(screen.getAllByText("Levine Law").length).toBeGreaterThan(0)
+    expect(screen.getByRole("link", { name: "Levine Law Client Portal" })).toHaveAttribute("href", "/sign-in")
     expect(screen.getByRole("heading", { name: "Sign in to your account" })).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Sign in" })).toBeInTheDocument()
     expect(screen.getByRole("link", { name: "Create one" })).toHaveAttribute("href", "/sign-up")

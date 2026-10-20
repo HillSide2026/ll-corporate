@@ -1,7 +1,42 @@
 # Client Portal — Product Roadmap
 
 > Strategic product, UX, and engineering roadmap for the Levine Law client portal.
-> Last updated: 2026-06-06
+> Last updated: 2026-10-20 — portal revision (ML1), see below. Governing record: ll-secondbrain LLP-037 ADR-006.
+
+---
+
+## 2026-10-20 Revision (ML1)
+
+Recorded in the firm's system design project (`ll-secondbrain` LLP-037, ADR-006).
+
+| Decision                                                    | What it means here                                                                                                                                                                                        | State                                                                                          |
+| ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| Domain is `portal.levine-law.ca`                            | Replaces `clients.levine-law.ca` throughout docs, config examples and readiness checks                                                                                                                    | Done in repo. DNS, Vercel domain and Keycloak redirect URIs still to change                    |
+| Purpose: client experience, not necessarily client delivery | The portal is where the client relationship lives. It is not the delivery channel for legal work                                                                                                          | Strategic Purpose table updated below                                                          |
+| Matters and Documents are hidden, not removed               | `PORTAL_ENABLE_MATTERS_AND_DOCUMENTS` (default off) hides the nav items and dashboard panels and returns 404 on the client routes, upload and download. Admin surface unaffected                          | Done                                                                                           |
+| Client teammate tier                                        | New `teammate` role: an authorized person at the client without instructing authority. Sees the workspace; cannot submit requests or upload. Keycloak role `portal_teammate` or `users.role = 'teammate'` | Role and gating done. Grant/revoke UI and shared visibility of the client's requests not built |
+| Admin is a Keycloak `portal_admin` role check               | `adminAuth.ts` checks the role first; `PORTAL_ADMIN_TOKEN` cookie kept as fallback until the role is assigned. With Keycloak configured and no token, admin is denied rather than opened in preview       | Done. Assign the role in Keycloak, then unset the token                                        |
+| Clio integration is on the roadmap                          | See Phase 5 below                                                                                                                                                                                         | Not started                                                                                    |
+
+### Keycloak roles
+
+Realm roles (or client roles on the `AUTH_KEYCLOAK_ID` client), read from the access token at sign-in:
+
+| Role              | Effect                                     |
+| ----------------- | ------------------------------------------ |
+| `portal_client`   | Portal tier `client` (Instructing Officer) |
+| `portal_teammate` | Portal tier `teammate`                     |
+| `portal_admin`    | Admin surface at `/corporate/admin`        |
+
+No portal role means the user is treated as a prospect and routed to intake.
+
+### Phase 5 — Clio integration (roadmap, not started)
+
+1. **Classification sync.** A periodic job reads Clio Manage API v4 (client of record, matter status, open/close dates, the POL-080 §3 allowlist) and sets each user's portal tier. Not a live call. Every record carries its as-of time. If the source is unreachable or stale, the user falls back to prospect. Clio cannot identify teammates; that tier stays portal-granted.
+2. **Clio for Clients hand-off.** Client tier only: a link out to `clients.clio.com` for e-signature and bill payment. Clio for Clients has no API, no embed and no custom domain, so this is a link, not an integration.
+3. **Clio Connect is out of scope.** Clio now positions it as "Clio for Co-Counsel", for outside counsel, not clients.
+
+Questions on OI-24 and OI-22 sent to Clio support 2026-10-20; awaiting reply. Open before Phase 5 can start: whether Clio for Clients is on LL's plan and on the Canadian instance (OI-24); Clio SSO for client users (OI-22); the classification source and staleness tolerance (OI-26).
 
 ---
 
@@ -65,9 +100,9 @@ Phase 1, Phase 2, and Phase 3 are complete. The portal is usable for a real frac
 | Layer         | Purpose                                                             |
 | ------------- | ------------------------------------------------------------------- |
 | Public site   | Positioning, authority, routing prospects to services or the portal |
-| Client portal | Execution layer — delivering legal services digitally               |
+| Client portal | Client experience — the relationship, not necessarily delivery      |
 
-The portal supports:
+The portal supports (matter and document views are built but hidden as of 2026-10-20):
 
 - Ongoing fractional counsel relationships
 - Front-of-matter document sharing
@@ -458,4 +493,8 @@ In priority order:
 2. **Set `LL_TASK_TRACKER_API_BASE_URL`** — point to deployed LL-task-tracker; live matter data will flow automatically.
 3. **Provision portal database** — apply `docs/portal-stage3-schema.sql` and set `PORTAL_DATABASE_URL` or `POSTGRES_URL`.
 4. **Provision private Vercel Blob** — set `BLOB_READ_WRITE_TOKEN` and verify upload/download flows.
-5. **Replace admin auth** — swap `PORTAL_ADMIN_TOKEN` cookie check in `adminAuth.ts` with a Keycloak lawyer role check once SSO is live.
+5. ~~**Replace admin auth**~~ — done 2026-10-20: `portal_admin` role check. Assign the role in Keycloak, then unset `PORTAL_ADMIN_TOKEN`.
+6. **Move the domain** — point `portal.levine-law.ca` at the Vercel project, update `AUTH_URL` and the Keycloak redirect and post-logout URIs.
+7. **Create the Keycloak roles** — `portal_client`, `portal_teammate`, `portal_admin`.
+8. **Teammate grant/revoke** — an admin control to add and remove teammates, and decide what of the client's requests a teammate sees.
+9. **Clio integration** — Phase 5 above.

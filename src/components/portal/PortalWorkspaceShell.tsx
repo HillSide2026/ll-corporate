@@ -1,9 +1,10 @@
-import Image from "next/image"
 import Link from "next/link"
 import type { ReactNode } from "react"
 
 import { signOutFromPortal } from "src/lib/auth/actions"
 import type { PortalSession } from "src/lib/auth/session"
+import { isMattersAndDocumentsEnabled } from "src/lib/portal/features"
+import { PortalBrandMark } from "./PortalBrandHeader"
 import { cx } from "./PortalDesignSystem"
 
 type PortalSection = "dashboard" | "matters" | "documents" | "requests" | "team" | "settings"
@@ -33,6 +34,10 @@ export function PortalWorkspaceShell({
   previewMode?: boolean
   session: PortalSession
 }) {
+  const showMattersAndDocuments = isMattersAndDocumentsEnabled()
+  const visibleNavItems = showMattersAndDocuments
+    ? navItems
+    : navItems.filter((item) => item.key !== "matters" && item.key !== "documents")
   const displayName = session.identity.displayName ?? session.identity.email ?? "Client"
   const email = session.identity.email ?? "Signed-in client"
   const initials =
@@ -57,27 +62,15 @@ export function PortalWorkspaceShell({
       <div className="grid min-h-dvh lg:grid-cols-[272px_1fr]">
         <aside className="border-b border-stone-200 bg-white lg:sticky lg:top-0 lg:h-dvh lg:border-r lg:border-b-0">
           <div className="flex h-full flex-col">
-            <div className="border-b border-stone-100 px-5 py-5">
-              <Link href="/corporate/app" className="flex items-center gap-3">
-                <Image
-                  src="/logos/levine-law-icon-navy.png"
-                  alt="Levine Law"
-                  width={500}
-                  height={500}
-                  className="h-9 w-9 rounded-md border border-stone-200 bg-white"
-                />
-                <div className="min-w-0">
-                  <p className="text-sm font-semibold text-stone-950">Levine Law</p>
-                  <p className="text-xs text-stone-500">Client Portal</p>
-                </div>
-              </Link>
+            <div className="border-b border-stone-100 px-5 py-3">
+              <PortalBrandMark href="/corporate/app" />
             </div>
 
             <nav aria-label="Portal navigation" className="flex-1 space-y-6 overflow-y-auto px-3 py-5">
               <div>
                 <p className="px-3 text-xs font-semibold tracking-[0.16em] text-stone-400 uppercase">Workspace</p>
                 <ul className="mt-3 space-y-1">
-                  {navItems.map((item) => {
+                  {visibleNavItems.map((item) => {
                     const isActive = active === item.key
                     return (
                       <li key={item.key}>
@@ -156,7 +149,9 @@ export function PortalWorkspaceShell({
                 Secure client workspace
               </p>
               <p className="text-sm text-stone-500">
-                Matter updates, shared documents, requests, and Levine Law contacts.
+                {showMattersAndDocuments
+                  ? "Matter updates, shared documents, requests, and Levine Law contacts."
+                  : "Requests, resources, and your Levine Law contacts."}
               </p>
             </div>
           </header>

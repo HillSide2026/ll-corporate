@@ -1,11 +1,12 @@
 import { type NextRequest, NextResponse } from "next/server"
 
 import { getAdminSession } from "src/lib/auth/adminAuth"
-import { getAccessToken, getPortalSession, isClientPortalSession } from "src/lib/auth/session"
+import { getAccessToken, getPortalSession, isWorkspacePortalSession } from "src/lib/auth/session"
 import { getPortalDocumentBlob } from "src/lib/portal/blobStorage"
 import { getPortalDocumentById } from "src/lib/portal/documentStore"
 import { getMatterByKey } from "src/lib/portal/matterSource"
 import { recordAuditEvent } from "src/lib/portal/auditLog"
+import { isMattersAndDocumentsEnabled } from "src/lib/portal/features"
 
 type DownloadRouteProps = {
   params: Promise<{ id: string }>
@@ -19,7 +20,10 @@ export async function GET(_request: NextRequest, { params }: DownloadRouteProps)
   if (!session && !isRealAdmin) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
-  if (session && !isRealAdmin && !isClientPortalSession(session)) {
+  if (!isRealAdmin && !isMattersAndDocumentsEnabled()) {
+    return NextResponse.json({ error: "Document not found" }, { status: 404 })
+  }
+  if (session && !isRealAdmin && !isWorkspacePortalSession(session)) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 })
   }
 

@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { redirect } from "next/navigation"
 
 import { PortalShell } from "src/components/portal/PortalShell"
-import { getAccessToken, getPortalSession, isClientPortalSession } from "src/lib/auth/session"
+import { getAccessToken, getPortalSession, isWorkspacePortalSession } from "src/lib/auth/session"
 
 export const metadata: Metadata = {
   title: "Portal Workspace",
@@ -18,7 +18,7 @@ export default async function PortalAppPage({ searchParams }: PortalAppPageProps
   if (!session) {
     redirect("/sign-in")
   }
-  if (!isClientPortalSession(session)) {
+  if (!isWorkspacePortalSession(session)) {
     redirect("/intake")
   }
 

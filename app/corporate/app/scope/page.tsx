@@ -16,8 +16,9 @@ import {
 } from "src/components/portal/PortalDesignSystem"
 import { PortalWorkspaceShell } from "src/components/portal/PortalWorkspaceShell"
 import { getPreviewPortalSession, isPreviewPortalAccessEnabled } from "src/lib/auth/config"
-import { getAccessToken, getPortalSession, isClientPortalSession } from "src/lib/auth/session"
+import { getAccessToken, getPortalSession, isWorkspacePortalSession } from "src/lib/auth/session"
 import { type CounselModel, getCounselProfile } from "src/lib/portal/counselProfileSource"
+import { isMattersAndDocumentsEnabled } from "src/lib/portal/features"
 import { getMatterList } from "src/lib/portal/matterSource"
 
 export const metadata: Metadata = { title: "Team / Contacts" }
@@ -43,11 +44,14 @@ function formatDate(iso: string): string {
 export default async function ScopePage() {
   const session = (await getPortalSession()) ?? (isPreviewPortalAccessEnabled() ? getPreviewPortalSession() : null)
   if (!session) redirect("/sign-in")
-  if (!isClientPortalSession(session)) redirect("/intake")
+  if (!isWorkspacePortalSession(session)) redirect("/intake")
 
   const accessToken = await getAccessToken()
   const { profile, isMock: profileMock } = getCounselProfile()
-  const { matters, isMock: mattersMock } = await getMatterList(accessToken)
+  const showMattersAndDocuments = isMattersAndDocumentsEnabled()
+  const { matters, isMock: mattersMock } = showMattersAndDocuments
+    ? await getMatterList(accessToken)
+    : { matters: [], isMock: false }
 
   const activeMatters = matters.filter((matter) => matter.matterState === "Active")
   const pendingMatters = matters.filter((matter) => matter.matterState === "Pending")
@@ -132,54 +136,56 @@ export default async function ScopePage() {
           </PortalCard>
         </div>
 
-        <PortalCard>
-          <PortalCardHeader
-            action={
-              <PortalButton href="/corporate/app/matters" tone="secondary">
-                All matters
-              </PortalButton>
-            }
-          >
-            <PortalCardTitle>Current work coverage</PortalCardTitle>
-            <PortalCardDescription>Active and pending matters connected to your workspace.</PortalCardDescription>
-          </PortalCardHeader>
-          <PortalCardContent>
-            {activeMatters.length + pendingMatters.length === 0 ? (
-              <PortalEmptyState
-                title="No current matters"
-                description="Accepted matters and pending work will appear here once available."
-                action={<PortalButton href="/corporate/app/requests/new">Open a matter</PortalButton>}
-              />
-            ) : (
-              <div className="grid gap-3 md:grid-cols-2">
-                {[...activeMatters, ...pendingMatters].map((matter, index) => {
-                  const key = matter.businessKey ?? `matter-${index}`
-                  return (
-                    <Link
-                      key={key}
-                      href={`/corporate/app/matters/${encodeURIComponent(key)}`}
-                      className="hover:border-brand-navy/30 rounded-lg border border-stone-200 bg-white px-4 py-4 transition hover:shadow-sm"
-                    >
-                      <div className="flex items-start justify-between gap-3">
-                        <div>
-                          <p className="font-semibold text-stone-950">{key}</p>
-                          {matter.matterType ? (
-                            <p className="mt-1 text-sm text-stone-500">{matter.matterType}</p>
+        {showMattersAndDocuments ? (
+          <PortalCard>
+            <PortalCardHeader
+              action={
+                <PortalButton href="/corporate/app/matters" tone="secondary">
+                  All matters
+                </PortalButton>
+              }
+            >
+              <PortalCardTitle>Current work coverage</PortalCardTitle>
+              <PortalCardDescription>Active and pending matters connected to your workspace.</PortalCardDescription>
+            </PortalCardHeader>
+            <PortalCardContent>
+              {activeMatters.length + pendingMatters.length === 0 ? (
+                <PortalEmptyState
+                  title="No current matters"
+                  description="Accepted matters and pending work will appear here once available."
+                  action={<PortalButton href="/corporate/app/requests/new">Open a matter</PortalButton>}
+                />
+              ) : (
+                <div className="grid gap-3 md:grid-cols-2">
+                  {[...activeMatters, ...pendingMatters].map((matter, index) => {
+                    const key = matter.businessKey ?? `matter-${index}`
+                    return (
+                      <Link
+                        key={key}
+                        href={`/corporate/app/matters/${encodeURIComponent(key)}`}
+                        className="hover:border-brand-navy/30 rounded-lg border border-stone-200 bg-white px-4 py-4 transition hover:shadow-sm"
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <p className="font-semibold text-stone-950">{key}</p>
+                            {matter.matterType ? (
+                              <p className="mt-1 text-sm text-stone-500">{matter.matterType}</p>
+                            ) : null}
+                          </div>
+                          {matter.matterState ? (
+                            <PortalBadge tone={matter.matterState === "Active" ? "navy" : "gold"}>
+                              {matter.matterState}
+                            </PortalBadge>
                           ) : null}
                         </div>
-                        {matter.matterState ? (
-                          <PortalBadge tone={matter.matterState === "Active" ? "navy" : "gold"}>
-                            {matter.matterState}
-                          </PortalBadge>
-                        ) : null}
-                      </div>
-                    </Link>
-                  )
-                })}
-              </div>
-            )}
-          </PortalCardContent>
-        </PortalCard>
+                      </Link>
+                    )
+                  })}
+                </div>
+              )}
+            </PortalCardContent>
+          </PortalCard>
+        ) : null}
       </div>
     </PortalWorkspaceShell>
   )

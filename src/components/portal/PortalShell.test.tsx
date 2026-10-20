@@ -1,10 +1,16 @@
 import { render, screen } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
 
+import { isMattersAndDocumentsEnabled } from "src/lib/portal/features"
+
 import { PortalShell } from "./PortalShell"
 
 vi.mock("src/lib/auth/actions", () => ({
   signOutFromPortal: vi.fn(),
+}))
+
+vi.mock("src/lib/portal/features", () => ({
+  isMattersAndDocumentsEnabled: vi.fn(() => true),
 }))
 
 const session = {
@@ -40,5 +46,16 @@ describe("PortalShell", () => {
     )
     expect(screen.getByRole("link", { name: "Exit preview" })).toHaveAttribute("href", "/sign-in")
     expect(screen.queryByRole("button", { name: "Sign out" })).not.toBeInTheDocument()
+  })
+
+  it("hides Matters and Documents when the views are not enabled", () => {
+    vi.mocked(isMattersAndDocumentsEnabled).mockReturnValue(false)
+    render(<PortalShell session={session} />)
+
+    expect(screen.queryByRole("link", { name: "Matters" })).not.toBeInTheDocument()
+    expect(screen.queryByRole("link", { name: "Documents" })).not.toBeInTheDocument()
+    expect(screen.queryByRole("link", { name: "View documents" })).not.toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Requests" })).toHaveAttribute("href", "/corporate/app/requests")
+    expect(screen.getByRole("link", { name: "Team / Contacts" })).toHaveAttribute("href", "/corporate/app/scope")
   })
 })

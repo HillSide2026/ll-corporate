@@ -48,7 +48,7 @@ addCheck(
   "AUTH_URL",
   isUrl(authUrl) && authUrl.endsWith("/corporate/api/auth"),
   "Auth URL must match the current Auth.js base path.",
-  "Set AUTH_URL=https://clients.levine-law.ca/corporate/api/auth.",
+  "Set AUTH_URL=https://portal.levine-law.ca/corporate/api/auth.",
 )
 
 addCheck(
@@ -62,14 +62,14 @@ addCheck(
   "Post-login redirect",
   !postLoginRedirect || isUrl(postLoginRedirect),
   "Optional absolute post-login redirect must be a valid URL when set.",
-  "Unset LL_CORPORATE_POST_LOGIN_REDIRECT_URL or set a valid https://clients.levine-law.ca/corporate/app URL.",
+  "Unset LL_CORPORATE_POST_LOGIN_REDIRECT_URL or set a valid https://portal.levine-law.ca/corporate/app URL.",
 )
 
 addCheck(
   "Logout redirect",
   !logoutRedirect || isUrl(logoutRedirect),
   "Optional absolute logout redirect must be a valid URL when set.",
-  "Unset LL_CORPORATE_LOGOUT_REDIRECT_URL or set a valid https://clients.levine-law.ca/sign-in URL.",
+  "Unset LL_CORPORATE_LOGOUT_REDIRECT_URL or set a valid https://portal.levine-law.ca/sign-in URL.",
 )
 
 addCheck(

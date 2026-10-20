@@ -1,12 +1,13 @@
 import type { Metadata } from "next"
-import { redirect } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 import { Suspense } from "react"
 
 import { MatterList } from "src/components/portal/MatterList"
 import { PortalButton, PortalCard, PortalCardContent, PortalPageHeader } from "src/components/portal/PortalDesignSystem"
 import { PortalWorkspaceShell } from "src/components/portal/PortalWorkspaceShell"
 import { getPreviewPortalSession, isPreviewPortalAccessEnabled } from "src/lib/auth/config"
-import { getAccessToken, getPortalSession, isClientPortalSession } from "src/lib/auth/session"
+import { getAccessToken, getPortalSession, isWorkspacePortalSession } from "src/lib/auth/session"
+import { isMattersAndDocumentsEnabled } from "src/lib/portal/features"
 
 export const metadata: Metadata = { title: "Matters" }
 
@@ -27,10 +28,12 @@ function MatterListSkeleton() {
 }
 
 export default async function MattersPage({ searchParams }: MattersPageProps) {
+  if (!isMattersAndDocumentsEnabled()) notFound()
+
   const session = (await getPortalSession()) ?? (isPreviewPortalAccessEnabled() ? getPreviewPortalSession() : null)
 
   if (!session) redirect("/sign-in")
-  if (!isClientPortalSession(session)) redirect("/intake")
+  if (!isWorkspacePortalSession(session)) redirect("/intake")
 
   const accessToken = await getAccessToken()
   const params = await searchParams

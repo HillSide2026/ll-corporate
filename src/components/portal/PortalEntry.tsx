@@ -1,4 +1,3 @@
-import Image from "next/image"
 import Link from "next/link"
 
 import { previewPortalAccess, signInWithCredentials, signInWithKeycloak } from "src/lib/auth/actions"
@@ -6,6 +5,7 @@ import { isKeycloakConfigured } from "src/lib/auth/config"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
+import { PortalBrandHeader } from "./PortalBrandHeader"
 import { SignInButton } from "./SignInButton"
 
 type PortalEntryProps = {
@@ -30,33 +30,20 @@ export function PortalEntry({ authError, previewAccessEnabled = false }: PortalE
   const keycloakConfigured = isKeycloakConfigured()
 
   return (
-    <main className="min-h-dvh bg-muted/30">
-      <header className="border-b bg-background px-6 py-4">
-        <div className="mx-auto max-w-6xl">
-          <Link href="/">
-            <Image
-              src="/logos/levine-law-wordmark-navy-transparent-2.png"
-              alt="Levine Law"
-              width={1080}
-              height={600}
-              className="h-8 w-auto"
-            />
-          </Link>
-        </div>
-      </header>
+    <main className="min-h-dvh bg-stone-50">
+      <PortalBrandHeader />
 
-      <div className="flex min-h-[calc(100dvh-57px)] items-center justify-center px-6 py-16">
+      <div className="flex min-h-[calc(100dvh-65px)] items-center justify-center px-6 py-16">
         <div className="w-full max-w-sm">
           <div className="mb-8 text-center">
-            <p className="text-[11px] font-semibold tracking-[0.22em] text-primary uppercase">Levine Law</p>
-            <h1 className="mt-3 text-2xl font-semibold tracking-tight">Sign in to your account</h1>
+            <h1 className="text-2xl font-semibold tracking-tight text-stone-900">Sign in to your account</h1>
           </div>
 
-          <div className="rounded-xl bg-card ring-1 ring-foreground/10 px-6 py-7">
+          <div className="rounded-lg border border-stone-200 bg-white px-6 py-7 shadow-sm">
             {authErrorMessage ? (
               <div
                 role="alert"
-                className="mb-5 rounded-lg border border-destructive/20 bg-destructive/10 px-4 py-3 text-sm leading-6 text-destructive"
+                className="border-destructive/20 bg-destructive/10 text-destructive mb-5 rounded-lg border px-4 py-3 text-sm leading-6"
               >
                 {authErrorMessage}
               </div>
@@ -79,7 +66,7 @@ export function PortalEntry({ authError, previewAccessEnabled = false }: PortalE
             {keycloakConfigured ? (
               <div className="mt-5">
                 <Separator className="my-4" />
-                <p className="mb-3 text-xs text-muted-foreground">Or sign in with your organisation account</p>
+                <p className="text-muted-foreground mb-3 text-xs">Or sign in with your organisation account</p>
                 <form action={signInWithKeycloak}>
                   <SignInButton label="Sign in with SSO" pendingLabel="Opening secure sign-in..." />
                 </form>
@@ -92,20 +79,22 @@ export function PortalEntry({ authError, previewAccessEnabled = false }: PortalE
                 <form action={previewPortalAccess}>
                   <button
                     type="submit"
-                    className="w-full rounded-lg border bg-background px-5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted"
+                    className="bg-background text-muted-foreground hover:bg-muted w-full rounded-lg border px-5 py-2 text-sm font-medium transition-colors"
                   >
                     Preview portal
                   </button>
                 </form>
-                <p className="mt-2 text-xs leading-5 text-muted-foreground">Preview mode uses a mock session for review only.</p>
+                <p className="text-muted-foreground mt-2 text-xs leading-5">
+                  Preview mode uses a mock session for review only.
+                </p>
               </div>
             ) : null}
           </div>
 
-          <div className="mt-5 space-y-2 text-center text-sm text-muted-foreground">
+          <div className="mt-5 space-y-2 text-center text-sm text-stone-500">
             <p>
               Don&apos;t have an account?{" "}
-              <Link href="/sign-up" className="font-semibold text-primary underline-offset-4 hover:underline">
+              <Link href="/sign-up" className="text-primary font-semibold underline-offset-4 hover:underline">
                 Create one
               </Link>
             </p>
@@ -113,7 +102,7 @@ export function PortalEntry({ authError, previewAccessEnabled = false }: PortalE
               Trouble signing in?{" "}
               <a
                 href="mailto:matthew@levinelegal.ca"
-                className="font-semibold text-primary underline-offset-4 hover:underline"
+                className="text-primary font-semibold underline-offset-4 hover:underline"
               >
                 Email Levine Law
               </a>

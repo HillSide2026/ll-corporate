@@ -12,7 +12,7 @@ import {
 } from "src/components/portal/PortalDesignSystem"
 import { PortalWorkspaceShell } from "src/components/portal/PortalWorkspaceShell"
 import { getPreviewPortalSession, isPreviewPortalAccessEnabled } from "src/lib/auth/config"
-import { getPortalSession, isClientPortalSession } from "src/lib/auth/session"
+import { getPortalSession, isClientPortalSession, isTeammatePortalSession } from "src/lib/auth/session"
 import { submitServiceRequest } from "src/lib/services/actions"
 import { getServiceBySlug, getServicePriceDisplay } from "src/lib/services/catalog"
 
@@ -51,6 +51,7 @@ export default async function ServiceRequestPage({ params }: ServiceRequestPageP
   if (!session) {
     redirect("/sign-in")
   }
+  if (isTeammatePortalSession(session)) redirect("/corporate/app/requests")
   if (!isClientPortalSession(session)) {
     redirect("/intake")
   }

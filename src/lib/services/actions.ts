@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation"
 
 import { getPreviewPortalSession, isPreviewPortalAccessEnabled } from "src/lib/auth/config"
-import { getPortalSession, isClientPortalSession } from "src/lib/auth/session"
+import { getPortalSession, isClientPortalSession, isTeammatePortalSession } from "src/lib/auth/session"
 import { createIntakeRequestContract } from "src/lib/contracts/intake"
 import { addRequest } from "src/lib/portal/requestStore"
 import { uploadAndStorePortalDocument } from "src/lib/portal/documentStore"
@@ -16,6 +16,7 @@ export async function submitServiceRequest(formData: FormData) {
   if (!session) {
     redirect("/sign-in")
   }
+  if (isTeammatePortalSession(session)) redirect("/corporate/app/requests")
   if (!isClientPortalSession(session)) {
     redirect("/intake")
   }

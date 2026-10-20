@@ -16,6 +16,9 @@ vi.mock("src/lib/auth/session", () => ({
   getPortalSession: vi.fn(),
   getAccessToken: vi.fn().mockResolvedValue(null),
   isClientPortalSession: (session: PortalSession) => session.identity.role === "client",
+  isTeammatePortalSession: (session: PortalSession) => session.identity.role === "teammate",
+  isWorkspacePortalSession: (session: PortalSession) =>
+    session.identity.role === "client" || session.identity.role === "teammate",
 }))
 
 vi.mock("src/components/portal/PortalShell", () => ({

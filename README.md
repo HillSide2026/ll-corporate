@@ -9,7 +9,7 @@ This repository is a Next.js application shell. It is not the system of record a
 Levine LLP currently runs a multi-repo web system:
 
 - The public WordPress website is served from `https://www.levine-law.ca`.
-- `ll-corporate` (this repo) is the standalone client portal app served from `https://clients.levine-law.ca`.
+- `ll-corporate` (this repo) is the standalone client portal app served from `https://portal.levine-law.ca`.
 - `LL-task-tracker` is a separate operational backend/app outside this repo.
 
 Current state versus intended domain role:
@@ -79,19 +79,7 @@ pnpm run e2e:headless
 
 ## Public Homepage
 
-The public `/` route is served by the Next.js route handler in `app/route.ts`, which returns the Astro-generated homepage HTML from `public/astro-home/index.html`. The Astro source app lives in `new website`.
-
-After changing the Astro homepage, run:
-
-```sh
-pnpm run astro:sync
-```
-
-This builds `new website`, copies `new website/dist/index.html` to `public/astro-home/index.html`, and refreshes generated assets in `public/_astro`. The regular production build also runs this sync first:
-
-```sh
-pnpm run build
-```
+There is none. `/` redirects to `/sign-in` (`app/route.ts`). The Astro marketing homepage was withdrawn on 2026-10-20: public pages belong on `levine-law.ca` under the firm's website policy, not on the portal. Old `/astro-home/*` links also redirect to sign-in (`next.config.ts`).
 
 Request-access links should point to `/sign-up`. The legacy `/corporate/onboarding` route remains as a redirect to `/sign-up` for old links.
 

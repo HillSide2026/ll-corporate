@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation"
 
-import { getPortalSession, isClientPortalSession } from "src/lib/auth/session"
+import { getPortalSession, isWorkspacePortalSession } from "src/lib/auth/session"
 
 export default async function AfterSignInPage() {
   const session = await getPortalSession()
@@ -9,7 +9,7 @@ export default async function AfterSignInPage() {
     redirect("/sign-in")
   }
 
-  if (isClientPortalSession(session)) {
+  if (isWorkspacePortalSession(session)) {
     redirect("/corporate/app")
   }
 

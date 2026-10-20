@@ -2,19 +2,19 @@
 
 > System note: the public WordPress website and the client portal are separate production deployments.
 > WordPress serves `https://www.levine-law.ca`.
-> `ll-corporate` serves the client portal at `https://clients.levine-law.ca`.
+> `ll-corporate` serves the client portal at `https://portal.levine-law.ca`.
 > Production must not mount the portal at `/corporate` on the WordPress domain.
 > See [DEPLOYMENT.md](../DEPLOYMENT.md) for the cross-app boundary overview.
 
 Production hostname:
 
-- `clients.levine-law.ca`
+- `portal.levine-law.ca`
 
 Current portal application routes:
 
-- Public portal entry: `https://clients.levine-law.ca/sign-in`
-- Protected shell: `https://clients.levine-law.ca/corporate/app`
-- Auth handlers: `https://clients.levine-law.ca/corporate/api/auth/*`
+- Public portal entry: `https://portal.levine-law.ca/sign-in`
+- Protected shell: `https://portal.levine-law.ca/corporate/app`
+- Auth handlers: `https://portal.levine-law.ca/corporate/api/auth/*`
 
 The `/corporate` protected shell and auth paths are current application routes. They are not a production deployment mount and do not imply a Next.js `basePath`.
 
@@ -28,7 +28,7 @@ Do not implement those route changes until approved.
 Auth.js configuration:
 
 ```text
-AUTH_URL=https://clients.levine-law.ca/corporate/api/auth
+AUTH_URL=https://portal.levine-law.ca/corporate/api/auth
 AUTH_TRUST_HOST=true
 ```
 
@@ -39,24 +39,24 @@ Production does not use Next.js `basePath`. `next.config.ts` currently avoids `b
 Keycloak redirect URIs:
 
 ```text
-https://clients.levine-law.ca/corporate/api/auth/callback/keycloak
+https://portal.levine-law.ca/corporate/api/auth/callback/keycloak
 ```
 
 Keycloak post-logout redirect URI:
 
 ```text
-https://clients.levine-law.ca/sign-in
+https://portal.levine-law.ca/sign-in
 ```
 
 Keycloak web origin:
 
 ```text
-https://clients.levine-law.ca
+https://portal.levine-law.ca
 ```
 
 Cookie and session assumptions:
 
-- Auth.js session cookies are scoped to `clients.levine-law.ca`.
+- Auth.js session cookies are scoped to `portal.levine-law.ca`.
 - The portal is a dedicated subdomain app, separate from WordPress.
 - The reverse proxy must keep HTTPS externally; production cookies should be secure.
 - Frontend session state proves identity only.
@@ -64,7 +64,7 @@ Cookie and session assumptions:
 
 API routing:
 
-- `https://clients.levine-law.ca/corporate/api/auth/*` belongs to `ll-corporate`.
+- `https://portal.levine-law.ca/corporate/api/auth/*` belongs to `ll-corporate`.
 - Future `ll-task-tracker` API access must go through `src/lib/api/`.
 - Do not expose backend domain routes directly from browser components.
 - Do not mount backend domain APIs under ambiguous public `/api/*` paths without an explicit proxy rule and security review.

@@ -2,6 +2,16 @@
 
 import { redirect } from "next/navigation"
 import { setAdminSessionCookie } from "src/lib/auth/adminAuth"
+import { signIn } from "src/lib/auth/auth"
+import { isKeycloakConfigured } from "src/lib/auth/config"
+
+export async function adminSignInWithKeycloak(): Promise<void> {
+  if (!isKeycloakConfigured()) {
+    redirect("/corporate/admin/login?error=1")
+  }
+
+  await signIn("keycloak", { redirectTo: "/corporate/admin" })
+}
 
 export async function adminLogin(formData: FormData): Promise<void> {
   const token = formData.get("token")

@@ -6,6 +6,7 @@ import type { PortalSession } from "src/lib/auth/session"
 import { getCounselProfile } from "src/lib/portal/counselProfileSource"
 import { getDocumentList } from "src/lib/portal/documentSource"
 import { getMatterList } from "src/lib/portal/matterSource"
+import { isMattersAndDocumentsEnabled } from "src/lib/portal/features"
 import { getMatterRequests } from "src/lib/portal/matterRequestStore"
 import { getRequests } from "src/lib/portal/requestStore"
 import {
@@ -67,8 +68,14 @@ function DashboardSkeleton() {
 }
 
 async function DashboardContent({ accessToken, session }: { accessToken: string | null; session: PortalSession }) {
-  const { matters, isMock: mattersMock } = await getMatterList(accessToken)
-  const { documents: lawyerDocs, isMock: documentsMock } = await getDocumentList()
+  // Matters and Documents are hidden unless enabled (LLP-037 ADR-006); skip their reads entirely.
+  const showMattersAndDocuments = isMattersAndDocumentsEnabled()
+  const { matters, isMock: mattersMock } = showMattersAndDocuments
+    ? await getMatterList(accessToken)
+    : { matters: [] as CaseInstance[], isMock: false }
+  const { documents: lawyerDocs, isMock: documentsMock } = showMattersAndDocuments
+    ? await getDocumentList()
+    : { documents: [] as Awaited<ReturnType<typeof getDocumentList>>["documents"], isMock: false }
   const serviceRequests = await getRequests(session.identity)
   const matterRequests = await getMatterRequests(session.identity)
   const { profile, isMock: profileMock } = getCounselProfile()
@@ -108,84 +115,95 @@ async function DashboardContent({ accessToken, session }: { accessToken: string 
     <div className="space-y-6">
       {mattersMock || documentsMock || profileMock ? (
         <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">
-          Preview data is visible until the production matter, document, and contact sources are connected.
+          {showMattersAndDocuments
+            ? "Preview data is visible until the production matter, document, and contact sources are connected."
+            : "Preview data is visible until the production contact source is connected."}
         </div>
       ) : null}
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <PortalStatCard
-          label="Active matters"
-          value={activeMatters.length}
-          detail="Open work currently in progress."
-          tone="navy"
-        />
-        <PortalStatCard
-          label="Open requests"
-          value={openMatterRequests.length + openServiceRequests.length}
-          detail="Requests awaiting review or completion."
-          tone="gold"
-        />
-        <PortalStatCard
-          label="Recent documents"
-          value={allDocs.length}
-          detail="Shared and uploaded files in the portal."
-          tone="green"
-        />
-        <PortalStatCard
-          label="Client actions"
-          value={actionNeeded.length}
-          detail="Items currently waiting on you."
-          tone={actionNeeded.length > 0 ? "gold" : "neutral"}
-        />
-      </div>
+      {/* Stat row only when matters and documents are on; the Open requests card below covers requests. */}
+      {showMattersAndDocuments ? (
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <PortalStatCard
+            label="Active matters"
+            value={activeMatters.length}
+            detail="Open work currently in progress."
+            tone="navy"
+          />
+          <PortalStatCard
+            label="Open requests"
+            value={openMatterRequests.length + openServiceRequests.length}
+            detail="Requests awaiting review or completion."
+            tone="gold"
+          />
+          <PortalStatCard
+            label="Recent documents"
+            value={allDocs.length}
+            detail="Shared and uploaded files in the portal."
+            tone="green"
+          />
+          <PortalStatCard
+            label="Client actions"
+            value={actionNeeded.length}
+            detail="Items currently waiting on you."
+            tone={actionNeeded.length > 0 ? "gold" : "neutral"}
+          />
+        </div>
+      ) : null}
 
-      <div className="grid gap-6 xl:grid-cols-[1.35fr_0.85fr]">
-        <PortalCard>
-          <PortalCardHeader
-            action={
-              <PortalButton href="/corporate/app/matters" tone="secondary">
-                View all
-              </PortalButton>
-            }
-          >
-            <PortalCardTitle>Active matters</PortalCardTitle>
-            <PortalCardDescription>Current work, status, and next action visibility.</PortalCardDescription>
-          </PortalCardHeader>
-          <PortalCardContent className="space-y-3">
-            {activeMatters.length === 0 ? (
-              <PortalEmptyState
-                title="No active matters"
-                description="Active matters will appear here once Levine Law has accepted and opened work in the portal."
-              />
-            ) : (
-              activeMatters.slice(0, 5).map((matter, index) => {
-                const key = matter.businessKey ?? `matter-${index}`
-                return (
-                  <Link
-                    key={key}
-                    href={`/corporate/app/matters/${encodeURIComponent(key)}`}
-                    className="hover:border-brand-navy/30 block rounded-lg border border-stone-200 bg-white px-4 py-4 transition hover:shadow-sm"
-                  >
-                    <div className="flex flex-wrap items-start justify-between gap-3">
-                      <div className="min-w-0">
-                        <p className="font-semibold text-stone-950">{key}</p>
-                        {matter.matterType ? <p className="mt-1 text-sm text-stone-500">{matter.matterType}</p> : null}
-                        <p className="mt-2 text-sm leading-6 text-stone-600">
-                          {matter.nextActionSummary ?? "No next action on file."}
-                        </p>
+      <div
+        className={showMattersAndDocuments ? "grid gap-6 xl:grid-cols-[1.35fr_0.85fr]" : "grid gap-6 xl:grid-cols-2"}
+      >
+        {showMattersAndDocuments ? (
+          <PortalCard>
+            <PortalCardHeader
+              action={
+                <PortalButton href="/corporate/app/matters" tone="secondary">
+                  View all
+                </PortalButton>
+              }
+            >
+              <PortalCardTitle>Active matters</PortalCardTitle>
+              <PortalCardDescription>Current work, status, and next action visibility.</PortalCardDescription>
+            </PortalCardHeader>
+            <PortalCardContent className="space-y-3">
+              {activeMatters.length === 0 ? (
+                <PortalEmptyState
+                  title="No active matters"
+                  description="Active matters will appear here once Levine Law has accepted and opened work in the portal."
+                />
+              ) : (
+                activeMatters.slice(0, 5).map((matter, index) => {
+                  const key = matter.businessKey ?? `matter-${index}`
+                  return (
+                    <Link
+                      key={key}
+                      href={`/corporate/app/matters/${encodeURIComponent(key)}`}
+                      className="hover:border-brand-navy/30 block rounded-lg border border-stone-200 bg-white px-4 py-4 transition hover:shadow-sm"
+                    >
+                      <div className="flex flex-wrap items-start justify-between gap-3">
+                        <div className="min-w-0">
+                          <p className="font-semibold text-stone-950">{key}</p>
+                          {matter.matterType ? (
+                            <p className="mt-1 text-sm text-stone-500">{matter.matterType}</p>
+                          ) : null}
+                          <p className="mt-2 text-sm leading-6 text-stone-600">
+                            {matter.nextActionSummary ?? "No next action on file."}
+                          </p>
+                        </div>
+                        {matter.matterState ? (
+                          <PortalBadge tone={statusTone(matter.matterState)}>{matter.matterState}</PortalBadge>
+                        ) : null}
                       </div>
-                      {matter.matterState ? (
-                        <PortalBadge tone={statusTone(matter.matterState)}>{matter.matterState}</PortalBadge>
-                      ) : null}
-                    </div>
-                  </Link>
-                )
-              })
-            )}
-          </PortalCardContent>
-        </PortalCard>
+                    </Link>
+                  )
+                })
+              )}
+            </PortalCardContent>
+          </PortalCard>
+        ) : null}
 
-        <div className="space-y-6">
+        <div className={showMattersAndDocuments ? "space-y-6" : "contents"}>
           <PortalCard>
             <PortalCardHeader>
               <PortalCardTitle>Primary Levine Law contact</PortalCardTitle>
@@ -214,13 +232,19 @@ async function DashboardContent({ accessToken, session }: { accessToken: string 
           <PortalCard>
             <PortalCardHeader>
               <PortalCardTitle>Recent activity</PortalCardTitle>
-              <PortalCardDescription>Latest document and request movement.</PortalCardDescription>
+              <PortalCardDescription>
+                {showMattersAndDocuments ? "Latest document and request movement." : "Latest request movement."}
+              </PortalCardDescription>
             </PortalCardHeader>
             <PortalCardContent>
               {recentActivity.length === 0 ? (
                 <PortalEmptyState
                   title="No recent activity"
-                  description="Portal activity will appear here as documents and requests are updated."
+                  description={
+                    showMattersAndDocuments
+                      ? "Portal activity will appear here as documents and requests are updated."
+                      : "Portal activity will appear here as requests are updated."
+                  }
                 />
               ) : (
                 <ol className="space-y-4">
@@ -242,44 +266,46 @@ async function DashboardContent({ accessToken, session }: { accessToken: string 
         </div>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-2">
-        <PortalCard>
-          <PortalCardHeader
-            action={
-              <PortalButton href="/corporate/app/documents" tone="secondary">
-                Browse
-              </PortalButton>
-            }
-          >
-            <PortalCardTitle>Recent documents</PortalCardTitle>
-            <PortalCardDescription>Files shared by Levine Law and uploaded by you.</PortalCardDescription>
-          </PortalCardHeader>
-          <PortalCardContent>
-            {allDocs.length === 0 ? (
-              <PortalEmptyState
-                title="No documents yet"
-                description="Documents shared with you will appear here once available."
-              />
-            ) : (
-              <div className="divide-y divide-stone-100">
-                {allDocs.slice(0, 5).map((doc) => (
-                  <div
-                    key={doc.id}
-                    className="flex flex-wrap items-center justify-between gap-3 py-3 first:pt-0 last:pb-0"
-                  >
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-medium text-stone-950">{doc.filename}</p>
-                      <p className="mt-1 text-xs text-stone-500">
-                        {doc.matterKey} · {formatDate(doc.addedAt)}
-                      </p>
+      <div className={showMattersAndDocuments ? "grid gap-6 xl:grid-cols-2" : "grid gap-6"}>
+        {showMattersAndDocuments ? (
+          <PortalCard>
+            <PortalCardHeader
+              action={
+                <PortalButton href="/corporate/app/documents" tone="secondary">
+                  Browse
+                </PortalButton>
+              }
+            >
+              <PortalCardTitle>Recent documents</PortalCardTitle>
+              <PortalCardDescription>Files shared by Levine Law and uploaded by you.</PortalCardDescription>
+            </PortalCardHeader>
+            <PortalCardContent>
+              {allDocs.length === 0 ? (
+                <PortalEmptyState
+                  title="No documents yet"
+                  description="Documents shared with you will appear here once available."
+                />
+              ) : (
+                <div className="divide-y divide-stone-100">
+                  {allDocs.slice(0, 5).map((doc) => (
+                    <div
+                      key={doc.id}
+                      className="flex flex-wrap items-center justify-between gap-3 py-3 first:pt-0 last:pb-0"
+                    >
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-medium text-stone-950">{doc.filename}</p>
+                        <p className="mt-1 text-xs text-stone-500">
+                          {doc.matterKey} · {formatDate(doc.addedAt)}
+                        </p>
+                      </div>
+                      {doc.uploadedByClient ? <PortalBadge>Uploaded by you</PortalBadge> : null}
                     </div>
-                    {doc.uploadedByClient ? <PortalBadge>Uploaded by you</PortalBadge> : null}
-                  </div>
-                ))}
-              </div>
-            )}
-          </PortalCardContent>
-        </PortalCard>
+                  ))}
+                </div>
+              )}
+            </PortalCardContent>
+          </PortalCard>
+        ) : null}
 
         <PortalCard>
           <PortalCardHeader action={<PortalButton href="/corporate/app/requests/new">Open matter</PortalButton>}>
@@ -325,6 +351,7 @@ async function DashboardContent({ accessToken, session }: { accessToken: string 
 
 export function PortalShell({ previewMode = false, session, accessToken = null }: PortalShellProps) {
   const displayName = session.identity.displayName ?? session.identity.email ?? "Client"
+  const showMattersAndDocuments = isMattersAndDocumentsEnabled()
 
   return (
     <PortalWorkspaceShell active="dashboard" previewMode={previewMode} session={session}>
@@ -332,13 +359,19 @@ export function PortalShell({ previewMode = false, session, accessToken = null }
         <PortalPageHeader
           eyebrow="Dashboard"
           title={`Welcome back, ${displayName}`}
-          description="A secure overview of your Levine Law matters, requests, documents, and relationship contacts."
+          description={
+            showMattersAndDocuments
+              ? "A secure overview of your Levine Law matters, requests, documents, and relationship contacts."
+              : "A secure overview of your Levine Law requests and relationship contacts."
+          }
           action={
             <div className="flex flex-wrap gap-3">
               <PortalButton href="/corporate/app/requests/new">Open a matter</PortalButton>
-              <PortalButton href="/corporate/app/documents" tone="secondary">
-                View documents
-              </PortalButton>
+              {showMattersAndDocuments ? (
+                <PortalButton href="/corporate/app/documents" tone="secondary">
+                  View documents
+                </PortalButton>
+              ) : null}
             </div>
           }
         />
