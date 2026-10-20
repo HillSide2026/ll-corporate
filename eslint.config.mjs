@@ -5,7 +5,6 @@ const eslintIgnore = [
   ".git/",
   ".next/",
   "node_modules/",
-  "new website/",
   "dist/",
   "build/",
   "coverage/",

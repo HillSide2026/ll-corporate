@@ -115,44 +115,41 @@ async function DashboardContent({ accessToken, session }: { accessToken: string 
     <div className="space-y-6">
       {mattersMock || documentsMock || profileMock ? (
         <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">
-          Preview data is visible until the production matter, document, and contact sources are connected.
+          {showMattersAndDocuments
+            ? "Preview data is visible until the production matter, document, and contact sources are connected."
+            : "Preview data is visible until the production contact source is connected."}
         </div>
       ) : null}
 
-      <div
-        className={showMattersAndDocuments ? "grid gap-4 md:grid-cols-2 xl:grid-cols-4" : "grid gap-4 md:grid-cols-2"}
-      >
-        {showMattersAndDocuments ? (
+      {/* Stat row only when matters and documents are on; the Open requests card below covers requests. */}
+      {showMattersAndDocuments ? (
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <PortalStatCard
             label="Active matters"
             value={activeMatters.length}
             detail="Open work currently in progress."
             tone="navy"
           />
-        ) : null}
-        <PortalStatCard
-          label="Open requests"
-          value={openMatterRequests.length + openServiceRequests.length}
-          detail="Requests awaiting review or completion."
-          tone="gold"
-        />
-        {showMattersAndDocuments ? (
-          <>
-            <PortalStatCard
-              label="Recent documents"
-              value={allDocs.length}
-              detail="Shared and uploaded files in the portal."
-              tone="green"
-            />
-            <PortalStatCard
-              label="Client actions"
-              value={actionNeeded.length}
-              detail="Items currently waiting on you."
-              tone={actionNeeded.length > 0 ? "gold" : "neutral"}
-            />
-          </>
-        ) : null}
-      </div>
+          <PortalStatCard
+            label="Open requests"
+            value={openMatterRequests.length + openServiceRequests.length}
+            detail="Requests awaiting review or completion."
+            tone="gold"
+          />
+          <PortalStatCard
+            label="Recent documents"
+            value={allDocs.length}
+            detail="Shared and uploaded files in the portal."
+            tone="green"
+          />
+          <PortalStatCard
+            label="Client actions"
+            value={actionNeeded.length}
+            detail="Items currently waiting on you."
+            tone={actionNeeded.length > 0 ? "gold" : "neutral"}
+          />
+        </div>
+      ) : null}
 
       <div
         className={showMattersAndDocuments ? "grid gap-6 xl:grid-cols-[1.35fr_0.85fr]" : "grid gap-6 xl:grid-cols-2"}
@@ -206,7 +203,7 @@ async function DashboardContent({ accessToken, session }: { accessToken: string 
           </PortalCard>
         ) : null}
 
-        <div className="space-y-6">
+        <div className={showMattersAndDocuments ? "space-y-6" : "contents"}>
           <PortalCard>
             <PortalCardHeader>
               <PortalCardTitle>Primary Levine Law contact</PortalCardTitle>
@@ -235,13 +232,19 @@ async function DashboardContent({ accessToken, session }: { accessToken: string 
           <PortalCard>
             <PortalCardHeader>
               <PortalCardTitle>Recent activity</PortalCardTitle>
-              <PortalCardDescription>Latest document and request movement.</PortalCardDescription>
+              <PortalCardDescription>
+                {showMattersAndDocuments ? "Latest document and request movement." : "Latest request movement."}
+              </PortalCardDescription>
             </PortalCardHeader>
             <PortalCardContent>
               {recentActivity.length === 0 ? (
                 <PortalEmptyState
                   title="No recent activity"
-                  description="Portal activity will appear here as documents and requests are updated."
+                  description={
+                    showMattersAndDocuments
+                      ? "Portal activity will appear here as documents and requests are updated."
+                      : "Portal activity will appear here as requests are updated."
+                  }
                 />
               ) : (
                 <ol className="space-y-4">
