@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { redirect } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 
 import {
   PortalBadge,
@@ -11,7 +11,8 @@ import {
 } from "src/components/portal/PortalDesignSystem"
 import { PortalWorkspaceShell } from "src/components/portal/PortalWorkspaceShell"
 import { getPreviewPortalSession, isPreviewPortalAccessEnabled } from "src/lib/auth/config"
-import { getPortalSession, isClientPortalSession } from "src/lib/auth/session"
+import { getPortalSession, isWorkspacePortalSession } from "src/lib/auth/session"
+import { isMattersAndDocumentsEnabled } from "src/lib/portal/features"
 import { getDocumentList } from "src/lib/portal/documentSource"
 
 export const metadata: Metadata = {
@@ -30,10 +31,12 @@ function formatDate(iso: string): string {
 }
 
 export default async function DocumentsPage({ searchParams }: DocumentsPageProps) {
+  if (!isMattersAndDocumentsEnabled()) notFound()
+
   const session = (await getPortalSession()) ?? (isPreviewPortalAccessEnabled() ? getPreviewPortalSession() : null)
 
   if (!session) redirect("/sign-in")
-  if (!isClientPortalSession(session)) redirect("/intake")
+  if (!isWorkspacePortalSession(session)) redirect("/intake")
 
   const params = await searchParams
   const query = typeof params.search === "string" ? params.search.trim().toLowerCase() : ""

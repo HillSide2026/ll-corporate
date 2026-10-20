@@ -4,12 +4,19 @@ import Keycloak from "next-auth/providers/keycloak"
 
 import { env } from "env.mjs"
 import { getUserByEmail, verifyPassword } from "src/lib/db/users"
+import { portalRoleFromKeycloakRoles, readKeycloakRoles } from "./keycloakRoles"
 
 export const authBasePath = "/corporate/api/auth"
 
 const keycloakProvider =
   env.AUTH_KEYCLOAK_ISSUER && env.AUTH_KEYCLOAK_ID && env.AUTH_KEYCLOAK_SECRET
-    ? [Keycloak({ clientId: env.AUTH_KEYCLOAK_ID, clientSecret: env.AUTH_KEYCLOAK_SECRET, issuer: env.AUTH_KEYCLOAK_ISSUER })]
+    ? [
+        Keycloak({
+          clientId: env.AUTH_KEYCLOAK_ID,
+          clientSecret: env.AUTH_KEYCLOAK_SECRET,
+          issuer: env.AUTH_KEYCLOAK_ISSUER,
+        }),
+      ]
     : []
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
@@ -56,6 +63,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
       if (user?.role) {
         token.role = user.role
+      }
+      // Keycloak realm/client roles drive the portal tier and the portal_admin check.
+      if (account?.provider === "keycloak" && account.access_token) {
+        const roles = readKeycloakRoles(account.access_token, env.AUTH_KEYCLOAK_ID)
+        token.keycloakRoles = roles
+        token.role = portalRoleFromKeycloakRoles(roles) ?? token.role
       }
       return token
     },

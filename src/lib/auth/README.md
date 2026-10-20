@@ -11,7 +11,7 @@ Implemented responsibilities:
 - Auth.js route handler configuration
 - Keycloak sign-in initiation
 - local session read/adaptation for portal identity display
-- sign-out back to the public `/sign-in` application route on `clients.levine-law.ca`
+- sign-out back to the public `/sign-in` application route on `portal.levine-law.ca`
 
 The protected portal shell reads only `PortalSession.identity`.
 

@@ -4,7 +4,8 @@ import { notFound, redirect } from "next/navigation"
 import type { AdminEvent, CaseInstance } from "src/lib/contracts"
 import { PortalButton, PortalPageHeader } from "src/components/portal/PortalDesignSystem"
 import { PortalWorkspaceShell } from "src/components/portal/PortalWorkspaceShell"
-import { getAccessToken, getPortalSession, isClientPortalSession } from "src/lib/auth/session"
+import { getAccessToken, getPortalSession, isWorkspacePortalSession } from "src/lib/auth/session"
+import { isMattersAndDocumentsEnabled } from "src/lib/portal/features"
 import { getMatterByKey } from "src/lib/portal/matterSource"
 import { getMatterUpdateList, type MatterUpdate } from "src/lib/portal/matterUpdateSource"
 import { getPortalDocumentsForMatter } from "src/lib/portal/documentStore"
@@ -94,6 +95,8 @@ function UpdatesFeed({ updates }: { updates: MatterUpdate[] }) {
 }
 
 export default async function MatterDetailPage({ params, searchParams }: MatterDetailPageProps) {
+  if (!isMattersAndDocumentsEnabled()) notFound()
+
   const { key } = await params
   const businessKey = decodeURIComponent(key)
   const sp = await searchParams
@@ -103,7 +106,7 @@ export default async function MatterDetailPage({ params, searchParams }: MatterD
   if (!session) {
     redirect("/sign-in")
   }
-  if (!isClientPortalSession(session)) {
+  if (!isWorkspacePortalSession(session)) {
     redirect("/intake")
   }
 

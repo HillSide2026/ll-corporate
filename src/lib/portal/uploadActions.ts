@@ -1,15 +1,19 @@
 "use server"
 
-import { redirect } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 
 import { getPreviewPortalSession, isPreviewPortalAccessEnabled } from "src/lib/auth/config"
-import { getPortalSession, isClientPortalSession } from "src/lib/auth/session"
+import { getPortalSession, isClientPortalSession, isTeammatePortalSession } from "src/lib/auth/session"
 import { uploadAndStorePortalDocument } from "./documentStore"
+import { isMattersAndDocumentsEnabled } from "./features"
 import { validatePortalDocumentFile } from "./uploadValidation"
 
 export async function uploadMatterDocument(formData: FormData): Promise<void> {
+  if (!isMattersAndDocumentsEnabled()) notFound()
+
   const session = (await getPortalSession()) ?? (isPreviewPortalAccessEnabled() ? getPreviewPortalSession() : null)
   if (!session) redirect("/sign-in")
+  if (isTeammatePortalSession(session)) redirect("/corporate/app")
   if (!isClientPortalSession(session)) redirect("/intake")
 
   const matterKey = formData.get("matterKey")

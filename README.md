@@ -9,7 +9,7 @@ This repository is a Next.js application shell. It is not the system of record a
 Levine LLP currently runs a multi-repo web system:
 
 - The public WordPress website is served from `https://www.levine-law.ca`.
-- `ll-corporate` (this repo) is the standalone client portal app served from `https://clients.levine-law.ca`.
+- `ll-corporate` (this repo) is the standalone client portal app served from `https://portal.levine-law.ca`.
 - `LL-task-tracker` is a separate operational backend/app outside this repo.
 
 Current state versus intended domain role:

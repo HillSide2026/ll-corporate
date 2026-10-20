@@ -1,6 +1,6 @@
 site:
   name: Levine Law
-  site: 'https://clients.levine-law.ca'
+  site: 'https://portal.levine-law.ca'
   base: '/'
   trailingSlash: false
 

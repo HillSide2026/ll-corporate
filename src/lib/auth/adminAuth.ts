@@ -1,19 +1,23 @@
 /**
  * Admin session check for the lawyer-facing admin surface.
  *
- * Reads PORTAL_ADMIN_TOKEN from env. If the token is not configured, the
- * admin surface runs in preview mode (accessible without a password) with
- * a visible warning. Once PORTAL_ADMIN_TOKEN is set in Vercel, the login
- * form is required.
+ * Primary: a Keycloak session whose access token carries the "portal_admin"
+ * realm or client role (LLP-037 ADR-006).
  *
- * Replace with a Keycloak role check once roles are configured:
- *   - Verify the session access token contains a "portal_admin" role claim
- *   - Remove the cookie-based token entirely
+ * Fallback, until Keycloak roles are configured in every environment: the
+ * PORTAL_ADMIN_TOKEN cookie. Once portal_admin is assigned in Keycloak, unset
+ * PORTAL_ADMIN_TOKEN and delete the cookie path below.
+ *
+ * Preview mode (open access with a visible warning) applies only when neither
+ * Keycloak nor PORTAL_ADMIN_TOKEN is configured — i.e. local development.
  */
 
 import { cookies } from "next/headers"
 
 import { env } from "env.mjs"
+import { isKeycloakConfigured } from "./config"
+import { PORTAL_ADMIN_ROLE } from "./keycloakRoles"
+import { getKeycloakRoles } from "./session"
 
 export type AdminSession = {
   isAdmin: boolean
@@ -23,11 +27,20 @@ export type AdminSession = {
 const ADMIN_COOKIE = "ll_admin_token"
 
 export async function getAdminSession(): Promise<AdminSession> {
+  const keycloakConfigured = isKeycloakConfigured()
+
+  if (keycloakConfigured) {
+    const roles = await getKeycloakRoles()
+    if (roles.includes(PORTAL_ADMIN_ROLE)) {
+      return { isAdmin: true, isPreview: false }
+    }
+  }
+
   const configuredToken = env.PORTAL_ADMIN_TOKEN
 
   if (!configuredToken) {
-    // No token configured — preview mode, allow all access.
-    return { isAdmin: true, isPreview: true }
+    // Keycloak configured but no portal_admin role: deny. Nothing configured: local preview.
+    return keycloakConfigured ? { isAdmin: false, isPreview: false } : { isAdmin: true, isPreview: true }
   }
 
   const cookieStore = await cookies()

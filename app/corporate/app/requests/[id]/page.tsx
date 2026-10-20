@@ -12,7 +12,7 @@ import {
 } from "src/components/portal/PortalDesignSystem"
 import { PortalWorkspaceShell } from "src/components/portal/PortalWorkspaceShell"
 import { getPreviewPortalSession, isPreviewPortalAccessEnabled } from "src/lib/auth/config"
-import { getPortalSession, isClientPortalSession } from "src/lib/auth/session"
+import { getPortalSession, isWorkspacePortalSession } from "src/lib/auth/session"
 import { getRequestById, type RequestStatus } from "src/lib/portal/requestStore"
 
 type RequestDetailPageProps = {
@@ -66,7 +66,7 @@ export default async function RequestDetailPage({ params, searchParams }: Reques
   if (!session) {
     redirect("/sign-in")
   }
-  if (!isClientPortalSession(session)) {
+  if (!isWorkspacePortalSession(session)) {
     redirect("/intake")
   }
 

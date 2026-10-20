@@ -14,6 +14,9 @@ vi.mock("next/navigation", () => ({
 vi.mock("src/lib/auth/session", () => ({
   getPortalSession: vi.fn(),
   isClientPortalSession: (session: PortalSession) => session.identity.role === "client",
+  isTeammatePortalSession: (session: PortalSession) => session.identity.role === "teammate",
+  isWorkspacePortalSession: (session: PortalSession) =>
+    session.identity.role === "client" || session.identity.role === "teammate",
 }))
 
 const clientSession: PortalSession = {
@@ -41,6 +44,15 @@ describe("AfterSignInPage", () => {
 
   it("redirects clients to the portal workspace", async () => {
     vi.mocked(getPortalSession).mockResolvedValue(clientSession)
+
+    await expect(AfterSignInPage()).rejects.toThrow("redirect:/corporate/app")
+    expect(redirect).toHaveBeenCalledWith("/corporate/app")
+  })
+
+  it("redirects client teammates to the portal workspace", async () => {
+    vi.mocked(getPortalSession).mockResolvedValue({
+      identity: { ...clientSession.identity, subject: "teammate-1", role: "teammate" },
+    })
 
     await expect(AfterSignInPage()).rejects.toThrow("redirect:/corporate/app")
     expect(redirect).toHaveBeenCalledWith("/corporate/app")

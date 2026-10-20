@@ -112,7 +112,7 @@ Everything below is configuration/infrastructure — the code is ready.
 
 ### Shortest critical path
 
-1. **Configure Keycloak** — create realm, OIDC client, register callback `https://clients.levine-law.ca/corporate/api/auth/callback/keycloak`
+1. **Configure Keycloak** — create realm, OIDC client, register callback `https://portal.levine-law.ca/corporate/api/auth/callback/keycloak`
 2. **Set auth env vars** — `AUTH_SECRET`, `AUTH_TRUST_HOST=true`, `AUTH_URL`, `AUTH_KEYCLOAK_ISSUER`, `AUTH_KEYCLOAK_ID`, `AUTH_KEYCLOAK_SECRET`
 3. **Wire LL-task-tracker** — set `LL_TASK_TRACKER_API_BASE_URL` to production endpoint; confirm live matter data
 4. **Apply portal DB schema** — run `docs/portal-stage3-schema.sql`, set `PORTAL_DATABASE_URL`
