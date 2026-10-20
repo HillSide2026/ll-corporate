@@ -1,17 +1,10 @@
-import { readFile } from "node:fs/promises"
-import path from "node:path"
+import { type NextRequest, NextResponse } from "next/server"
 
-export const runtime = "nodejs"
-
-const astroHomePath = path.join(process.cwd(), "public", "astro-home", "index.html")
-
-export async function GET() {
-  const html = await readFile(astroHomePath, "utf8")
-
-  return new Response(html, {
-    headers: {
-      "Cache-Control": "public, max-age=0, must-revalidate",
-      "Content-Type": "text/html; charset=utf-8",
-    },
-  })
+/**
+ * The portal opens on sign-in. The public marketing homepage is withdrawn
+ * (ML1 2026-10-20): public pages belong on levine-law.ca under POL-051, not on
+ * the portal. Temporary redirect, so the decision can be revisited.
+ */
+export function GET(request: NextRequest) {
+  return NextResponse.redirect(new URL("/sign-in", request.url), 307)
 }
