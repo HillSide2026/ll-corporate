@@ -10,7 +10,7 @@ import { ConflictCheckForm } from "./ConflictCheckForm"
 const nextSteps = [
   "We run a check to confirm we can act for you and your business.",
   "We email you the engagement letter and request service-specific information.",
-  "You sign the letter, we review all of your information and deliver your work right here.",
+  "You sign the letter, we review all of your information and deliver your work.",
 ]
 
 /**
