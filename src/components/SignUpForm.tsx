@@ -2,14 +2,15 @@
 
 import { useActionState, useRef } from "react"
 
+import { brandButton } from "src/components/brand/Brand"
 import { registerAction, RegisterState } from "src/lib/auth/registerAction"
-import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { cn } from "@/lib/utils"
 
 function FieldError({ state, field }: { state: RegisterState; field: string }) {
   if (state?.field !== field) return null
-  return <p className="mt-1.5 text-xs text-destructive">{state.error}</p>
+  return <p className="text-destructive mt-1.5 text-xs">{state.error}</p>
 }
 
 export function SignUpForm() {
@@ -26,7 +27,7 @@ export function SignUpForm() {
   return (
     <form action={action} className="space-y-4">
       {state?.error && !state.field ? (
-        <div className="rounded-lg border border-destructive/20 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+        <div className="border-destructive/20 bg-destructive/10 text-destructive rounded-lg border px-4 py-3 text-sm">
           {state.error}
         </div>
       ) : null}
@@ -35,6 +36,7 @@ export function SignUpForm() {
         <Label htmlFor="su-name">Full name</Label>
         <Input
           id="su-name"
+          className="h-11 rounded-lg"
           name="name"
           type="text"
           autoComplete="name"
@@ -48,6 +50,7 @@ export function SignUpForm() {
         <Label htmlFor="su-email">Email address</Label>
         <Input
           id="su-email"
+          className="h-11 rounded-lg"
           name="email"
           type="email"
           autoComplete="email"
@@ -61,6 +64,7 @@ export function SignUpForm() {
         <Label htmlFor="su-password">Password</Label>
         <Input
           id="su-password"
+          className="h-11 rounded-lg"
           name="password"
           type="password"
           autoComplete="new-password"
@@ -73,7 +77,7 @@ export function SignUpForm() {
         {state?.field === "password" ? (
           <FieldError state={state} field="password" />
         ) : (
-          <p className="text-xs text-muted-foreground">At least 8 characters.</p>
+          <p className="text-muted-foreground text-xs">At least 8 characters.</p>
         )}
       </div>
 
@@ -81,6 +85,7 @@ export function SignUpForm() {
         <Label htmlFor="su-confirm">Confirm password</Label>
         <Input
           id="su-confirm"
+          className="h-11 rounded-lg"
           name="confirmPassword"
           type="password"
           autoComplete="new-password"
@@ -92,9 +97,9 @@ export function SignUpForm() {
         <FieldError state={state} field="confirmPassword" />
       </div>
 
-      <Button type="submit" disabled={pending} className="mt-2 h-10 w-full">
+      <button type="submit" disabled={pending} className={cn(brandButton, "mt-2 w-full")}>
         {pending ? "Creating account..." : "Create account"}
-      </Button>
+      </button>
     </form>
   )
 }
