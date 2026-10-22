@@ -23,7 +23,7 @@ export const leadFaqs: Faq[] = [
   {
     question: "Will I need to provide identification?",
     answer:
-      "Yes. Before work begins you'll complete a short identification form in the portal, as the Law Society of Ontario requires. We may ask for more information later.",
+      "Yes. Before work begins, you come back to the portal and answer a few identification questions, as the Law Society of Ontario requires. If necessary, we will also ask you to provide identification.",
   },
   {
     question: "How will I receive my documents?",

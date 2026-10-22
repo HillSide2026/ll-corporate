@@ -99,7 +99,10 @@ function RequestStatus({ request, email }: { request: ConflictRequest; email: st
           service-specific information. The letter sets out the service and its fixed fee, which may differ from the
           service you chose here.
         </p>
-        <p>You sign the letter and pay by email. Work begins once both are done.</p>
+        <p>
+          You sign the letter and pay by email, then come back here to answer a few identification questions. Work
+          begins once these are done.
+        </p>
       </StatusCard>
     )
   }
