@@ -33,12 +33,18 @@ export async function registerAction(_prev: RegisterState, formData: FormData): 
     return { error: "You must agree to the Terms of Use to create an account.", field: "acceptTerms" }
   }
 
-  const existing = await getUserByEmail(email)
-  if (existing) {
-    return { error: "An account with this email address already exists.", field: "email" }
-  }
+  // A database failure must show a message, not crash the page
+  try {
+    const existing = await getUserByEmail(email)
+    if (existing) {
+      return { error: "An account with this email address already exists.", field: "email" }
+    }
 
-  await createUser({ email, name, password, termsVersion: TERMS_VERSION ?? "unpublished" })
+    await createUser({ email, name, password, termsVersion: TERMS_VERSION ?? "unpublished" })
+  } catch (err) {
+    console.error("registerAction: account database unavailable", err)
+    return { error: "We could not create your account right now. Please try again later." }
+  }
 
   try {
     await signIn("credentials", { email, password, redirectTo: "/auth/after-sign-in" })

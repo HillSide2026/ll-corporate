@@ -76,4 +76,15 @@ describe("registerAction", () => {
     expect(result).toEqual({ error: "You must agree to the Terms of Use to create an account.", field: "acceptTerms" })
     expect(dbMocks.createUser).not.toHaveBeenCalled()
   })
+
+  it("returns an error instead of throwing when the database is unavailable", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {})
+    dbMocks.getUserByEmail.mockRejectedValue(new Error("missing_connection_string"))
+
+    const result = await registerAction(null, registrationFormData())
+
+    expect(result).toEqual({ error: "We could not create your account right now. Please try again later." })
+    expect(dbMocks.createUser).not.toHaveBeenCalled()
+    expect(authMocks.signIn).not.toHaveBeenCalled()
+  })
 })
