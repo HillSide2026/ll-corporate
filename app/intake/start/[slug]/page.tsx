@@ -49,10 +49,11 @@ function RequestStatus({ request, email }: { request: ConflictRequest; email: st
     return (
       <StatusPanel icon={<CircleCheck className="size-5 text-emerald-600" />} tone="green" title="We can act for you">
         <p>
-          The conflict check is complete. Next, we will send your engagement letter and payment link to{" "}
-          <span className="font-medium text-stone-900">{email}</span>, along with the questions we need answered.
+          The conflict check is complete. Next, we will contact you at{" "}
+          <span className="font-medium text-stone-900">{email}</span> to confirm the service you need and its fee.
+          The service you chose here is a starting point, and we may suggest a different one.
         </p>
-        <p>Please send details of your matter only after you receive the engagement letter.</p>
+        <p>Once we agree, we will send your engagement letter and payment link.</p>
       </StatusPanel>
     )
   }

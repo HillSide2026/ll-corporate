@@ -4,12 +4,18 @@ import { ArrowRight, Check, Mail, ShieldCheck } from "lucide-react"
 import { type LeadService, leadServices } from "src/lib/services/leadServices"
 
 const steps = [
-  { title: "Choose a service", body: "Pick what you need below. Every service has a fixed fee, confirmed before you pay." },
+  {
+    title: "Choose a service",
+    body: "Pick the closest match below. We confirm the right service and its fixed fee before you pay.",
+  },
   {
     title: "Conflict check",
     body: "You tell us who is involved. We confirm we can act for you before you share details, sign or pay.",
   },
-  { title: "Details, sign and pay", body: "Answer a short questionnaire, sign the engagement letter and pay online." },
+  {
+    title: "Confirm, sign and pay",
+    body: "We confirm the right service and fee with you, then you sign the engagement letter and pay.",
+  },
   { title: "We get to work", body: "A lawyer handles your file, and you follow it here." },
 ]
 

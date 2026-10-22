@@ -51,7 +51,8 @@ function RequestCard({ request }: { request: ConflictRequest }) {
         <div>
           <p className="font-semibold text-stone-900">{request.applicantName}</p>
           <p className="mt-0.5 text-sm text-stone-500">
-            {request.userEmail} · {service?.title ?? request.serviceSlug} ({request.serviceCode})
+            {request.userEmail} · Picked: {service?.title ?? request.serviceSlug} ({request.serviceCode}), not yet
+            confirmed
           </p>
           <p className="mt-0.5 text-xs text-stone-400">Requested {formatDate(request.createdAt)}</p>
         </div>
@@ -122,7 +123,8 @@ export default async function AdminConflictsPage() {
       <div className="mx-auto max-w-5xl space-y-6 px-6 py-10">
         <p className="text-sm text-stone-500">
           Run each name through Clio&apos;s conflict search, then clear or decline. The lead sees the result on their
-          conflict check page; contact them by email as well. {pending} pending.
+          conflict check page. After clearing, email them to confirm the right service and fee before sending an
+          engagement letter. {pending} pending.
         </p>
 
         {unavailable ? (
