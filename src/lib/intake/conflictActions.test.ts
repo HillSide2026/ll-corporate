@@ -18,6 +18,9 @@ const mocks = vi.hoisted(() => ({
 
 vi.mock("next/navigation", () => ({ redirect: mocks.redirect }))
 vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }))
+vi.mock("next/headers", () => ({
+  cookies: vi.fn(async () => ({ get: (name: string) => (name === "ll_ref" ? { value: "MSB-Partner" } : undefined) })),
+}))
 vi.mock("src/lib/auth/session", () => ({ getPortalSession: mocks.getPortalSession }))
 vi.mock("src/lib/auth/adminAuth", () => ({ getAdminSession: mocks.getAdminSession }))
 vi.mock("src/lib/portal/portalNotifications", () => ({ sendPortalNotification: mocks.sendPortalNotification }))
@@ -70,6 +73,7 @@ describe("submitConflictCheck", () => {
       companyName: "Acme Ltd.",
       relatedParties: "John Cofounder",
       adverseParties: undefined,
+      source: "msb-partner",
     })
     expect(mocks.sendPortalNotification).toHaveBeenCalledWith(
       expect.objectContaining({ type: "intake_conflict_request_created", requestId: "CC-1" })

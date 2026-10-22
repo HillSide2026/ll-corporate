@@ -94,6 +94,12 @@ export default async function AdminHomePage() {
             Review conflict checks
           </Link>
           <Link
+            href="/corporate/admin/scorecard"
+            className="border-brand-navy text-brand-navy hover:bg-brand-navy inline-flex rounded border bg-white px-4 py-2 text-sm font-semibold transition-colors hover:text-white"
+          >
+            Lead scorecard
+          </Link>
+          <Link
             href="/corporate/admin/access-requests"
             className="border-brand-navy text-brand-navy hover:bg-brand-navy inline-flex rounded border bg-white px-4 py-2 text-sm font-semibold transition-colors hover:text-white"
           >

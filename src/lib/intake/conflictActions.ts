@@ -1,13 +1,22 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
+import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 
 import { getAdminSession } from "src/lib/auth/adminAuth"
 import { getPortalSession } from "src/lib/auth/session"
 import { sendPortalNotification } from "src/lib/portal/portalNotifications"
 import { leadServices } from "src/lib/services/leadServices"
-import { createConflictRequest, decideConflictRequest, getLatestConflictRequest } from "./conflictRequestStore"
+import { normalizeRef, REF_COOKIE } from "./attribution"
+import {
+  createConflictRequest,
+  decideConflictRequest,
+  getLatestConflictRequest,
+  recordCompletion,
+  recordEngagement,
+  recordPayment,
+} from "./conflictRequestStore"
 
 export type ConflictFormState = {
   error?: string
@@ -17,7 +26,9 @@ export type ConflictFormState = {
 const MAX_FIELD = 2000
 
 function field(formData: FormData, name: string): string {
-  return String(formData.get(name) ?? "").trim().slice(0, MAX_FIELD)
+  return String(formData.get(name) ?? "")
+    .trim()
+    .slice(0, MAX_FIELD)
 }
 
 export async function submitConflictCheck(_prev: ConflictFormState, formData: FormData): Promise<ConflictFormState> {
@@ -46,6 +57,7 @@ export async function submitConflictCheck(_prev: ConflictFormState, formData: Fo
         companyName: field(formData, "companyName") || undefined,
         relatedParties: field(formData, "relatedParties") || undefined,
         adverseParties: field(formData, "adverseParties") || undefined,
+        source: normalizeRef((await cookies()).get(REF_COOKIE)?.value),
       })
       await sendPortalNotification({
         type: "intake_conflict_request_created",
@@ -84,5 +96,44 @@ export async function decideConflictCheck(formData: FormData): Promise<void> {
     }).catch((err: unknown) => console.warn("decideConflictCheck: notification failed", err))
   }
 
+  revalidatePath("/corporate/admin/conflicts")
+}
+
+async function requireAdmin(): Promise<void> {
+  const { isAdmin } = await getAdminSession()
+  if (!isAdmin) redirect("/corporate/admin/login")
+}
+
+/** Parses "1,250" or "1250.00" dollars into cents; null if not a positive amount. */
+function parseFeeCents(value: string): number | null {
+  const amount = Number(value.replace(/[$,\s]/g, ""))
+  return Number.isFinite(amount) && amount > 0 ? Math.round(amount * 100) : null
+}
+
+export async function recordEngagementAction(formData: FormData): Promise<void> {
+  await requireAdmin()
+  const id = field(formData, "id")
+  const finalServiceCode = field(formData, "finalServiceCode")
+  const feeCents = parseFeeCents(field(formData, "fee"))
+  if (!id || !finalServiceCode || feeCents === null) redirect("/corporate/admin/conflicts?error=engagement")
+  await recordEngagement(id, { finalServiceCode, feeCents, clioMatter: field(formData, "clioMatter") || null })
+  revalidatePath("/corporate/admin/conflicts")
+}
+
+export async function recordPaymentAction(formData: FormData): Promise<void> {
+  await requireAdmin()
+  const id = field(formData, "id")
+  if (id) await recordPayment(id)
+  revalidatePath("/corporate/admin/conflicts")
+}
+
+export async function recordCompletionAction(formData: FormData): Promise<void> {
+  await requireAdmin()
+  const id = field(formData, "id")
+  const hours = Number(field(formData, "hours"))
+  if (!id || !Number.isFinite(hours) || hours <= 0 || hours > 999) {
+    redirect("/corporate/admin/conflicts?error=hours")
+  }
+  await recordCompletion(id, Math.round(hours * 100) / 100)
   revalidatePath("/corporate/admin/conflicts")
 }
