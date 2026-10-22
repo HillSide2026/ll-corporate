@@ -110,13 +110,21 @@ export function LeadWelcome({ firstName }: { firstName?: string }) {
   return (
     <div className="space-y-12">
       <section>
-        <p className="text-brand-navy text-xs font-semibold tracking-[0.18em] uppercase">Corporate services</p>
+        <p className="text-brand-navy text-xs font-semibold tracking-[0.18em] uppercase">Corporate law services</p>
         <h1 className="mt-3 text-3xl font-semibold tracking-tight text-stone-950 sm:text-4xl">
           {firstName ? `Welcome, ${firstName}.` : "Welcome."}
         </h1>
+        {/* Draft mission line, pending ML1 approval */}
         <p className="mt-3 max-w-2xl text-base leading-7 text-stone-600">
-          Fixed-fee corporate work for Ontario and federal companies, handled by a lawyer. Choose a service to get
-          started.
+          Levine Law helps founders and business owners set up, run and grow their companies on sound legal footing.
+        </p>
+      </section>
+
+      <section className="border-t border-stone-200 pt-10">
+        <h2 className="text-2xl font-semibold tracking-tight text-stone-950">Ready to get started?</h2>
+        <p className="mt-2 max-w-2xl text-base leading-7 text-stone-600">
+          Flat-fee corporate work for founders and entrepreneurs across Ontario, handled by real lawyers. Choose a
+          service to get started.
         </p>
       </section>
 
@@ -140,8 +148,8 @@ export function LeadWelcome({ firstName }: { firstName?: string }) {
       </section>
 
       <section aria-labelledby="services" className="space-y-5">
-        <h2 id="services" className="text-lg font-semibold tracking-tight text-stone-950">
-          Choose a service
+        <h2 id="services" className="sr-only">
+          Services
         </h2>
         {featured ? <FeaturedService service={featured} /> : null}
         <div className="grid gap-5 md:grid-cols-2">

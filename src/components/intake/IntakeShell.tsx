@@ -30,7 +30,7 @@ export async function IntakeShell({
   return (
     <main className="min-h-dvh bg-stone-50">
       <PortalBrandHeader
-        label="Client Portal"
+        label="Portal"
         href="/intake"
         className={width}
         action={
