@@ -48,7 +48,7 @@ function IncludesList({ items }: { items: string[] }) {
   )
 }
 
-function FeaturedService({ service }: { service: LeadService }) {
+function ServiceCard({ service }: { service: LeadService }) {
   return (
     <article className="overflow-hidden rounded-xl border border-stone-200 bg-white shadow-sm">
       <div className="grid gap-0 md:grid-cols-[1.4fr_1fr]">
@@ -87,26 +87,7 @@ function FeaturedService({ service }: { service: LeadService }) {
   )
 }
 
-function ServiceCard({ service }: { service: LeadService }) {
-  return (
-    <article className="flex flex-col rounded-xl border border-stone-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md">
-      <p className="text-brand-navy text-xs font-semibold tracking-[0.16em] uppercase">{service.category}</p>
-      <h3 className="mt-2 text-lg font-semibold tracking-tight text-stone-950">{service.title}</h3>
-      <p className="mt-2 text-sm leading-6 text-stone-600">{service.summary}</p>
-      <div className="mt-4 flex-1">
-        <IncludesList items={service.includes} />
-      </div>
-      <div className="mt-6 flex flex-col gap-3 border-t border-stone-100 pt-5 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-sm font-medium text-stone-900">{priceLabel(service)}</p>
-        <StartLink service={service} />
-      </div>
-    </article>
-  )
-}
-
 export function LeadWelcome({ firstName }: { firstName?: string }) {
-  const [featured, ...others] = leadServices
-
   return (
     <div className="space-y-12">
       <section>
@@ -147,16 +128,13 @@ export function LeadWelcome({ firstName }: { firstName?: string }) {
         </ol>
       </section>
 
-      <section aria-labelledby="services" className="space-y-5">
+      <section aria-labelledby="services" className="space-y-8">
         <h2 id="services" className="sr-only">
           Services
         </h2>
-        {featured ? <FeaturedService service={featured} /> : null}
-        <div className="grid gap-5 md:grid-cols-2">
-          {others.map((service) => (
-            <ServiceCard key={service.slug} service={service} />
-          ))}
-        </div>
+        {leadServices.map((service) => (
+          <ServiceCard key={service.slug} service={service} />
+        ))}
       </section>
 
       <section className="flex flex-col gap-5 rounded-xl border border-stone-200 bg-white p-6 sm:flex-row sm:items-center sm:justify-between">
