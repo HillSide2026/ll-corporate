@@ -12,10 +12,12 @@ export type IntakeSection = "browse" | "questionnaire" | "engagement"
 export async function IntakeShell({
   active = "browse",
   wide = false,
+  showProgress = true,
   children,
 }: {
   active?: IntakeSection
   wide?: boolean
+  showProgress?: boolean
   children: ReactNode
 }) {
   const cookieStore = await cookies()
@@ -45,7 +47,7 @@ export async function IntakeShell({
         }
       />
 
-      <IntakeFunnelBar className={width} />
+      {showProgress ? <IntakeFunnelBar className={width} /> : null}
 
       <div className={cx("mx-auto w-full px-6 py-10 sm:py-14", width)}>{children}</div>
     </main>
