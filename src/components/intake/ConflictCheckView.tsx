@@ -9,7 +9,7 @@ import { ConflictCheckForm } from "./ConflictCheckForm"
 // ML1 2026-10-22
 const nextSteps = [
   "We run a check to confirm we can act for you and your business.",
-  "We email you the engagement agreement and a request for additional information.",
+  "We email you the engagement letter and request service-specific information.",
   "You sign the letter, we review all of your information and deliver your work.",
 ]
 
