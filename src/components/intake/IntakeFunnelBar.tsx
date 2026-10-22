@@ -19,9 +19,9 @@ function getActiveStep(pathname: string): number {
   return 1
 }
 
-export function IntakeFunnelBar({ className }: { className?: string }) {
+export function IntakeFunnelBar({ className, currentStep }: { className?: string; currentStep?: number }) {
   const pathname = usePathname()
-  const activeStep = getActiveStep(pathname)
+  const activeStep = currentStep ?? getActiveStep(pathname)
 
   return (
     <div className="border-b border-stone-200 bg-white px-6 py-3">

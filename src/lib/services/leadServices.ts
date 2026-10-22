@@ -12,6 +12,8 @@ export type LeadService = {
   title: string
   summary: string
   includes: string[]
+  /** Conflict check form wording for this service (ML1 2026-10-22). */
+  conflict: { companyLabel: string; companyHint: string; partiesLabel: string; partiesHint: string }
 }
 
 export const leadServices: LeadService[] = [
@@ -28,6 +30,12 @@ export const leadServices: LeadService[] = [
       "Share, director and officer registers",
       "Minute book set up and ready to maintain",
     ],
+    conflict: {
+      companyLabel: "Proposed company name",
+      companyHint: "Leave blank if you haven't chosen one yet.",
+      partiesLabel: "Proposed shareholders and directors",
+      partiesHint: "Full names, one per line.",
+    },
   },
   {
     code: "CORP-002",
@@ -36,6 +44,12 @@ export const leadServices: LeadService[] = [
     title: "Founders' Shareholder Agreement",
     summary: "Agree on ownership, vesting, decisions and exits before they become disputes.",
     includes: ["Two or three founders", "Vesting and departure terms", "Decision-making and deadlock rules"],
+    conflict: {
+      companyLabel: "Company name",
+      companyHint: "Include a proposed name if the company doesn't exist yet.",
+      partiesLabel: "Your co-founders",
+      partiesHint: "Full names, one per line.",
+    },
   },
   {
     code: "CORP-003",
@@ -44,6 +58,12 @@ export const leadServices: LeadService[] = [
     title: "New Shareholder Admission",
     summary: "Bring in a new shareholder with the approvals, share issuance or transfer, and registers done properly.",
     includes: ["Board and shareholder approvals", "Share issuance or transfer", "Updated registers and certificates"],
+    conflict: {
+      companyLabel: "Company name",
+      companyHint: "The company the new shareholder is joining.",
+      partiesLabel: "Existing shareholders and the incoming shareholder",
+      partiesHint: "Full names of people or companies, one per line.",
+    },
   },
   {
     code: "CORP-009",
@@ -53,5 +73,11 @@ export const leadServices: LeadService[] = [
     summary:
       "A lawyer reviews your corporate records and tells you what is missing or out of date, and what it takes to fix it.",
     includes: ["Minute book and register review", "Public record comparison", "Written list of gaps and fixes"],
+    conflict: {
+      companyLabel: "Company name",
+      companyHint: "The company whose records we will review.",
+      partiesLabel: "Current shareholders, directors and officers",
+      partiesHint: "Full names of people or companies, one per line.",
+    },
   },
 ]

@@ -37,23 +37,23 @@ export function QuestionnaireClient({ service }: { service: CorporateService }) 
       <div className="mb-8">
         <Link
           href="/intake/catalog"
-          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+          className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-sm"
         >
           <ChevronLeft className="size-4" />
           Back to catalog
         </Link>
-        <p className="mt-4 text-[11px] font-semibold tracking-[0.22em] text-primary uppercase">
-          {service.title}
-        </p>
+        <p className="text-primary mt-4 text-[11px] font-semibold tracking-[0.22em] uppercase">{service.title}</p>
         <h1 className="mt-2 text-2xl font-semibold tracking-tight">Intake questionnaire</h1>
-        <p className="mt-1.5 text-sm text-muted-foreground">
+        <p className="text-muted-foreground mt-1.5 text-sm">
           Answer each question to the best of your ability. Levine Law will follow up if more detail is needed.
         </p>
       </div>
 
       <div className="mb-6 space-y-2">
-        <div className="flex items-center justify-between text-xs text-muted-foreground">
-          <span>Question {step + 1} of {total}</span>
+        <div className="text-muted-foreground flex items-center justify-between text-xs">
+          <span>
+            Question {step + 1} of {total}
+          </span>
           <span>{progress}% complete</span>
         </div>
         <Progress value={progress} />
@@ -62,7 +62,7 @@ export function QuestionnaireClient({ service }: { service: CorporateService }) 
       <Card>
         <form onSubmit={handleNext}>
           <CardHeader>
-            <Label htmlFor="answer" className="text-base font-medium text-foreground">
+            <Label htmlFor="answer" className="text-foreground text-base font-medium">
               {currentPrompt}
             </Label>
           </CardHeader>
@@ -86,22 +86,22 @@ export function QuestionnaireClient({ service }: { service: CorporateService }) 
             ) : (
               <div />
             )}
-            <Button type="submit">
-              {isLast ? "Review and continue" : "Continue"}
-            </Button>
+            <Button type="submit">{isLast ? "Review and continue" : "Continue"}</Button>
           </CardFooter>
         </form>
       </Card>
 
       <details className="mt-4">
-        <summary className="cursor-pointer rounded-lg border bg-card px-4 py-3 text-sm font-medium ring-1 ring-foreground/10 hover:bg-muted/50">
+        <summary className="bg-card ring-foreground/10 hover:bg-muted/50 cursor-pointer rounded-lg border px-4 py-3 text-sm font-medium ring-1">
           What does {service.title} include?
         </summary>
-        <div className="mt-1 rounded-lg border bg-card px-4 py-4 ring-1 ring-foreground/10">
+        <div className="bg-card ring-foreground/10 mt-1 rounded-lg border px-4 py-4 ring-1">
           <ul className="space-y-1.5">
             {service.scope.map((item) => (
-              <li key={item} className="flex gap-2.5 text-sm text-muted-foreground">
-                <span className="mt-0.5 shrink-0 text-primary" aria-hidden="true">·</span>
+              <li key={item} className="text-muted-foreground flex gap-2.5 text-sm">
+                <span className="text-primary mt-0.5 shrink-0" aria-hidden="true">
+                  ·
+                </span>
                 {item}
               </li>
             ))}
