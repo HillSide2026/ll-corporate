@@ -27,12 +27,18 @@ export async function registerAction(_prev: RegisterState, formData: FormData): 
     return { error: "Passwords do not match.", field: "confirmPassword" }
   }
 
-  const existing = await getUserByEmail(email)
-  if (existing) {
-    return { error: "An account with this email address already exists.", field: "email" }
-  }
+  // A database failure must show a message, not crash the page
+  try {
+    const existing = await getUserByEmail(email)
+    if (existing) {
+      return { error: "An account with this email address already exists.", field: "email" }
+    }
 
-  await createUser({ email, name, password })
+    await createUser({ email, name, password })
+  } catch (err) {
+    console.error("registerAction: account database unavailable", err)
+    return { error: "We could not create your account right now. Please try again later." }
+  }
 
   try {
     await signIn("credentials", { email, password, redirectTo: "/auth/after-sign-in" })
