@@ -1,7 +1,8 @@
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowRight, Check, Mail } from "lucide-react"
+import { ArrowRight, Check, ChevronDown, Mail } from "lucide-react"
 
+import { leadFaqs } from "src/lib/portal/leadFaqs"
 import { lawyers } from "src/lib/portal/team"
 import { type LeadService, leadServices } from "src/lib/services/leadServices"
 
@@ -84,54 +85,35 @@ function ServiceCard({ service }: { service: LeadService }) {
   )
 }
 
+function NavyPanel({ children, className }: { children: React.ReactNode; className?: string }) {
+  return (
+    <section
+      className={`bg-brand-navy relative overflow-hidden rounded-3xl px-7 py-10 text-white sm:px-12 sm:py-14 ${className ?? ""}`}
+    >
+      <div
+        aria-hidden="true"
+        className="bg-brand-blue/40 pointer-events-none absolute -top-32 -right-24 size-96 rounded-full blur-3xl"
+      />
+      <div className="relative">{children}</div>
+    </section>
+  )
+}
+
 export function LeadWelcome({ firstName }: { firstName?: string }) {
   return (
     <div className="space-y-16">
-      <section className="bg-brand-navy relative overflow-hidden rounded-3xl px-7 py-10 text-white sm:px-12 sm:py-14">
-        <div
-          aria-hidden="true"
-          className="bg-brand-blue/40 pointer-events-none absolute -top-32 -right-24 size-96 rounded-full blur-3xl"
-        />
-        <div className="relative grid items-end gap-10 lg:grid-cols-[1.4fr_1fr]">
-          <div>
-            <div className="flex items-center gap-3">
-              <span className="bg-brand-red h-0.5 w-8" aria-hidden="true" />
-              <p className="text-[11px] font-semibold tracking-[0.2em] text-white/70 uppercase">
-                Corporate law services
-              </p>
-            </div>
-            <h1 className="font-display mt-5 text-4xl font-semibold tracking-tight sm:text-5xl">
-              {firstName ? `Welcome, ${firstName}.` : "Welcome."}
-            </h1>
-            {/* Draft mission line, pending ML1 approval */}
-            <p className="mt-5 max-w-xl text-lg leading-8 text-white/80">
-              Levine Law helps founders and business owners set up, run and grow their companies on sound legal footing.
-            </p>
-          </div>
-
-          <div>
-            <p className="text-[11px] font-semibold tracking-[0.2em] text-white/60 uppercase">Our lawyers</p>
-            <ul className="mt-4 space-y-4">
-              {lawyers.map((lawyer) => (
-                <li key={lawyer.name} className="flex items-center gap-4">
-                  <Image
-                    src={lawyer.photo}
-                    alt={lawyer.name}
-                    width={72}
-                    height={72}
-                    className="size-[72px] rounded-full object-cover ring-2 ring-white/25"
-                  />
-                  <div>
-                    <p className="font-display text-lg font-semibold">{lawyer.name}</p>
-                    <p className="text-sm text-white/70">{lawyer.title}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-            <p className="mt-5 text-xs text-white/55">Licensed by the Law Society of Ontario</p>
-          </div>
+      <NavyPanel>
+        <div className="flex items-center gap-3">
+          <span className="bg-brand-red h-0.5 w-8" aria-hidden="true" />
+          <p className="text-[11px] font-semibold tracking-[0.2em] text-white/70 uppercase">Corporate law services</p>
         </div>
-      </section>
+        <h1 className="font-display mt-5 text-4xl font-semibold tracking-tight sm:text-5xl">
+          {firstName ? `Welcome, ${firstName}.` : "Welcome."}
+        </h1>
+        <p className="mt-5 max-w-2xl text-lg leading-8 text-white/80">
+          Levine Law helps founders and entrepreneurs set up, run and grow their companies on sound legal footing.
+        </p>
+      </NavyPanel>
 
       <section>
         <h2 className="font-display text-3xl font-semibold tracking-tight text-stone-950">Ready to get started?</h2>
@@ -142,7 +124,7 @@ export function LeadWelcome({ firstName }: { firstName?: string }) {
 
         <ol className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
           {steps.map((step, index) => (
-            <li key={step.title} className="relative">
+            <li key={step.title}>
               <div className="flex items-center gap-3">
                 <span className="border-brand-navy text-brand-navy flex size-8 shrink-0 items-center justify-center rounded-full border-2 bg-white text-sm font-semibold">
                   {index + 1}
@@ -158,6 +140,29 @@ export function LeadWelcome({ firstName }: { firstName?: string }) {
         </ol>
       </section>
 
+      <NavyPanel>
+        <div className="text-center">
+          <p className="text-[11px] font-semibold tracking-[0.2em] text-white/60 uppercase">Our lawyers</p>
+          <h2 className="font-display mt-3 text-3xl font-semibold tracking-tight">Your file is handled by a lawyer</h2>
+        </div>
+        <ul className="mt-10 flex flex-col items-center justify-center gap-10 sm:flex-row sm:gap-20">
+          {lawyers.map((lawyer) => (
+            <li key={lawyer.name} className="flex flex-col items-center text-center">
+              <Image
+                src={lawyer.photo}
+                alt={lawyer.name}
+                width={160}
+                height={160}
+                className="ring-brand-blue size-40 rounded-full object-cover ring-4"
+              />
+              <p className="font-display mt-5 text-xl font-semibold">{lawyer.name}</p>
+              <p className="mt-1 text-sm text-white/70">{lawyer.title}</p>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-10 text-center text-xs text-white/55">Licensed by the Law Society of Ontario</p>
+      </NavyPanel>
+
       <section aria-labelledby="services" className="space-y-6">
         <h2 id="services" className="sr-only">
           Services
@@ -167,21 +172,49 @@ export function LeadWelcome({ firstName }: { firstName?: string }) {
         ))}
       </section>
 
-      <section className="flex flex-col gap-5 rounded-2xl border border-dashed border-stone-300 px-7 py-6 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <p className="font-display text-lg font-semibold text-stone-950">Not sure which service you need?</p>
-          <p className="mt-1 text-sm leading-6 text-stone-600">
-            Send a short note. Please don&apos;t include details of your matter until we&apos;ve confirmed we can act
-            for you.
-          </p>
+      <section aria-labelledby="faqs">
+        <h2 id="faqs" className="font-display text-center text-3xl font-semibold tracking-tight text-stone-950">
+          FAQs
+        </h2>
+        <div className="mx-auto mt-8 max-w-3xl space-y-3">
+          {leadFaqs.map((faq) => (
+            <details
+              key={faq.question}
+              className="group rounded-xl border border-stone-200 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)] open:shadow-[0_8px_24px_rgba(29,71,113,0.08)]"
+            >
+              <summary className="text-brand-navy flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 text-base font-medium [&::-webkit-details-marker]:hidden">
+                {faq.question}
+                <ChevronDown
+                  className="size-5 shrink-0 text-stone-500 transition-transform group-open:rotate-180"
+                  aria-hidden="true"
+                />
+              </summary>
+              <p className="px-6 pb-5 text-[15px] leading-7 text-stone-600">{faq.answer}</p>
+            </details>
+          ))}
+          <details className="group rounded-xl border border-stone-200 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)] open:shadow-[0_8px_24px_rgba(29,71,113,0.08)]">
+            <summary className="text-brand-navy flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 text-base font-medium [&::-webkit-details-marker]:hidden">
+              Not sure which service I need?
+              <ChevronDown
+                className="size-5 shrink-0 text-stone-500 transition-transform group-open:rotate-180"
+                aria-hidden="true"
+              />
+            </summary>
+            <div className="px-6 pb-5">
+              <p className="text-[15px] leading-7 text-stone-600">
+                Send us a short note. Please don&apos;t include details of your matter until we&apos;ve confirmed we can
+                act for you.
+              </p>
+              <a
+                href="mailto:matthew@levinelegal.ca?subject=Which%20service%20do%20I%20need%3F"
+                className="mt-4 inline-flex items-center gap-2 rounded-md border border-stone-300 bg-white px-4 py-2.5 text-sm font-semibold text-stone-800 transition-colors hover:border-stone-400"
+              >
+                <Mail className="size-4" aria-hidden="true" />
+                Email Levine Law
+              </a>
+            </div>
+          </details>
         </div>
-        <a
-          href="mailto:matthew@levinelegal.ca?subject=Which%20service%20do%20I%20need%3F"
-          className="inline-flex shrink-0 items-center justify-center gap-2 rounded-md border border-stone-300 bg-white px-4 py-2.5 text-sm font-semibold text-stone-800 transition-colors hover:border-stone-400"
-        >
-          <Mail className="size-4" aria-hidden="true" />
-          Email Levine Law
-        </a>
       </section>
     </div>
   )
