@@ -1,4 +1,4 @@
-import { CircleCheck, Clock, Lock, ShieldCheck } from "lucide-react"
+import { Check, CircleCheck, Clock, Lock, ShieldCheck } from "lucide-react"
 
 import { brandCard, Eyebrow, NavyPanel } from "src/components/brand/Brand"
 import type { ConflictRequest } from "src/lib/intake/conflictRequestStore"
@@ -12,26 +12,70 @@ const nextSteps = [
   "You sign the engagement letter and pay here.",
 ]
 
-function NextStepsPanel() {
+/**
+ * Where the lead is in the three steps: done steps are ticked, the current one is
+ * marked "Now". Before submitting, nothing has started; the confidentiality note
+ * only makes sense next to the form.
+ */
+function NextStepsPanel({ request }: { request: ConflictRequest | null }) {
+  const current = !request ? -1 : request.status === "cleared" ? 1 : 0
   return (
     <section className={cn(brandCard, "p-7 sm:p-9")}>
-      <h2 className="font-display text-2xl font-semibold tracking-tight text-stone-950">What happens next</h2>
+      <h2 className="font-display text-2xl font-semibold tracking-tight text-stone-950">
+        {request ? "Where things stand" : "What happens next"}
+      </h2>
       <ol className="mt-6 grid gap-6 sm:grid-cols-3">
-        {nextSteps.map((step, index) => (
-          <li key={step} className="flex items-start gap-3">
-            <span className="border-brand-navy text-brand-navy flex size-8 shrink-0 items-center justify-center rounded-full border-2 text-sm font-semibold">
-              {index + 1}
-            </span>
-            <p className="pt-1 text-sm leading-6 text-stone-700">{step}</p>
-          </li>
-        ))}
+        {nextSteps.map((step, index) => {
+          const done = index < current
+          const now = index === current
+          return (
+            <li key={step} className="flex items-start gap-3">
+              <span
+                className={cn(
+                  "flex size-8 shrink-0 items-center justify-center rounded-full border-2 text-sm font-semibold",
+                  done
+                    ? "border-brand-navy bg-brand-navy text-white"
+                    : now
+                      ? "border-brand-blue text-brand-blue"
+                      : "border-brand-navy text-brand-navy",
+                  index > current && current >= 0 && "border-stone-300 text-stone-400"
+                )}
+              >
+                {done ? <Check className="size-4" aria-hidden="true" /> : index + 1}
+              </span>
+              <div className="pt-1">
+                {now || done ? (
+                  <p
+                    className={cn(
+                      "text-[11px] font-semibold tracking-[0.16em] uppercase",
+                      now ? "text-brand-blue" : "text-stone-500"
+                    )}
+                  >
+                    {now ? "Now" : "Done"}
+                  </p>
+                ) : null}
+                <p
+                  className={cn(
+                    "text-sm leading-6",
+                    done ? "text-stone-500" : "text-stone-700",
+                    index > current && current >= 0 && "text-stone-500"
+                  )}
+                >
+                  {step}
+                </p>
+              </div>
+            </li>
+          )
+        })}
       </ol>
-      <div className="mt-7 flex items-start gap-3 border-t border-stone-100 pt-5">
-        <Lock className="text-brand-blue mt-0.5 size-4 shrink-0" aria-hidden="true" />
-        <p className="text-sm leading-6 text-stone-600">
-          What you tell us here is confidential and used only to check for conflicts.
-        </p>
-      </div>
+      {!request ? (
+        <div className="mt-7 flex items-start gap-3 border-t border-stone-100 pt-5">
+          <Lock className="text-brand-blue mt-0.5 size-4 shrink-0" aria-hidden="true" />
+          <p className="text-sm leading-6 text-stone-600">
+            What you tell us here is confidential and used only to check for conflicts.
+          </p>
+        </div>
+      ) : null}
     </section>
   )
 }
@@ -141,7 +185,7 @@ export function ConflictCheckView({
             </div>
           </section>
         )}
-        {request?.status === "declined" ? null : <NextStepsPanel />}
+        {request?.status === "declined" ? null : <NextStepsPanel request={request} />}
       </div>
     </div>
   )
