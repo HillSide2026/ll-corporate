@@ -6,10 +6,11 @@ import type { LeadService } from "src/lib/services/leadServices"
 import { cn } from "@/lib/utils"
 import { ConflictCheckForm } from "./ConflictCheckForm"
 
+// ML1 2026-10-22
 const nextSteps = [
-  "We run the conflict check.",
-  "We email you to confirm the right service and its fixed fee.",
-  "You sign the engagement letter and pay here.",
+  "We run a check to confirm we can act for you and your business.",
+  "We email you the engagement agreement and a request for additional information.",
+  "You sign the letter, we review all of your information and deliver your work.",
 ]
 
 /**
@@ -21,9 +22,7 @@ function NextStepsPanel({ request }: { request: ConflictRequest | null }) {
   const current = !request ? -1 : request.status === "cleared" ? 1 : 0
   return (
     <section className={cn(brandCard, "p-7 sm:p-9")}>
-      <h2 className="font-display text-2xl font-semibold tracking-tight text-stone-950">
-        {request ? "Where things stand" : "What happens next"}
-      </h2>
+      <h2 className="font-display text-2xl font-semibold tracking-tight text-stone-950">What happens next</h2>
       <ol className="mt-6 grid gap-6 sm:grid-cols-3">
         {nextSteps.map((step, index) => {
           const done = index < current
