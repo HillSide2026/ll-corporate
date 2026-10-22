@@ -13,10 +13,10 @@ const steps = [
     body: "You tell us who is involved. We confirm we can act for you before you share details, sign or pay.",
   },
   {
-    title: "Confirm, sign and pay",
+    title: "Confirm and agree",
     body: "We confirm the right service and fee with you, then you sign the engagement letter and pay.",
   },
-  { title: "We get to work", body: "A lawyer handles your file, and you follow it here." },
+  { title: "Lawyer handles everything", body: "You can follow your file's progress here." },
 ]
 
 function priceLabel(service: LeadService) {

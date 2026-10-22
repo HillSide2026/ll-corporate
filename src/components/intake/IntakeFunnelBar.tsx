@@ -8,8 +8,8 @@ import { cn } from "@/lib/utils"
 const steps = [
   { id: 1, label: "Choose a service" },
   { id: 2, label: "Conflict check" },
-  { id: 3, label: "Details, sign and pay" },
-  { id: 4, label: "Work begins" },
+  { id: 3, label: "Confirm and agree" },
+  { id: 4, label: "Lawyer handles everything" },
 ]
 
 function getActiveStep(pathname: string): number {
