@@ -94,11 +94,12 @@ function RequestStatus({ request, email }: { request: ConflictRequest; email: st
     return (
       <StatusCard icon={<CircleCheck className="size-6 text-emerald-600" />} title="We can act for you">
         <p>
-          The conflict check is complete. Next, we will contact you at{" "}
-          <span className="font-medium text-stone-900">{email}</span> to confirm the service you need and its fee. The
-          service you chose here is a starting point, and we may suggest a different one.
+          The conflict check is complete. Next, we will email you at{" "}
+          <span className="font-medium text-stone-900">{email}</span> with the engagement letter and a request for
+          service-specific information. The letter sets out the service and its fixed fee, which may differ from the
+          service you chose here.
         </p>
-        <p>Once we agree, you will sign the engagement letter and pay here.</p>
+        <p>You sign the letter and pay by email. Work begins once both are done.</p>
       </StatusCard>
     )
   }

@@ -8,7 +8,7 @@ export const leadFaqs: Faq[] = [
   {
     question: "How does this work?",
     answer:
-      "Choose the service closest to what you need. Tell us who is involved so we can run a conflict check. Once we confirm we can act, we agree the right service and fixed fee with you, you sign the engagement letter and pay here, and a lawyer takes it from there.",
+      "Choose the service closest to what you need. Tell us who is involved so we can run a conflict check. Once we confirm we can act, we email you the engagement letter and a request for service-specific information. You sign the letter and pay by email, and a lawyer takes it from there.",
   },
   {
     question: "What is a conflict check, and why does it come first?",
@@ -18,7 +18,7 @@ export const leadFaqs: Faq[] = [
   {
     question: "When do I sign?",
     answer:
-      "Only after we've confirmed we can act for you and agreed the service and fee with you. You then sign the engagement letter in the portal, before work begins.",
+      "Only after we've confirmed we can act for you. We email you the engagement letter, and you sign it and pay from that email before work begins.",
   },
   {
     question: "Will I need to provide identification?",
