@@ -32,6 +32,7 @@ function registrationFormData() {
   formData.set("email", "Prospect@Example.com")
   formData.set("password", "password123")
   formData.set("confirmPassword", "password123")
+  formData.set("acceptTerms", "on")
   return formData
 }
 
@@ -56,11 +57,22 @@ describe("registerAction", () => {
       email: "prospect@example.com",
       name: "New Prospect",
       password: "password123",
+      termsVersion: "unpublished",
     })
     expect(authMocks.signIn).toHaveBeenCalledWith("credentials", {
       email: "prospect@example.com",
       password: "password123",
       redirectTo: "/auth/after-sign-in",
     })
+  })
+
+  it("refuses to create an account without agreement to the Terms of Use", async () => {
+    const formData = registrationFormData()
+    formData.delete("acceptTerms")
+
+    const result = await registerAction(null, formData)
+
+    expect(result).toEqual({ error: "You must agree to the Terms of Use to create an account.", field: "acceptTerms" })
+    expect(dbMocks.createUser).not.toHaveBeenCalled()
   })
 })

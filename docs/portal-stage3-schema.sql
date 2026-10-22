@@ -129,3 +129,8 @@ create table if not exists intake_events (
 
 create index if not exists intake_events_service_idx
   on intake_events (service_slug, event, created_at desc);
+
+-- Terms of Use agreement recorded at sign-up (ML1 2026-10-22). The users table is
+-- created by scripts/db-migrate.mjs; run these before deploying the sign-up change.
+alter table users add column if not exists terms_version text;
+alter table users add column if not exists terms_accepted_at timestamptz;

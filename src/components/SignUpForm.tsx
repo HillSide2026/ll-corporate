@@ -1,9 +1,11 @@
 "use client"
 
 import { useActionState, useRef } from "react"
+import Link from "next/link"
 
 import { brandButton } from "src/components/brand/Brand"
 import { registerAction, RegisterState } from "src/lib/auth/registerAction"
+import { TERMS_URL } from "src/lib/portal/terms"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
@@ -95,6 +97,30 @@ export function SignUpForm() {
           aria-invalid={state?.field === "confirmPassword" || undefined}
         />
         <FieldError state={state} field="confirmPassword" />
+      </div>
+
+      <div>
+        <label className="flex items-start gap-3 text-sm leading-6 text-stone-700">
+          <input
+            type="checkbox"
+            name="acceptTerms"
+            required
+            className="accent-brand-navy mt-1 size-4 shrink-0"
+            aria-invalid={state?.field === "acceptTerms" || undefined}
+          />
+          <span>
+            I agree to the{" "}
+            <Link
+              href={TERMS_URL}
+              target="_blank"
+              className="text-brand-blue font-semibold underline-offset-4 hover:underline"
+            >
+              Terms of Use
+            </Link>
+            .
+          </span>
+        </label>
+        <FieldError state={state} field="acceptTerms" />
       </div>
 
       <button type="submit" disabled={pending} className={cn(brandButton, "mt-2 w-full")}>

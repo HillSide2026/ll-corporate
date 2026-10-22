@@ -5,6 +5,7 @@ import { Geist, Source_Serif_4 } from "next/font/google"
 
 import { cn } from "@/lib/utils"
 import { TooltipProvider } from "@/components/ui/tooltip"
+import { PortalFooter } from "src/components/brand/PortalFooter"
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
 const sourceSerif = Source_Serif_4({ subsets: ["latin"], variable: "--font-display-serif" })
@@ -22,6 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={cn("font-sans", geist.variable, sourceSerif.variable)}>
       <body>
         <TooltipProvider>{children}</TooltipProvider>
+        <PortalFooter />
       </body>
     </html>
   )

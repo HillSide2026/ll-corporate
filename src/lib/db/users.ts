@@ -21,11 +21,17 @@ export async function getUserByEmail(email: string): Promise<UserWithHash | null
   return result.rows[0] ?? null
 }
 
-export async function createUser(input: { email: string; name: string; password: string }): Promise<User> {
+/** Records agreement to the Terms of Use: when, and which version (ML1 2026-10-22). */
+export async function createUser(input: {
+  email: string
+  name: string
+  password: string
+  termsVersion: string
+}): Promise<User> {
   const passwordHash = await hash(input.password, 12)
   const result = await sql<User>`
-    INSERT INTO users (email, name, password_hash)
-    VALUES (${input.email.toLowerCase()}, ${input.name}, ${passwordHash})
+    INSERT INTO users (email, name, password_hash, terms_version, terms_accepted_at)
+    VALUES (${input.email.toLowerCase()}, ${input.name}, ${passwordHash}, ${input.termsVersion}, now())
     RETURNING id, email, name, role, created_at
   `
   return result.rows[0]!
