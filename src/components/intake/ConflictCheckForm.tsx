@@ -120,7 +120,7 @@ export function ConflictCheckForm({ service, defaultName }: { service: LeadServi
       </div>
 
       <button type="submit" disabled={pending} className={cn(brandButton, "w-full sm:w-auto")}>
-        {pending ? "Sending..." : "Request conflict check"}
+        {pending ? "Sending..." : "Request Check"}
       </button>
     </form>
   )

@@ -14,25 +14,25 @@ const nextSteps = [
 
 function NextStepsPanel() {
   return (
-    <aside className={cn(brandCard, "p-7")}>
-      <h2 className="font-display text-xl font-semibold tracking-tight text-stone-950">What happens next</h2>
-      <ol className="mt-5 space-y-4">
+    <section className={cn(brandCard, "p-7 sm:p-9")}>
+      <h2 className="font-display text-2xl font-semibold tracking-tight text-stone-950">What happens next</h2>
+      <ol className="mt-6 grid gap-6 sm:grid-cols-3">
         {nextSteps.map((step, index) => (
           <li key={step} className="flex items-start gap-3">
-            <span className="border-brand-navy text-brand-navy flex size-7 shrink-0 items-center justify-center rounded-full border-2 text-xs font-semibold">
+            <span className="border-brand-navy text-brand-navy flex size-8 shrink-0 items-center justify-center rounded-full border-2 text-sm font-semibold">
               {index + 1}
             </span>
-            <p className="pt-0.5 text-sm leading-6 text-stone-700">{step}</p>
+            <p className="pt-1 text-sm leading-6 text-stone-700">{step}</p>
           </li>
         ))}
       </ol>
-      <div className="mt-6 flex items-start gap-3 border-t border-stone-100 pt-5">
+      <div className="mt-7 flex items-start gap-3 border-t border-stone-100 pt-5">
         <Lock className="text-brand-blue mt-0.5 size-4 shrink-0" aria-hidden="true" />
         <p className="text-sm leading-6 text-stone-600">
           What you tell us here is confidential and used only to check for conflicts.
         </p>
       </div>
-    </aside>
+    </section>
   )
 }
 
@@ -115,14 +115,10 @@ export function ConflictCheckView({
           Step 2 · Conflict check
         </Eyebrow>
         <h1 className="font-display mt-5 text-4xl font-semibold tracking-tight sm:text-5xl">{service.title}</h1>
-        <p className="mt-4 max-w-2xl text-lg leading-8 text-white/80">
-          Before we can act for you, we must confirm we don&apos;t already act for anyone whose interests conflict with
-          yours. Tell us only who is involved, not what the matter is about.
-        </p>
-        <p className="mt-5 text-sm text-white/60">Fixed fee, quoted after your conflict check</p>
+        <p className="mt-4 max-w-2xl text-lg leading-8 text-white/80">{service.why}</p>
       </NavyPanel>
 
-      <div className="grid gap-8 lg:grid-cols-[1.6fr_1fr] lg:items-start">
+      <div className="space-y-8">
         {unavailable ? (
           <div
             role="alert"
@@ -135,15 +131,17 @@ export function ConflictCheckView({
         ) : (
           <section className={cn(brandCard, "p-7 sm:p-9")}>
             <h2 className="font-display text-2xl font-semibold tracking-tight text-stone-950">Who is involved?</h2>
-            <p className="mt-2 text-[15px] leading-7 text-stone-600">Nothing is signed or paid at this step.</p>
-            <div className="mt-7">
+            <p className="mt-2 max-w-2xl text-[15px] leading-7 text-stone-600">
+              Before we can act for you, we must confirm we don&apos;t already act for anyone whose interests conflict
+              with yours. Tell us only who is involved, not what the matter is about. Nothing is signed or paid at this
+              step.
+            </p>
+            <div className="mt-7 max-w-2xl">
               <ConflictCheckForm service={service} defaultName={defaultName} />
             </div>
           </section>
         )}
-        <div className="lg:sticky lg:top-8">
-          <NextStepsPanel />
-        </div>
+        <NextStepsPanel />
       </div>
     </div>
   )
