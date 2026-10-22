@@ -1,6 +1,16 @@
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowRight, Check, ChevronDown } from "lucide-react"
+import {
+  ArrowDown,
+  ArrowRight,
+  Building2,
+  Check,
+  ChevronDown,
+  ClipboardCheck,
+  type LucideIcon,
+  UserPlus,
+  Users,
+} from "lucide-react"
 
 import { leadFaqs } from "src/lib/portal/leadFaqs"
 import { lawyers } from "src/lib/portal/team"
@@ -13,74 +23,42 @@ const steps = [
   { title: "Lawyer handles everything", body: "Follow your file's progress here." },
 ]
 
-function StartLink({ service }: { service: LeadService }) {
-  return (
-    <Link
-      href={`/intake/start/${service.slug}`}
-      className="bg-brand-navy hover:bg-brand-blue focus-visible:ring-brand-blue/40 inline-flex w-full items-center justify-center gap-2 rounded-md px-4 py-3 text-sm font-semibold text-white transition-colors focus-visible:ring-2 focus-visible:outline-none"
-    >
-      Get started
-      <ArrowRight className="size-4" aria-hidden="true" />
-    </Link>
-  )
+const serviceIcons: Record<string, LucideIcon> = {
+  incorporation: Building2,
+  "founders-shareholder-agreement": Users,
+  "new-shareholder": UserPlus,
+  "corporate-checkup": ClipboardCheck,
 }
 
-function ServiceCard({ service }: { service: LeadService }) {
+function ServiceRow({ service }: { service: LeadService }) {
+  const Icon = serviceIcons[service.slug] ?? Building2
   return (
-    <article className="overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)] transition-shadow hover:shadow-[0_8px_24px_rgba(29,71,113,0.08)]">
-      <div className="grid md:grid-cols-[1.5fr_1fr]">
-        <div className="p-7 md:p-9">
+    <article className="group hover:border-brand-blue/30 grid gap-6 rounded-2xl border border-stone-200 bg-white p-7 shadow-[0_1px_2px_rgba(16,24,40,0.04)] transition-all hover:shadow-[0_10px_30px_rgba(29,71,113,0.10)] md:grid-cols-[1.25fr_1fr_auto] md:items-center md:gap-10 md:p-8">
+      <div className="flex items-start gap-5">
+        <span className="bg-brand-blue/10 text-brand-blue flex size-12 shrink-0 items-center justify-center rounded-xl">
+          <Icon className="size-6" aria-hidden="true" />
+        </span>
+        <div>
           <p className="text-brand-blue text-[11px] font-semibold tracking-[0.18em] uppercase">{service.category}</p>
-          <h3 className="font-display mt-2 text-2xl font-semibold tracking-tight text-stone-950">{service.title}</h3>
-          <p className="mt-3 max-w-prose text-[15px] leading-7 text-stone-600">{service.summary}</p>
-          <ul className="mt-6 space-y-2.5">
-            {service.includes.map((item) => (
-              <li key={item} className="flex items-start gap-2.5 text-sm leading-6 text-stone-700">
-                <Check className="text-brand-blue mt-1 size-4 shrink-0" aria-hidden="true" />
-                {item}
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="flex flex-col gap-6 border-t border-stone-100 bg-stone-50/80 p-7 md:border-t-0 md:border-l md:p-9">
-          <div>
-            <p className="text-[11px] font-semibold tracking-[0.16em] text-stone-500 uppercase">Fee</p>
-            {service.price ? (
-              <>
-                <p className="font-display mt-1.5 text-2xl font-semibold text-stone-950">
-                  {service.price.split(" + ")[0]}
-                </p>
-                {service.price.includes(" + ") ? (
-                  <p className="mt-1 text-sm text-stone-500">+ {service.price.split(" + ").slice(1).join(" + ")}</p>
-                ) : null}
-              </>
-            ) : (
-              <>
-                <p className="font-display mt-1.5 text-2xl font-semibold text-stone-950">Fixed fee</p>
-                <p className="mt-1 text-sm text-stone-500">Quoted after your conflict check</p>
-              </>
-            )}
-          </div>
-          {service.addOns?.length ? (
-            <div>
-              <p className="text-[11px] font-semibold tracking-[0.16em] text-stone-500 uppercase">Optional add-ons</p>
-              <ul className="mt-2.5 flex flex-wrap gap-1.5">
-                {service.addOns.map((addOn) => (
-                  <li
-                    key={addOn}
-                    className="rounded-full border border-stone-200 bg-white px-2.5 py-1 text-xs text-stone-600"
-                  >
-                    {addOn}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ) : null}
-          <div className="mt-auto">
-            <StartLink service={service} />
-          </div>
+          <h3 className="font-display mt-1.5 text-2xl font-semibold tracking-tight text-stone-950">{service.title}</h3>
+          <p className="mt-2 text-[15px] leading-7 text-stone-600">{service.summary}</p>
         </div>
       </div>
+      <ul className="space-y-2 border-stone-100 md:border-l md:pl-10">
+        {service.includes.map((item) => (
+          <li key={item} className="flex items-start gap-2.5 text-sm leading-6 text-stone-700">
+            <Check className="text-brand-blue mt-1 size-4 shrink-0" aria-hidden="true" />
+            {item}
+          </li>
+        ))}
+      </ul>
+      <Link
+        href={`/intake/start/${service.slug}`}
+        className="bg-brand-navy hover:bg-brand-blue focus-visible:ring-brand-blue/40 inline-flex items-center justify-center gap-2 rounded-md px-5 py-3 text-sm font-semibold whitespace-nowrap text-white transition-colors focus-visible:ring-2 focus-visible:outline-none"
+      >
+        Get started
+        <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+      </Link>
     </article>
   )
 }
@@ -94,6 +72,10 @@ function NavyPanel({ children, className }: { children: React.ReactNode; classNa
         aria-hidden="true"
         className="bg-brand-blue/40 pointer-events-none absolute -top-32 -right-24 size-96 rounded-full blur-3xl"
       />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 [background-image:linear-gradient(to_right,white_1px,transparent_1px),linear-gradient(to_bottom,white_1px,transparent_1px)] [mask-image:linear-gradient(to_left,black,transparent_70%)] [background-size:48px_48px] opacity-[0.07]"
+      />
       <div className="relative">{children}</div>
     </section>
   )
@@ -101,7 +83,7 @@ function NavyPanel({ children, className }: { children: React.ReactNode; classNa
 
 export function LeadWelcome({ firstName }: { firstName?: string }) {
   return (
-    <div className="space-y-16">
+    <div className="space-y-20">
       <NavyPanel>
         <div className="flex items-center gap-3">
           <span className="bg-brand-red h-0.5 w-8" aria-hidden="true" />
@@ -113,6 +95,13 @@ export function LeadWelcome({ firstName }: { firstName?: string }) {
         <p className="mt-5 max-w-2xl text-lg leading-8 text-white/80">
           Levine Law helps founders and entrepreneurs set up, run and grow their companies on sound legal footing.
         </p>
+        <a
+          href="#services"
+          className="text-brand-navy mt-8 inline-flex items-center gap-2 rounded-md bg-white px-5 py-3 text-sm font-semibold transition-colors hover:bg-white/90"
+        >
+          View services
+          <ArrowDown className="size-4" aria-hidden="true" />
+        </a>
       </NavyPanel>
 
       <section>
@@ -163,13 +152,16 @@ export function LeadWelcome({ firstName }: { firstName?: string }) {
         <p className="mt-10 text-center text-xs text-white/55">Licensed by the Law Society of Ontario</p>
       </NavyPanel>
 
-      <section aria-labelledby="services" className="space-y-6">
-        <h2 id="services" className="sr-only">
-          Services
-        </h2>
-        {leadServices.map((service) => (
-          <ServiceCard key={service.slug} service={service} />
-        ))}
+      <section aria-labelledby="services" id="services" className="scroll-mt-8">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <h2 className="font-display text-3xl font-semibold tracking-tight text-stone-950">Our services</h2>
+          <p className="text-sm text-stone-500">Each service is a fixed fee, quoted after your conflict check.</p>
+        </div>
+        <div className="mt-8 space-y-5">
+          {leadServices.map((service) => (
+            <ServiceRow key={service.slug} service={service} />
+          ))}
+        </div>
       </section>
 
       <section aria-labelledby="faqs">

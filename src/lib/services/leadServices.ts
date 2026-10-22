@@ -2,6 +2,7 @@
  * Services offered to leads (prospect tier) on the portal welcome page.
  * ML1 2026-10-22: CORP-001, CORP-002 (founders tier), CORP-003 and CORP-009.
  * CORP-006 Corporate Maintenance is not offered to leads.
+ * No prices or add-ons are shown; each fee is quoted after the conflict check (ML1 2026-10-22).
  * Codes are SERVICES_REGISTRY.json codes in ll-secondbrain.
  */
 export type LeadService = {
@@ -11,9 +12,6 @@ export type LeadService = {
   title: string
   summary: string
   includes: string[]
-  /** Omitted until ML1 sets the fee; the page then says the fee is confirmed before payment. */
-  price?: string
-  addOns?: string[]
 }
 
 export const leadServices: LeadService[] = [
@@ -22,19 +20,13 @@ export const leadServices: LeadService[] = [
     slug: "incorporation",
     category: "New company",
     title: "Incorporation",
-    summary: "Start an Ontario or federal corporation with the right share structure and a complete minute book from day one.",
+    summary:
+      "Start an Ontario or federal corporation with the right share structure and a complete minute book from day one.",
     includes: [
       "Articles of incorporation and filing",
       "By-laws and organizing resolutions",
       "Share, director and officer registers",
       "Minute book set up and ready to maintain",
-    ],
-    price: "From $1,250 + disbursements",
-    addOns: [
-      "GST/HST registration",
-      "CRA representative authorization",
-      "Extra-provincial registration",
-      "Non-standard share structure",
     ],
   },
   {
@@ -58,7 +50,8 @@ export const leadServices: LeadService[] = [
     slug: "corporate-checkup",
     category: "Records review",
     title: "Corporate CheckUp",
-    summary: "A lawyer reviews your corporate records and tells you what is missing or out of date, and what it takes to fix it.",
+    summary:
+      "A lawyer reviews your corporate records and tells you what is missing or out of date, and what it takes to fix it.",
     includes: ["Minute book and register review", "Public record comparison", "Written list of gaps and fixes"],
   },
 ]

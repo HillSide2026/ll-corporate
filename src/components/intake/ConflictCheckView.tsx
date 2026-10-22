@@ -113,7 +113,7 @@ export function ConflictCheckView({
       <header>
         <p className="text-brand-navy text-xs font-semibold tracking-[0.18em] uppercase">Step 2 · Conflict check</p>
         <h1 className="mt-3 text-3xl font-semibold tracking-tight text-stone-950">{service.title}</h1>
-        <p className="mt-2 text-sm text-stone-500">{service.price ?? "Fixed fee, confirmed before you pay"}</p>
+        <p className="mt-2 text-sm text-stone-500">Fixed fee, quoted after your conflict check</p>
       </header>
 
       {unavailable ? (
