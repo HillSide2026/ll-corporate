@@ -82,3 +82,26 @@ create index if not exists portal_audit_events_resource_idx
 
 create index if not exists portal_audit_events_actor_idx
   on portal_audit_events (actor_subject, created_at desc);
+
+-- Lead conflict checks (ML1 2026-10-22): a lead names the parties before sharing
+-- matter details, signing or paying; Levine Law clears or declines.
+create table if not exists intake_conflict_requests (
+  id text primary key,
+  user_id text not null,
+  user_email text not null,
+  service_code text not null,
+  service_slug text not null,
+  applicant_name text not null,
+  company_name text,
+  related_parties text,
+  adverse_parties text,
+  status text not null default 'pending',
+  decided_at timestamptz,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists intake_conflict_requests_user_idx
+  on intake_conflict_requests (user_id, service_slug, created_at desc);
+
+create index if not exists intake_conflict_requests_status_idx
+  on intake_conflict_requests (status, created_at desc);

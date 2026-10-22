@@ -1,19 +1,7 @@
-import type { Metadata } from "next"
+import { redirect } from "next/navigation"
 
-import { IntakeShell } from "src/components/intake/IntakeShell"
-import { EngagementClient } from "src/components/intake/EngagementClient"
-
-export const metadata: Metadata = { title: "Service Engagement" }
-
-type Props = { searchParams: Promise<Record<string, string | string[] | undefined>> }
-
-export default async function EngagementPage({ searchParams }: Props) {
-  const sp = await searchParams
-  const serviceSlug = typeof sp.service === "string" ? sp.service : undefined
-
-  return (
-    <IntakeShell active="engagement">
-      <EngagementClient serviceSlug={serviceSlug} />
-    </IntakeShell>
-  )
+// Closed until the conflict check clears (ML1 2026-10-22): no click-to-accept engagement
+// before Levine Law confirms it can act. EngagementClient is kept for the post-clearance step.
+export default function EngagementPage() {
+  redirect("/intake/catalog")
 }
