@@ -2,9 +2,22 @@ import type { Metadata } from "next"
 
 import { Eyebrow } from "src/components/brand/Brand"
 import { PortalBrandHeader } from "src/components/portal/PortalBrandHeader"
-import { TERMS_TEXT, TERMS_VERSION } from "src/lib/portal/terms"
+import { TERMS_TEXT, TERMS_VERSION, type TermsBlock } from "src/lib/portal/terms"
 
 export const metadata: Metadata = { title: "Terms of Use — Levine Law" }
+
+function Block({ block }: { block: TermsBlock }) {
+  if (block.type === "ul") {
+    return (
+      <ul className="mt-3 list-disc space-y-1.5 pl-6 text-[15px] leading-7 text-stone-700">
+        {block.items.map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ul>
+    )
+  }
+  return <p className="mt-3 text-[15px] leading-7 text-stone-700">{block.text}</p>
+}
 
 export default function TermsPage() {
   return (
@@ -18,14 +31,20 @@ export default function TermsPage() {
         ) : (
           <p className="mt-6 text-[15px] leading-7 text-stone-600">The Terms of Use are being finalized.</p>
         )}
-        <div className="mt-10 space-y-8">
-          {TERMS_TEXT.map((section) => (
-            <section key={section.heading}>
-              <h2 className="font-display text-xl font-semibold text-stone-950">{section.heading}</h2>
-              {section.body.map((paragraph) => (
-                <p key={paragraph.slice(0, 40)} className="mt-3 text-[15px] leading-7 text-stone-700">
-                  {paragraph}
-                </p>
+        <div className="mt-8">
+          {TERMS_TEXT.map((section, index) => (
+            <section key={section.heading ?? `section-${index}`} className={section.level === 2 ? "mt-10" : "mt-6"}>
+              {section.heading ? (
+                section.level === 2 ? (
+                  <h2 className="font-display text-2xl font-semibold tracking-tight text-stone-950">
+                    {section.heading}
+                  </h2>
+                ) : (
+                  <h3 className="text-base font-semibold text-stone-950">{section.heading}</h3>
+                )
+              ) : null}
+              {section.blocks.map((block, blockIndex) => (
+                <Block key={blockIndex} block={block} />
               ))}
             </section>
           ))}
