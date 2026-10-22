@@ -53,6 +53,8 @@ function ConversionRecord({ request }: { request: ConflictRequest }) {
   const finalService = leadServices.find((s) => s.code === request.finalServiceCode)
 
   if (!request.engagedAt) {
+    const picked = leadServices.find((s) => s.code === request.serviceCode)
+    const pickedFee = picked?.testFeeCents ? String(picked.testFeeCents / 100) : undefined
     return (
       <form
         action={recordEngagementAction}
@@ -75,7 +77,8 @@ function ConversionRecord({ request }: { request: ConflictRequest }) {
             name="fee"
             inputMode="decimal"
             required
-            placeholder="1250"
+            defaultValue={pickedFee}
+            placeholder="0"
             className={`mt-1 block w-28 ${smallInput}`}
           />
         </label>
