@@ -2,6 +2,7 @@
 
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
+import { TERMS_VERSION } from "src/lib/portal/terms"
 import { registerAction } from "./registerAction"
 
 const dbMocks = vi.hoisted(() => ({
@@ -57,7 +58,7 @@ describe("registerAction", () => {
       email: "prospect@example.com",
       name: "New Prospect",
       password: "password123",
-      termsVersion: "unpublished",
+      termsVersion: TERMS_VERSION,
     })
     expect(authMocks.signIn).toHaveBeenCalledWith("credentials", {
       email: "prospect@example.com",
