@@ -12,6 +12,8 @@ export type LeadService = {
   title: string
   summary: string
   includes: string[]
+  /** Flat test fee (all in) for measuring profitability; not shown to leads. ML1 sets these. */
+  testFeeCents?: number
   /** Why a client wants this service; shown on the conflict check page. Draft, pending ML1 review. */
   why: string
   /** Conflict check form wording for this service (ML1 2026-10-22). */
@@ -22,6 +24,7 @@ export const leadServices: LeadService[] = [
   {
     code: "CORP-001",
     slug: "incorporation",
+    testFeeCents: 120000, // ML1 2026-10-22: $1,200 all in
     category: "New company",
     title: "Incorporation",
     summary:
