@@ -2,13 +2,22 @@ import type { ReactNode } from "react"
 import { cookies } from "next/headers"
 
 import { PortalBrandHeader } from "src/components/portal/PortalBrandHeader"
-import { switchToHubMode } from "src/lib/intake/modeActions"
+import { cx } from "src/components/portal/PortalDesignSystem"
+import { signOutFromPortal } from "src/lib/auth/actions"
 import { IntakeFunnelBar } from "./IntakeFunnelBar"
 import { IntakeHubLayout } from "./IntakeHubLayout"
 
 export type IntakeSection = "browse" | "questionnaire" | "engagement"
 
-export async function IntakeShell({ active = "browse", children }: { active?: IntakeSection; children: ReactNode }) {
+export async function IntakeShell({
+  active = "browse",
+  wide = false,
+  children,
+}: {
+  active?: IntakeSection
+  wide?: boolean
+  children: ReactNode
+}) {
   const cookieStore = await cookies()
   const mode = cookieStore.get("intake_mode")?.value === "hub" ? "hub" : "funnel"
 
@@ -16,27 +25,29 @@ export async function IntakeShell({ active = "browse", children }: { active?: In
     return <IntakeHubLayout active={active}>{children}</IntakeHubLayout>
   }
 
+  const width = wide ? "max-w-5xl" : "max-w-3xl"
+
   return (
     <main className="min-h-dvh bg-stone-50">
       <PortalBrandHeader
-        label="Client Intake"
+        label="Client Portal"
         href="/intake"
-        className="max-w-3xl"
+        className={width}
         action={
-          <form action={switchToHubMode}>
+          <form action={signOutFromPortal}>
             <button
               type="submit"
               className="text-sm text-stone-500 underline-offset-4 hover:text-stone-950 hover:underline"
             >
-              Skip guided setup
+              Sign out
             </button>
           </form>
         }
       />
 
-      <IntakeFunnelBar />
+      <IntakeFunnelBar className={width} />
 
-      <div className="mx-auto w-full max-w-3xl px-6 py-10">{children}</div>
+      <div className={cx("mx-auto w-full px-6 py-10 sm:py-14", width)}>{children}</div>
     </main>
   )
 }
