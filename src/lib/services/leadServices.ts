@@ -1,6 +1,7 @@
 /**
  * Services offered to leads (prospect tier) on the portal welcome page.
- * ML1 2026-10-22: CORP-001, CORP-002 (founders tier), CORP-003, CORP-006 and CORP-009.
+ * ML1 2026-10-22: CORP-001, CORP-002 (founders tier), CORP-003 and CORP-009.
+ * CORP-006 Corporate Maintenance is not offered to leads.
  * Codes are SERVICES_REGISTRY.json codes in ll-secondbrain.
  */
 export type LeadService = {
@@ -51,14 +52,6 @@ export const leadServices: LeadService[] = [
     title: "New Shareholder Admission",
     summary: "Bring in a new shareholder with the approvals, share issuance or transfer, and registers done properly.",
     includes: ["Board and shareholder approvals", "Share issuance or transfer", "Updated registers and certificates"],
-  },
-  {
-    code: "CORP-006",
-    slug: "corporate-maintenance",
-    category: "Annual plan",
-    title: "Corporate Maintenance",
-    summary: "Keep your company in good standing every year without having to think about it.",
-    includes: ["Annual resolutions", "Annual return filing", "Minute book kept current"],
   },
   {
     code: "CORP-009",
