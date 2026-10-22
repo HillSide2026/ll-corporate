@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowRight, Check, ChevronDown, Mail } from "lucide-react"
+import { ArrowRight, Check, ChevronDown } from "lucide-react"
 
 import { leadFaqs } from "src/lib/portal/leadFaqs"
 import { lawyers } from "src/lib/portal/team"
@@ -192,28 +192,6 @@ export function LeadWelcome({ firstName }: { firstName?: string }) {
               <p className="px-6 pb-5 text-[15px] leading-7 text-stone-600">{faq.answer}</p>
             </details>
           ))}
-          <details className="group rounded-xl border border-stone-200 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)] open:shadow-[0_8px_24px_rgba(29,71,113,0.08)]">
-            <summary className="text-brand-navy flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 text-base font-medium [&::-webkit-details-marker]:hidden">
-              Not sure which service I need?
-              <ChevronDown
-                className="size-5 shrink-0 text-stone-500 transition-transform group-open:rotate-180"
-                aria-hidden="true"
-              />
-            </summary>
-            <div className="px-6 pb-5">
-              <p className="text-[15px] leading-7 text-stone-600">
-                Send us a short note. Please don&apos;t include details of your matter until we&apos;ve confirmed we can
-                act for you.
-              </p>
-              <a
-                href="mailto:matthew@levinelegal.ca?subject=Which%20service%20do%20I%20need%3F"
-                className="mt-4 inline-flex items-center gap-2 rounded-md border border-stone-300 bg-white px-4 py-2.5 text-sm font-semibold text-stone-800 transition-colors hover:border-stone-400"
-              >
-                <Mail className="size-4" aria-hidden="true" />
-                Email Levine Law
-              </a>
-            </div>
-          </details>
         </div>
       </section>
     </div>

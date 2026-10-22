@@ -16,24 +16,9 @@ export const leadFaqs: Faq[] = [
       "Before a lawyer can act for you, they must confirm they don't already act for anyone whose interests conflict with yours. We ask only for names at this stage. Nothing is signed or paid until the check is complete.",
   },
   {
-    question: "Why can't I describe my matter yet?",
+    question: "When do I sign?",
     answer:
-      "Until we confirm we can act for you, please share only who is involved. Sending details of your matter before then could prevent us from acting for you or for someone else.",
-  },
-  {
-    question: "What if the service I chose isn't the right one?",
-    answer:
-      "That's fine. The service you choose is a starting point. After the conflict check, we confirm the right service and its fee with you before you agree to anything.",
-  },
-  {
-    question: "When do I sign and pay?",
-    answer:
-      "Only after we've confirmed we can act and agreed the service and fee with you. You then sign the engagement letter in the portal and pay the fixed fee by card, before work begins.",
-  },
-  {
-    question: "What does the fixed fee include?",
-    answer:
-      "The fee covers the work described for the confirmed service. Disbursements, such as government filing fees, are charged in addition and are set out in your engagement letter.",
+      "Only after we've confirmed we can act for you and agreed the service and fee with you. You then sign the engagement letter in the portal, before work begins.",
   },
   {
     question: "Will I need to provide identification?",
