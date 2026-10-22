@@ -141,7 +141,7 @@ export function ConflictCheckView({
             </div>
           </section>
         )}
-        <NextStepsPanel />
+        {request?.status === "declined" ? null : <NextStepsPanel />}
       </div>
     </div>
   )
