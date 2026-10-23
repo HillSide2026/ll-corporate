@@ -45,7 +45,7 @@ export default async function ConflictCheckPage({ params }: PageProps) {
   }
 
   return (
-    <IntakeShell active="browse" wide step={2}>
+    <IntakeShell active="browse" wide step={2} bleed>
       <ConflictCheckView
         service={service}
         request={request}

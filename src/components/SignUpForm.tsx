@@ -123,7 +123,11 @@ export function SignUpForm() {
         <FieldError state={state} field="acceptTerms" />
       </div>
 
-      <button type="submit" disabled={pending} className={cn(brandButton, "mt-2 w-full")}>
+      <button
+        type="submit"
+        disabled={pending}
+        className={cn(brandButton, "bg-brand-blue hover:bg-brand-navy mt-2 w-full")}
+      >
         {pending ? "Creating account..." : "Create account"}
       </button>
     </form>

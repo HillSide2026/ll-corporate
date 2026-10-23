@@ -40,24 +40,39 @@ export function Eyebrow({
   )
 }
 
-/** Navy feature panel with the brand-blue glow and architectural grid. */
-export function NavyPanel({ children, className }: { children: ReactNode; className?: string }) {
+/**
+ * Navy feature panel with the brand-blue glow and architectural grid. `bleed` makes it a
+ * full-width section (square edges, larger glow) instead of a rounded card.
+ */
+export function NavyPanel({
+  children,
+  className,
+  bleed = false,
+}: {
+  children: ReactNode
+  className?: string
+  bleed?: boolean
+}) {
   return (
     <section
       className={cn(
-        "bg-brand-navy relative overflow-hidden rounded-3xl px-7 py-10 text-white sm:px-12 sm:py-14",
+        "bg-brand-navy relative overflow-hidden text-white",
+        bleed ? "px-6 py-8 sm:px-12 sm:py-12" : "rounded-3xl px-7 py-10 sm:px-12 sm:py-14",
         className
       )}
     >
       <div
         aria-hidden="true"
-        className="bg-brand-blue/40 pointer-events-none absolute -top-32 -right-24 size-96 rounded-full blur-3xl"
+        className={cn(
+          "bg-brand-blue/40 pointer-events-none absolute rounded-full blur-3xl",
+          bleed ? "-top-40 -right-40 size-[40rem]" : "-top-32 -right-24 size-96"
+        )}
       />
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 [background-image:linear-gradient(to_right,white_1px,transparent_1px),linear-gradient(to_bottom,white_1px,transparent_1px)] [mask-image:linear-gradient(to_left,black,transparent_70%)] [background-size:48px_48px] opacity-[0.07]"
       />
-      <div className="relative">{children}</div>
+      <div className="relative h-full">{children}</div>
     </section>
   )
 }
