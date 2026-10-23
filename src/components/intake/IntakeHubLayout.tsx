@@ -36,7 +36,7 @@ export function IntakeHubLayout({ active, children }: { active: IntakeSection; c
     <SidebarProvider>
       <Sidebar>
         <SidebarHeader className="border-sidebar-border border-b px-4 py-2">
-          <PortalBrandMark href="/intake" label="Client Intake" />
+          <PortalBrandMark href="/intake" label="Portal" />
         </SidebarHeader>
 
         <SidebarContent className="pt-3">
@@ -85,7 +85,7 @@ export function IntakeHubLayout({ active, children }: { active: IntakeSection; c
         <header className="flex h-14 shrink-0 items-center border-b px-4">
           <SidebarTrigger className="-ml-1" />
           <Separator orientation="vertical" className="mx-3 h-4" />
-          <p className="text-muted-foreground text-xs font-semibold tracking-[0.18em] uppercase">Client Intake</p>
+          <p className="text-muted-foreground text-xs font-semibold tracking-[0.18em] uppercase">Portal</p>
         </header>
         <div className="mx-auto w-full max-w-4xl px-5 py-8 md:px-8">{children}</div>
       </SidebarInset>

@@ -45,8 +45,18 @@ export default async function AdminHomePage() {
   const { isAdmin, isPreview } = await getAdminSession()
   if (!isAdmin) redirect("/corporate/admin/login")
 
-  const { matters, isMock } = await getMatterList(null)
-  const matterRequests = await getMatterRequests()
+  // Matters and requests come from systems that may not be connected; the admin
+  // home must still load so the conflict check queue stays reachable.
+  const { matters, isMock, mattersUnavailable } = await getMatterList(null)
+    .then((result) => ({ ...result, mattersUnavailable: false }))
+    .catch((err: unknown) => {
+      console.error("AdminHomePage: matters unavailable", err)
+      return { matters: [] as CaseInstance[], isMock: false, mattersUnavailable: true }
+    })
+  const matterRequests = await getMatterRequests().catch((err: unknown) => {
+    console.error("AdminHomePage: matter requests unavailable", err)
+    return []
+  })
 
   return (
     <main className="min-h-dvh bg-stone-50 text-stone-900">
@@ -76,7 +86,19 @@ export default async function AdminHomePage() {
       </header>
 
       <div className="mx-auto max-w-5xl space-y-12 px-6 py-10">
-        <section>
+        <section className="flex flex-wrap gap-3">
+          <Link
+            href="/corporate/admin/conflicts"
+            className="bg-brand-navy hover:bg-brand-navy-dark inline-flex rounded px-4 py-2 text-sm font-semibold text-white transition-colors"
+          >
+            Review conflict checks
+          </Link>
+          <Link
+            href="/corporate/admin/scorecard"
+            className="border-brand-navy text-brand-navy hover:bg-brand-navy inline-flex rounded border bg-white px-4 py-2 text-sm font-semibold transition-colors hover:text-white"
+          >
+            Lead scorecard
+          </Link>
           <Link
             href="/corporate/admin/access-requests"
             className="border-brand-navy text-brand-navy hover:bg-brand-navy inline-flex rounded border bg-white px-4 py-2 text-sm font-semibold transition-colors hover:text-white"
@@ -91,7 +113,9 @@ export default async function AdminHomePage() {
             <h2 className="text-base font-semibold text-stone-900">Active matters</h2>
             {isMock ? <span className="text-xs text-stone-400">Preview data</span> : null}
           </div>
-          {matters.length === 0 ? (
+          {mattersUnavailable ? (
+            <p className="mt-4 text-sm text-stone-400">Matters are unavailable: the matter system is not connected.</p>
+          ) : matters.length === 0 ? (
             <p className="mt-4 text-sm text-stone-400">No matters found.</p>
           ) : (
             <ul className="mt-4 space-y-2">

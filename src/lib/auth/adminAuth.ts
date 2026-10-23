@@ -8,8 +8,9 @@
  * PORTAL_ADMIN_TOKEN cookie. Once portal_admin is assigned in Keycloak, unset
  * PORTAL_ADMIN_TOKEN and delete the cookie path below.
  *
- * Preview mode (open access with a visible warning) applies only when neither
- * Keycloak nor PORTAL_ADMIN_TOKEN is configured — i.e. local development.
+ * Preview mode (open access with a visible warning) applies only in local
+ * development (NODE_ENV=development) when neither Keycloak nor
+ * PORTAL_ADMIN_TOKEN is configured. Deployed builds deny instead.
  */
 
 import { cookies } from "next/headers"
@@ -39,8 +40,10 @@ export async function getAdminSession(): Promise<AdminSession> {
   const configuredToken = env.PORTAL_ADMIN_TOKEN
 
   if (!configuredToken) {
-    // Keycloak configured but no portal_admin role: deny. Nothing configured: local preview.
-    return keycloakConfigured ? { isAdmin: false, isPreview: false } : { isAdmin: true, isPreview: true }
+    // Nothing configured: open preview, but only in local development. A deployed
+    // portal with no admin credential must deny, never fall open.
+    const localPreview = !keycloakConfigured && process.env.NODE_ENV === "development"
+    return localPreview ? { isAdmin: true, isPreview: true } : { isAdmin: false, isPreview: false }
   }
 
   const cookieStore = await cookies()

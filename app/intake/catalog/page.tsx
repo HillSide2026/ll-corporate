@@ -1,14 +1,18 @@
 import type { Metadata } from "next"
 
 import { IntakeShell } from "src/components/intake/IntakeShell"
-import { CatalogClient } from "src/components/intake/CatalogClient"
+import { LeadWelcome } from "src/components/intake/LeadWelcome"
+import { getPortalSession } from "src/lib/auth/session"
 
-export const metadata: Metadata = { title: "Browse" }
+export const metadata: Metadata = { title: "Welcome" }
 
-export default function CatalogPage() {
+export default async function CatalogPage() {
+  const session = await getPortalSession()
+  const firstName = session?.identity.displayName?.trim().split(/\s+/)[0]
+
   return (
-    <IntakeShell active="browse">
-      <CatalogClient />
+    <IntakeShell active="browse" wide showProgress={false}>
+      <LeadWelcome firstName={firstName} />
     </IntakeShell>
   )
 }

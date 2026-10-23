@@ -8,7 +8,7 @@ import { cx } from "./PortalDesignSystem"
  * The portal's one brand lockup: the Levine Law serif wordmark, a rule, and the
  * section label. Used by every header and sidebar so the product reads as one.
  */
-export function PortalBrandMark({ label = "Client Portal", href }: { label?: string; href: string }) {
+export function PortalBrandMark({ label = "Portal", href }: { label?: string; href: string }) {
   return (
     <Link href={href} className="flex items-center gap-3" aria-label={`Levine Law ${label}`}>
       <Image
@@ -27,7 +27,7 @@ export function PortalBrandMark({ label = "Client Portal", href }: { label?: str
 
 /** Header for the portal's entry surfaces (sign-in, sign-up, intake). */
 export function PortalBrandHeader({
-  label = "Client Portal",
+  label = "Portal",
   href = "/sign-in",
   action,
   className,

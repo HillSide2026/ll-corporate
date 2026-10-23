@@ -31,6 +31,10 @@ async function migrateUsers() {
   )
 `
 
+  // Terms of Use agreement recorded at sign-up (ML1 2026-10-22)
+  await pool.sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS terms_version TEXT`
+  await pool.sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS terms_accepted_at TIMESTAMPTZ`
+
   await pool.end()
   console.log("Migration complete: users table ready.")
 }

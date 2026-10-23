@@ -2,7 +2,8 @@
 
 import { useFormStatus } from "react-dom"
 
-import { Button } from "@/components/ui/button"
+import { brandButton } from "src/components/brand/Brand"
+import { cn } from "@/lib/utils"
 
 type SignInButtonProps = {
   label?: string
@@ -13,8 +14,8 @@ export function SignInButton({ label = "Sign in securely", pendingLabel = "Signi
   const { pending } = useFormStatus()
 
   return (
-    <Button type="submit" aria-busy={pending} disabled={pending} className="h-10 w-full">
+    <button type="submit" aria-busy={pending} disabled={pending} className={cn(brandButton, "w-full")}>
       {pending ? pendingLabel : label}
-    </Button>
+    </button>
   )
 }

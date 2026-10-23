@@ -2,6 +2,7 @@
 
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
+import { TERMS_VERSION } from "src/lib/portal/terms"
 import { registerAction } from "./registerAction"
 
 const dbMocks = vi.hoisted(() => ({
@@ -32,6 +33,7 @@ function registrationFormData() {
   formData.set("email", "Prospect@Example.com")
   formData.set("password", "password123")
   formData.set("confirmPassword", "password123")
+  formData.set("acceptTerms", "on")
   return formData
 }
 
@@ -56,11 +58,33 @@ describe("registerAction", () => {
       email: "prospect@example.com",
       name: "New Prospect",
       password: "password123",
+      termsVersion: TERMS_VERSION,
     })
     expect(authMocks.signIn).toHaveBeenCalledWith("credentials", {
       email: "prospect@example.com",
       password: "password123",
       redirectTo: "/auth/after-sign-in",
     })
+  })
+
+  it("refuses to create an account without agreement to the Terms of Use", async () => {
+    const formData = registrationFormData()
+    formData.delete("acceptTerms")
+
+    const result = await registerAction(null, formData)
+
+    expect(result).toEqual({ error: "You must agree to the Terms of Use to create an account.", field: "acceptTerms" })
+    expect(dbMocks.createUser).not.toHaveBeenCalled()
+  })
+
+  it("returns an error instead of throwing when the database is unavailable", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {})
+    dbMocks.getUserByEmail.mockRejectedValue(new Error("missing_connection_string"))
+
+    const result = await registerAction(null, registrationFormData())
+
+    expect(result).toEqual({ error: "We could not create your account right now. Please try again later." })
+    expect(dbMocks.createUser).not.toHaveBeenCalled()
+    expect(authMocks.signIn).not.toHaveBeenCalled()
   })
 })

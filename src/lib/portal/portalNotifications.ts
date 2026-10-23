@@ -1,7 +1,11 @@
 import { env } from "env.mjs"
 
 type PortalNotificationPayload = {
-  type: "portal_access_request_created" | "portal_access_request_status_changed"
+  type:
+    | "portal_access_request_created"
+    | "portal_access_request_status_changed"
+    | "intake_conflict_request_created"
+    | "intake_conflict_request_decided"
   requestId: string
   email: string
   fullName: string

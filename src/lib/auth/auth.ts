@@ -43,7 +43,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         }
 
         // DB-backed user authentication
-        const user = await getUserByEmail(email).catch(() => null)
+        // Log database failures so they are not mistaken for a wrong password
+        const user = await getUserByEmail(email).catch((err: unknown) => {
+          console.error("authorize: account database unavailable", err)
+          return null
+        })
         if (!user) return null
 
         const valid = await verifyPassword(password, user.password_hash)

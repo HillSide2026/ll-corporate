@@ -4,7 +4,7 @@ import type { ReactNode } from "react"
 export const metadata: Metadata = {
   title: {
     template: "%s — Levine Law",
-    default: "Levine Law Client Intake",
+    default: "Levine Law Portal",
   },
 }
 

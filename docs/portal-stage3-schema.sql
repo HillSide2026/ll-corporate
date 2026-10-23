@@ -82,3 +82,55 @@ create index if not exists portal_audit_events_resource_idx
 
 create index if not exists portal_audit_events_actor_idx
   on portal_audit_events (actor_subject, created_at desc);
+
+-- Lead conflict checks (ML1 2026-10-22): a lead names the parties before sharing
+-- matter details, signing or paying; Levine Law clears or declines.
+create table if not exists intake_conflict_requests (
+  id text primary key,
+  user_id text not null,
+  user_email text not null,
+  service_code text not null,
+  service_slug text not null,
+  applicant_name text not null,
+  company_name text,
+  related_parties text,
+  adverse_parties text,
+  status text not null default 'pending',
+  decided_at timestamptz,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists intake_conflict_requests_user_idx
+  on intake_conflict_requests (user_id, service_slug, created_at desc);
+
+create index if not exists intake_conflict_requests_status_idx
+  on intake_conflict_requests (status, created_at desc);
+
+-- Lead funnel measurement (ML1 2026-10-22): where each lead came from, how far it
+-- got, what it sold for and what it cost in time. Feeds the admin scorecard.
+alter table intake_conflict_requests add column if not exists source text;
+alter table intake_conflict_requests add column if not exists engaged_at timestamptz;
+alter table intake_conflict_requests add column if not exists final_service_code text;
+alter table intake_conflict_requests add column if not exists fee_cents integer;
+alter table intake_conflict_requests add column if not exists clio_matter text;
+alter table intake_conflict_requests add column if not exists paid_at timestamptz;
+alter table intake_conflict_requests add column if not exists completed_at timestamptz;
+alter table intake_conflict_requests add column if not exists hours numeric(6,2);
+
+create table if not exists intake_events (
+  id bigserial primary key,
+  user_id text not null,
+  service_slug text not null,
+  event text not null,
+  source text,
+  created_at timestamptz not null default now(),
+  unique (user_id, service_slug, event)
+);
+
+create index if not exists intake_events_service_idx
+  on intake_events (service_slug, event, created_at desc);
+
+-- Terms of Use agreement recorded at sign-up (ML1 2026-10-22). The users table is
+-- created by scripts/db-migrate.mjs; run these before deploying the sign-up change.
+alter table users add column if not exists terms_version text;
+alter table users add column if not exists terms_accepted_at timestamptz;
