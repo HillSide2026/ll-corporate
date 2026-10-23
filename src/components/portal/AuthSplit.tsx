@@ -11,13 +11,18 @@ import { Eyebrow, NavyPanel } from "src/components/brand/Brand"
  * the design (ML1 2026-10-22).
  */
 export function AuthSplit({
+  eyebrow = "Corporate law services",
   title,
+  intro = "Levine Law helps founders and entrepreneurs set up, run and grow their companies on sound legal footing.",
   points,
   cardTitle,
   children,
   footer,
 }: {
+  /** Shared pages (sign-in) pass neutral wording: leads and clients both see them. */
+  eyebrow?: string
   title: string
+  intro?: string
   points?: string[]
   cardTitle: string
   children: ReactNode
@@ -42,12 +47,10 @@ export function AuthSplit({
 
           <div className="mt-10 max-w-lg lg:my-auto lg:py-12">
             <Eyebrow tone="dark" rule>
-              Corporate law services
+              {eyebrow}
             </Eyebrow>
             <h1 className="font-display mt-5 text-4xl font-semibold tracking-tight sm:text-5xl">{title}</h1>
-            <p className="mt-5 hidden text-lg leading-8 text-white/80 sm:block">
-              Levine Law helps founders and entrepreneurs set up, run and grow their companies on sound legal footing.
-            </p>
+            <p className="mt-5 hidden text-lg leading-8 text-white/80 sm:block">{intro}</p>
             {points?.length ? (
               <ul className="mt-8 hidden space-y-3 sm:block">
                 {points.map((point) => (

@@ -37,7 +37,7 @@ export function IntakeFunnelBar({ className, currentStep }: { className?: string
                 <span
                   className={cn(
                     "flex size-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold",
-                    isDone || isActive ? "bg-brand-navy text-white" : "bg-stone-100 text-stone-400"
+                    isDone || isActive ? "bg-brand-blue text-white" : "bg-stone-100 text-stone-400"
                   )}
                 >
                   {isDone ? "✓" : step.id}
@@ -51,7 +51,7 @@ export function IntakeFunnelBar({ className, currentStep }: { className?: string
                   {step.label}
                 </span>
               </div>
-              {!isLast && <div className={cn("mx-3 h-px flex-1", isDone ? "bg-brand-navy/40" : "bg-stone-200")} />}
+              {!isLast && <div className={cn("mx-3 h-px flex-1", isDone ? "bg-brand-blue/40" : "bg-stone-200")} />}
             </li>
           )
         })}
