@@ -2,14 +2,14 @@
  * Portal Terms of Use (ML1 2026-10-22: every portal page links to them, sign-up
  * requires agreement, and the confirmation email must state that the user agreed).
  *
- * Text: the levine-law.ca website Terms of Use and Website Privacy Policy, copied
- * verbatim from the website (last modified 2026-07-03) as the starting point. ML1
- * will update it to cover portal use. TERMS_VERSION is recorded against each user
- * who agrees: change it whenever the text changes.
+ * Text: ML1's portal Terms of Use and Platform Privacy Policy, version 2026-10-22-portal,
+ * copied verbatim from "portal terms.docx" (ML1, 2026-10-22). The document's title, version
+ * line and copyright line are shown by the page and footer, not repeated here.
+ * TERMS_VERSION is recorded against each user who agrees: change it whenever the text changes.
  */
 export const TERMS_URL = "/terms"
 
-export const TERMS_VERSION: string | null = "2026-07-03-website"
+export const TERMS_VERSION: string | null = "2026-10-22-portal"
 
 export type TermsBlock = { type: "p"; text: string } | { type: "ul"; items: string[] }
 
@@ -22,11 +22,29 @@ export const TERMS_TEXT: TermsSection[] = [
     blocks: [
       {
         type: "p",
-        text: "By accessing and browsing levinelegal.ca (the “Website”), you hereby accept these Terms of Use (“Terms) including the Website Privacy Policy set out hereunder.",
+        text: "By accessing and browsing levine-law.ca or levinelegal.ca (either one or both, the “Website”) or portal.levine-law.ca (the “Portal” and, together with the Website, the “Platform”), you hereby accept these Terms of Use (the “Terms”), including the Platform Privacy Policy set out hereunder.",
       },
       {
         type: "p",
-        text: "If you do not agree to accept the Terms, then you must stop using the Website immediately.",
+        text: "If you do not agree to accept the Terms, then you must stop using the Platform immediately.",
+      },
+    ],
+  },
+  {
+    heading: "Portal and Limited Scope Legal Services",
+    level: 2,
+    blocks: [
+      {
+        type: "p",
+        text: "Through the Portal, Levine Law may, in its discretion, offer limited scope legal services to users who become clients (“Limited Scope Services”). Limited Scope Services are provided only under a separate written engagement agreement between you and Levine Law that describes the nature, extent and scope of the services to be provided and their limitations (an “Engagement Agreement”). No Limited Scope Services will be provided, and no lawyer-client relationship will arise, until Levine Law has completed its conflict check and and an Engagement Agreement has been entered into.",
+      },
+      {
+        type: "p",
+        text: "Limited Scope Services are limited to the specific tasks described in the applicable Engagement Agreement. Levine Law will not advise you on, and is not responsible for, any matter or any part of your matter outside that scope, even if it is related to, or comes to our attention while we are providing, the Limited Scope Services. You remain responsible for all other aspects of your matter and should obtain independent legal advice on any issue outside the agreed scope.",
+      },
+      {
+        type: "p",
+        text: "If there is a conflict between these Terms and an Engagement Agreement, the Engagement Agreement governs with respect to the Limited Scope Services.",
       },
     ],
   },
@@ -36,11 +54,11 @@ export const TERMS_TEXT: TermsSection[] = [
     blocks: [
       {
         type: "p",
-        text: "The information provided on the Website is not intended to be legal advice. Many factors unknown to us may affect the applicability of any statement or comment that we make on our Website to your particular circumstances.",
+        text: "Except for Limited Scope Services provided under an Engagement Agreement, the information provided on the Platform is not intended to be legal advice. Many factors unknown to us may affect the applicability of any statement or comment that we make on our Platform to your particular circumstances.",
       },
       {
         type: "p",
-        text: "Our Website provides general information on legal and related matters and must not be considered to create a lawyer client relationship in any respect. If you require legal advice, you should retain qualified legal professionals to advise you in the context of your particular circumstances. If you would like to retain Us to give you legal advice, please telephone, email or write to any of our lawyers, who will be pleased to discuss whether or not our firm can assist you.",
+        text: "Except as set out in an Engagement Agreement, the Platform provides general information on legal and related matters and must not be considered to create a lawyer client relationship in any respect. If you require legal advice, you should retain qualified legal professionals to advise you in the context of your particular circumstances. If you would like to retain Us to give you legal advice, please telephone, email or write to any of our lawyers, or submit a request through the Portal, and we will be pleased to discuss whether or not our firm can assist you.",
       },
     ],
   },
@@ -50,7 +68,7 @@ export const TERMS_TEXT: TermsSection[] = [
     blocks: [
       {
         type: "p",
-        text: "Unless and until We specifically agree to act for you on a matter, you should not provide us with any unsolicited confidential information or material. Unsolicited information and material will not be treated as confidential and will not be protected by any lawyer-client privilege.",
+        text: "Accessing the Platform, including creating a Portal account or submitting a request through the Portal, does not by itself create a lawyer-client relationship. A lawyer-client relationship arises only when Levine Law confirms in writing that it will act for you, and then only on the terms and within the scope set out in the applicable Engagement Agreement. Until then, you should not provide us with any unsolicited confidential information or material. Unsolicited information and material may not be treated as confidential and will not be protected by any lawyer-client privilege.",
       },
     ],
   },
@@ -60,7 +78,7 @@ export const TERMS_TEXT: TermsSection[] = [
     blocks: [
       {
         type: "p",
-        text: "Levine Law either owns the intellectual property rights in the underlying HTML, Java scripts, text, audio clips, video clips and other content that is made available to you on our Website, or has obtained the permission of the owner of the intellectual property in such content to use the content on our Website.",
+        text: "Levine Law either owns the intellectual property rights in the underlying HTML, Java scripts, text, audio clips, video clips and other content that is made available to you on our Platform, or has obtained the permission of the owner of the intellectual property in such content to use the content on our Platform.",
       },
     ],
   },
@@ -70,7 +88,7 @@ export const TERMS_TEXT: TermsSection[] = [
     blocks: [
       {
         type: "p",
-        text: "Levine Law grants to you a limited license to display on your computer, print, download and use the underlying HTML, text, audio clips, video clips and other content that is made available to you on our Website, for non-commercial, personal, or educational purposes only, provided that:",
+        text: "Levine Law grants to you a limited license to display on your computer, print, download and use the underlying HTML, text, audio clips, video clips and other content that is made available to you on our Platform, for non-commercial, personal, or educational purposes only, provided that:",
       },
       {
         type: "ul",
@@ -88,12 +106,12 @@ export const TERMS_TEXT: TermsSection[] = [
         items: [
           "make any commercial use of such content;",
           "include such content in or with any product that you create or distribute; or",
-          "copy such content onto your or any other Website.",
+          "copy such content onto your or any other website, platform or service.",
         ],
       },
       {
         type: "p",
-        text: "Notwithstanding the above, nothing contained in this licence shall be construed as conferring any right under any copyright of Levine Law or any other person who owns the copyright in content provided on our Website.",
+        text: "Notwithstanding the above, nothing contained in this licence shall be construed as conferring any right under any copyright of Levine Law or any other person who owns the copyright in content provided on our Platform. Documents and other work product delivered to you as part of Limited Scope Services are governed by the applicable Engagement Agreement and not by this licence.",
       },
     ],
   },
@@ -103,7 +121,7 @@ export const TERMS_TEXT: TermsSection[] = [
     blocks: [
       {
         type: "p",
-        text: "Unless and until We specifically agree to consult with you on a specific matter, nothing on this Website should be considered to create or otherwise constitute a consultation.  Even if we do agree to consult with you on a specific matter, any such consultation shall only take place after we have performed a preliminary check to ensure that there is no conflict of interest.",
+        text: "Unless and until We specifically agree to consult with you on a specific matter, nothing on this Platform should be considered to create or otherwise constitute a consultation. Even if we do agree to consult with you on a specific matter, any such consultation shall only take place after we have performed a preliminary check to ensure that there is no conflict of interest.",
       },
     ],
   },
@@ -113,7 +131,7 @@ export const TERMS_TEXT: TermsSection[] = [
     blocks: [
       {
         type: "p",
-        text: "Levine Law does not warrant the quality, accuracy or completeness of any information on our Website. Such information is provided “as is” without warranty or condition of any kind. The Website may include inaccuracies or typographical errors. In no event shall Levine Law be liable for any damages whatsoever, including special, indirect or consequential damages, arising out of or in connection with the use or performance of information available on this Website.",
+        text: "Except as expressly set out in an Engagement Agreement, Levine Law does not warrant the quality, accuracy or completeness of any information on our Platform. Such information is provided “as is” without warranty or condition of any kind. The Platform may include inaccuracies or typographical errors, and Levine Law does not warrant that the Platform, including the Portal, will be available, uninterrupted, secure or error-free. In no event shall Levine Law be liable for any damages whatsoever, including special, indirect or consequential damages, arising out of or in connection with the use or performance of information available on this Platform. Nothing in these Terms limits or excludes any duty or liability that Levine Law owes to a client in respect of Limited Scope Services under an Engagement Agreement or applicable law, including the rules of the Law Society of Ontario.",
       },
     ],
   },
@@ -123,7 +141,7 @@ export const TERMS_TEXT: TermsSection[] = [
     blocks: [
       {
         type: "p",
-        text: "No endorsement of any third party products or services is expressed or implied by any information, material or content referred to or included on, or linked from or to this Website",
+        text: "No endorsement of any third party products or services is expressed or implied by any information, material or content referred to or included on, or linked from or to this Platform.",
       },
     ],
   },
@@ -133,22 +151,32 @@ export const TERMS_TEXT: TermsSection[] = [
     blocks: [
       {
         type: "p",
-        text: "Levine law retains the right to amend the above conditions at any time, including the right to revoke any permissions.",
+        text: "Levine Law retains the right to amend these Terms at any time, including the right to revoke any permissions. No amendment will change the terms of an Engagement Agreement then in effect unless you agree in writing.",
       },
     ],
   },
   {
-    heading: "Use of this web site",
+    heading: "Use of the Platform",
     level: 2,
     blocks: [
       {
         type: "p",
-        text: "If you have problems viewing any page of this site, please do not hesitate to contact the Webmaster.",
+        text: "If you have problems viewing any part of the Platform, please do not hesitate to contact the Webmaster.",
       },
     ],
   },
   {
-    heading: "Website Privacy Policy",
+    heading: "Portal Accounts",
+    level: 3,
+    blocks: [
+      {
+        type: "p",
+        text: "To use the Portal, you may be required to create an account. You agree to provide accurate and complete registration information and to keep it current. You are responsible for keeping your login credentials confidential and for all activity under your account. You must notify us promptly at {Portal support email address} if you become aware of any unauthorized access to or use of your account. Levine Law may suspend or terminate your access to the Portal at any time, including if we believe your account has been compromised or these Terms have been breached, subject to any obligations we owe you under an Engagement Agreement.",
+      },
+    ],
+  },
+  {
+    heading: "Platform Privacy Policy",
     level: 2,
     blocks: [
       {
@@ -157,11 +185,11 @@ export const TERMS_TEXT: TermsSection[] = [
       },
       {
         type: "p",
-        text: "This Website Privacy Policy aims to help you understand our personal information collection, use, disclosure and retention practices, specifically as it pertains to this website. By providing personal information to us via this website or by email you agree to the processing set out in this Website Privacy Policy.",
+        text: "This Platform Privacy Policy aims to help you understand our personal information collection, use, disclosure and retention practices, specifically as it pertains to this Platform. By providing personal information to us via this Platform or by email you agree to the processing set out in this Platform Privacy Policy.",
       },
       {
         type: "p",
-        text: "This Website Privacy Policy does not apply to, and Levine Law is not responsible for, any third party websites which may be accessible through links from this website. If you follow a link to any of these third-party websites, they will have their own privacy policies and you will need to check these policies before you submit any personal information to such third-party websites.",
+        text: "This Platform Privacy Policy does not apply to, and Levine Law is not responsible for, any third-party websites which may be accessible through links from this Platform. If you follow a link to any of these third-party websites, they will have their own privacy policies and you will need to check these policies before you submit any personal information to such third-party websites.",
       },
     ],
   },
@@ -171,7 +199,7 @@ export const TERMS_TEXT: TermsSection[] = [
     blocks: [
       {
         type: "p",
-        text: "Levine Law (“Levine”, “we”, “us” or “our”) is a  law firm. Unless we notify you otherwise, we are the “data controller” of your personal information, i.e. the organization who alone or jointly determines the purposes for which, and the manner in which, any personal information is, or is likely to be, processed.",
+        text: "Levine Law (“Levine”, “we”, “us” or “our”) is a law firm. Unless we notify you otherwise, we are the “data controller” of your personal information, i.e. the organization who alone or jointly determines the purposes for which, and the manner in which, any personal information is, or is likely to be, processed.",
       },
     ],
   },
@@ -186,6 +214,10 @@ export const TERMS_TEXT: TermsSection[] = [
       {
         type: "p",
         text: "• Contact information such as name, email address and telephone number;",
+      },
+      {
+        type: "p",
+        text: "• Portal account information such as username, password, security settings, and login and activity history;",
       },
       {
         type: "p",
@@ -209,7 +241,7 @@ export const TERMS_TEXT: TermsSection[] = [
       },
       {
         type: "p",
-        text: "• Website usage and other technical information such as details of visits to our websites or information collected through cookies and other tracking technologies;",
+        text: "• Platform usage and other technical information such as details of visits to the Platform or information collected through cookies and other tracking technologies;",
       },
       {
         type: "p",
@@ -243,11 +275,11 @@ export const TERMS_TEXT: TermsSection[] = [
       },
       {
         type: "p",
-        text: "• To provide our legal and other services and to conduct our business – to administer and perform our services, including to carry out our obligations arising from any agreements entered into between you and us. Applicable legal grounds: contract performance, legitimate interests (to enable us to perform our obligations and provide our services), consent;",
+        text: "• To provide our legal and other services (including Limited Scope Services through the Portal) and to conduct our business – to administer and perform our services, including to carry out our obligations arising from any agreements entered into between you and us. Applicable legal grounds: contract performance, legitimate interests (to enable us to perform our obligations and provide our services), consent;",
       },
       {
         type: "p",
-        text: "• To facilitate use of our websites and to ensure content is relevant – to respond to requests for information or enquiries from visitors to our websites and to ensure that content from our websites is presented in the most effective manner for you and for your device. Applicable legal grounds: legitimate interests (to allow us to provide the content and services on the websites), consent, contract performance;",
+        text: "• To facilitate use of the Platform and to ensure content is relevant – to respond to requests for information or enquiries from visitors to the Platform and to ensure that content from the Platform is presented in the most effective manner for you and for your device. Applicable legal grounds: legitimate interests (to allow us to provide the content and services on the Platform), consent, contract performance;",
       },
       {
         type: "p",
@@ -271,7 +303,7 @@ export const TERMS_TEXT: TermsSection[] = [
       },
       {
         type: "p",
-        text: "• To reorganize or make changes to our business – In the event that we undergo a reorganization (for example if we merge, combine or divest a part of our business), we may need to transfer some or all of personal information to the relevant third party (or its advisors) as part of any due diligence process or transfer to that reorganized entity or third party your personal information for the same purposes as set out in this Privacy Policy or for the purpose of analyzing any proposed reorganization. Applicable legal grounds: legitimate interests (in order to allow us to change our business).",
+        text: "• To reorganize or make changes to our business – In the event that we undergo a reorganization (for example if we merge, combine or divest a part of our business), we may need to transfer some or all of personal information to the relevant third party (or its advisors) as part of any due diligence process or transfer to that reorganized entity or third party your personal information for the same purposes as set out in this Platform Privacy Policy or for the purpose of analyzing any proposed reorganization. Applicable legal grounds: legitimate interests (in order to allow us to change our business).",
       },
     ],
   },
@@ -285,7 +317,7 @@ export const TERMS_TEXT: TermsSection[] = [
       },
       {
         type: "p",
-        text: "• Third-party service providers who provide website, application development, hosting, maintenance, and other services to us.",
+        text: "• Third-party service providers who provide website, platform, application development, hosting, maintenance, and other services to us.",
       },
       {
         type: "p",
@@ -303,7 +335,7 @@ export const TERMS_TEXT: TermsSection[] = [
     blocks: [
       {
         type: "p",
-        text: "We will only keep personal information for as long as reasonably necessary to fulfil the relevant purposes set out in this Policy Privacy and in order to comply with our legal and regulatory obligations. If you would like further information regarding the periods for which personal information will be kept, please contact us as set forth in the “How to contact us?” section.",
+        text: "We will only keep personal information for as long as reasonably necessary to fulfil the relevant purposes set out in this Platform Privacy Policy and in order to comply with our legal and regulatory obligations. If you would like further information regarding the periods for which personal information will be kept, please contact us as set forth in the “How to contact us?” section.",
       },
     ],
   },
@@ -373,7 +405,7 @@ export const TERMS_TEXT: TermsSection[] = [
     blocks: [
       {
         type: "p",
-        text: "For details of the cookies employed by us, please consult our Cookie Policy, which forms part of this Website Privacy Policy.",
+        text: "For details of the cookies employed by us, please consult our Cookie Policy, which forms part of this Platform Privacy Policy.",
       },
     ],
   },
@@ -383,21 +415,21 @@ export const TERMS_TEXT: TermsSection[] = [
     blocks: [
       {
         type: "p",
-        text: "For any questions or comments about this Privacy Policy or personal information, to make an access or correction request, to exercise any applicable rights, to make a complaint, or to obtain information about our policies and practices with respect to any service providers outside Canada, our Privacy Officer can be reached by email via office at levinelegal.ca.",
+        text: "For any questions or comments about this Platform Privacy Policy or personal information, to make an access or correction request, to exercise any applicable rights, to make a complaint, or to obtain information about our policies and practices with respect to any service providers outside Canada, our Privacy Officer can be reached by email via office at levine-law.ca.",
       },
     ],
   },
   {
-    heading: "10. How we may update this Website Privacy Policy?",
+    heading: "10. How we may update this Platform Privacy Policy?",
     level: 3,
     blocks: [
       {
         type: "p",
-        text: "We may change the content of our websites and how we use cookies without notice and consequently our Website Privacy Policy, including but not limited to any related Cookie Policy, may change from time to time in the future. We therefore encourage you to review them whenever you visit the website to stay informed of how we are processing personal information.",
+        text: "We may change the content of the Platform and how we use cookies without notice and consequently our Platform Privacy Policy, including but not limited to any related Cookie Policy, may change from time to time in the future. We therefore encourage you to review them whenever you visit the Platform to stay informed of how we are processing personal information.",
       },
       {
         type: "p",
-        text: "This Website Privacy Policy was last updated April, 2024.",
+        text: "This Platform Privacy Policy was last updated October, 2026.",
       },
     ],
   },
