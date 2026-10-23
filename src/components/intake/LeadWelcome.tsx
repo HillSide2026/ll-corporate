@@ -19,7 +19,7 @@ import { lawyers } from "src/lib/portal/team"
 import { type LeadService, leadServices } from "src/lib/services/leadServices"
 
 const steps = [
-  { title: "Choose a service", body: "Pick the closest match below." },
+  { title: "Choose Service", body: "Pick the closest match below." },
   { title: "Conflict check", body: "Tell us who is involved. Nothing is shared, signed or paid yet." },
   { title: "Confirm and agree", body: "We email you the engagement letter. You sign and pay by email." },
   { title: "Lawyer handles everything", body: "Follow your file's progress here." },

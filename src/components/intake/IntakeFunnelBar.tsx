@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils"
 
 // Conflict check comes before any details, signature or payment (ML1 2026-10-22).
 const steps = [
-  { id: 1, label: "Choose a service" },
+  { id: 1, label: "Choose Service" },
   { id: 2, label: "Conflict check" },
   { id: 3, label: "Confirm and agree" },
   { id: 4, label: "Lawyer handles everything" },
