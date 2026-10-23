@@ -18,6 +18,7 @@ function request(overrides: Partial<ConflictRequest>): ConflictRequest {
     decidedAt: null,
     createdAt: "2026-10-01T00:00:00.000Z",
     source: null,
+    screening: null,
     engagedAt: null,
     finalServiceCode: null,
     feeCents: null,

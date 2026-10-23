@@ -11,6 +11,8 @@ import { SignInButton } from "./SignInButton"
 type PortalEntryProps = {
   authError?: string
   previewAccessEnabled?: boolean
+  /** The service a lead arrived for by an entry link; kept through sign-in. */
+  serviceSlug?: string
 }
 
 function getAuthErrorMessage(authError?: string) {
@@ -25,7 +27,7 @@ function getAuthErrorMessage(authError?: string) {
     : undefined
 }
 
-export function PortalEntry({ authError, previewAccessEnabled = false }: PortalEntryProps) {
+export function PortalEntry({ authError, previewAccessEnabled = false, serviceSlug }: PortalEntryProps) {
   const authErrorMessage = getAuthErrorMessage(authError)
   const keycloakConfigured = isKeycloakConfigured()
 
@@ -37,7 +39,10 @@ export function PortalEntry({ authError, previewAccessEnabled = false }: PortalE
         <>
           <p>
             Don&apos;t have an account?{" "}
-            <Link href="/sign-up" className="text-brand-blue font-semibold underline-offset-4 hover:underline">
+            <Link
+              href={serviceSlug ? `/sign-up?service=${serviceSlug}` : "/sign-up"}
+              className="text-brand-blue font-semibold underline-offset-4 hover:underline"
+            >
               Create one
             </Link>
           </p>
@@ -63,6 +68,7 @@ export function PortalEntry({ authError, previewAccessEnabled = false }: PortalE
       ) : null}
 
       <form action={signInWithCredentials} className="space-y-5">
+        {serviceSlug ? <input type="hidden" name="service" value={serviceSlug} /> : null}
         <div className="space-y-1.5">
           <Label htmlFor="email">Email address</Label>
           <Input id="email" name="email" type="email" autoComplete="email" required className="h-11 rounded-lg" />

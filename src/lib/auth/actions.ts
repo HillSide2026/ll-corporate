@@ -6,13 +6,14 @@ import { redirect } from "next/navigation"
 
 import { signIn, signOut } from "./auth"
 import { isKeycloakConfigured, isPreviewPortalAccessEnabled } from "./config"
+import { afterSignInPath } from "./redirects"
 
 export async function signInWithCredentials(formData: FormData) {
   try {
     await signIn("credentials", {
       email: formData.get("email"),
       password: formData.get("password"),
-      redirectTo: "/auth/after-sign-in",
+      redirectTo: afterSignInPath(formData.get("service")),
     })
   } catch (err) {
     if (err instanceof AuthError) {

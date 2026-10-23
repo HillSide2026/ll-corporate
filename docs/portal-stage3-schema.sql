@@ -134,3 +134,7 @@ create index if not exists intake_events_service_idx
 -- created by scripts/db-migrate.mjs; run these before deploying the sign-up change.
 alter table users add column if not exists terms_version text;
 alter table users add column if not exists terms_accepted_at timestamptz;
+
+-- Routing answers asked with the conflict check (ML1 2026-10-22), e.g. buying or
+-- selling for the letter of intent services. Never matter details.
+alter table intake_conflict_requests add column if not exists screening jsonb;

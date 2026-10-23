@@ -45,7 +45,7 @@ describe("AfterSignInPage", () => {
   it("redirects clients to the portal workspace", async () => {
     vi.mocked(getPortalSession).mockResolvedValue(clientSession)
 
-    await expect(AfterSignInPage()).rejects.toThrow("redirect:/corporate/app")
+    await expect(AfterSignInPage({})).rejects.toThrow("redirect:/corporate/app")
     expect(redirect).toHaveBeenCalledWith("/corporate/app")
   })
 
@@ -54,21 +54,29 @@ describe("AfterSignInPage", () => {
       identity: { ...clientSession.identity, subject: "teammate-1", role: "teammate" },
     })
 
-    await expect(AfterSignInPage()).rejects.toThrow("redirect:/corporate/app")
+    await expect(AfterSignInPage({})).rejects.toThrow("redirect:/corporate/app")
     expect(redirect).toHaveBeenCalledWith("/corporate/app")
   })
 
   it("redirects non-client users to intake", async () => {
     vi.mocked(getPortalSession).mockResolvedValue(prospectSession)
 
-    await expect(AfterSignInPage()).rejects.toThrow("redirect:/intake")
+    await expect(AfterSignInPage({})).rejects.toThrow("redirect:/intake")
     expect(redirect).toHaveBeenCalledWith("/intake")
+  })
+
+  it("sends a lead who arrived by a service entry link to that service", async () => {
+    vi.mocked(getPortalSession).mockResolvedValue(prospectSession)
+
+    await expect(AfterSignInPage({ searchParams: Promise.resolve({ service: "letter-of-intent" }) })).rejects.toThrow(
+      "redirect:/intake/start/letter-of-intent"
+    )
   })
 
   it("redirects unauthenticated users to sign-in", async () => {
     vi.mocked(getPortalSession).mockResolvedValue(null)
 
-    await expect(AfterSignInPage()).rejects.toThrow("redirect:/sign-in")
+    await expect(AfterSignInPage({})).rejects.toThrow("redirect:/sign-in")
     expect(redirect).toHaveBeenCalledWith("/sign-in")
   })
 })

@@ -15,7 +15,14 @@ function FieldError({ state, field }: { state: RegisterState; field: string }) {
   return <p className="text-destructive mt-1.5 text-xs">{state.error}</p>
 }
 
-export function SignUpForm() {
+type SignUpFormProps = {
+  /** The service a lead arrived for by an entry link. */
+  service?: { slug: string; title: string }
+  defaultName?: string
+  defaultEmail?: string
+}
+
+export function SignUpForm({ service, defaultName, defaultEmail }: SignUpFormProps = {}) {
   const [state, action, pending] = useActionState(registerAction, null)
   const passwordRef = useRef<HTMLInputElement>(null)
   const confirmRef = useRef<HTMLInputElement>(null)
@@ -28,6 +35,14 @@ export function SignUpForm() {
 
   return (
     <form action={action} className="space-y-4">
+      {service ? (
+        <>
+          <input type="hidden" name="service" value={service.slug} />
+          <p className="rounded-lg bg-stone-50 px-4 py-3 text-sm text-stone-700">
+            Requesting: <span className="font-semibold text-stone-900">{service.title}</span>
+          </p>
+        </>
+      ) : null}
       {state?.error && !state.field ? (
         <div className="border-destructive/20 bg-destructive/10 text-destructive rounded-lg border px-4 py-3 text-sm">
           {state.error}
@@ -42,6 +57,7 @@ export function SignUpForm() {
           name="name"
           type="text"
           autoComplete="name"
+          defaultValue={defaultName}
           required
           aria-invalid={state?.field === "name" || undefined}
         />
@@ -56,6 +72,7 @@ export function SignUpForm() {
           name="email"
           type="email"
           autoComplete="email"
+          defaultValue={defaultEmail}
           required
           aria-invalid={state?.field === "email" || undefined}
         />

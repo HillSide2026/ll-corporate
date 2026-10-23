@@ -17,6 +17,8 @@ export type ConflictRequest = {
   createdAt: string
   /** Where the lead came from (?ref= code), if known. */
   source: string | null
+  /** Answers to the service's routing questions, e.g. buying or selling. */
+  screening: Record<string, string> | null
   /** Conversion record, kept by Levine Law after clearing (ML1 2026-10-22). */
   engagedAt: string | null
   finalServiceCode: string | null
@@ -41,6 +43,7 @@ type ConflictRow = {
   decided_at: Date | string | null
   created_at: Date | string
   source: string | null
+  screening: Record<string, string> | null
   engaged_at: Date | string | null
   final_service_code: string | null
   fee_cents: number | null
@@ -73,6 +76,7 @@ function mapRow(row: ConflictRow): ConflictRequest {
     decidedAt: toIsoOrNull(row.decided_at),
     createdAt: toIso(row.created_at),
     source: row.source ?? null,
+    screening: row.screening ?? null,
     engagedAt: toIsoOrNull(row.engaged_at ?? null),
     finalServiceCode: row.final_service_code ?? null,
     feeCents: row.fee_cents ?? null,
@@ -93,18 +97,20 @@ export async function createConflictRequest(input: {
   relatedParties?: string
   adverseParties?: string
   source?: string | null
+  screening?: Record<string, string> | null
 }): Promise<ConflictRequest> {
   const db = requirePortalDatabase()
   const id = `CC-${Date.now()}-${crypto.randomUUID().slice(0, 8).toUpperCase()}`
   const result = await db.sql<ConflictRow>`
     insert into intake_conflict_requests (
       id, user_id, user_email, service_code, service_slug,
-      applicant_name, company_name, related_parties, adverse_parties, source
+      applicant_name, company_name, related_parties, adverse_parties, source, screening
     )
     values (
       ${id}, ${input.userId}, ${input.userEmail}, ${input.serviceCode}, ${input.serviceSlug},
       ${input.applicantName}, ${input.companyName ?? null}, ${input.relatedParties ?? null},
-      ${input.adverseParties ?? null}, ${input.source ?? null}
+      ${input.adverseParties ?? null}, ${input.source ?? null},
+      ${input.screening && Object.keys(input.screening).length ? JSON.stringify(input.screening) : null}::jsonb
     )
     returning *
   `
@@ -149,34 +155,37 @@ export async function decideConflictRequest(
 export async function recordEngagement(
   id: string,
   input: { finalServiceCode: string; feeCents: number; clioMatter: string | null }
-): Promise<boolean> {
+): Promise<ConflictRequest | null> {
   const db = requirePortalDatabase()
-  const result = await db.sql`
+  const result = await db.sql<ConflictRow>`
     update intake_conflict_requests
     set engaged_at = now(), final_service_code = ${input.finalServiceCode},
         fee_cents = ${input.feeCents}, clio_matter = ${input.clioMatter}
     where id = ${id} and status = 'cleared' and engaged_at is null
+    returning *
   `
-  return (result.rowCount ?? 0) > 0
+  return result.rows[0] ? mapRow(result.rows[0]) : null
 }
 
-export async function recordPayment(id: string): Promise<boolean> {
+export async function recordPayment(id: string): Promise<ConflictRequest | null> {
   const db = requirePortalDatabase()
-  const result = await db.sql`
+  const result = await db.sql<ConflictRow>`
     update intake_conflict_requests
     set paid_at = now()
     where id = ${id} and engaged_at is not null and paid_at is null
+    returning *
   `
-  return (result.rowCount ?? 0) > 0
+  return result.rows[0] ? mapRow(result.rows[0]) : null
 }
 
 /** Work delivered, with the hours recorded against the matter in Clio. */
-export async function recordCompletion(id: string, hours: number): Promise<boolean> {
+export async function recordCompletion(id: string, hours: number): Promise<ConflictRequest | null> {
   const db = requirePortalDatabase()
-  const result = await db.sql`
+  const result = await db.sql<ConflictRow>`
     update intake_conflict_requests
     set completed_at = now(), hours = ${hours}
     where id = ${id} and paid_at is not null and completed_at is null
+    returning *
   `
-  return (result.rowCount ?? 0) > 0
+  return result.rows[0] ? mapRow(result.rows[0]) : null
 }

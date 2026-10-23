@@ -3,12 +3,24 @@ import Link from "next/link"
 
 import { AuthSplit } from "src/components/portal/AuthSplit"
 import { SignUpForm } from "src/components/SignUpForm"
+import { findLeadService } from "src/lib/services/leadServices"
 
 export const metadata: Metadata = {
   title: "Create Account — Levine Law",
 }
 
-export default function SignUpPage() {
+type PageProps = { searchParams?: Promise<Record<string, string | string[] | undefined>> }
+
+function param(params: Record<string, string | string[] | undefined> | undefined, key: string): string | undefined {
+  const value = params?.[key]
+  return typeof value === "string" ? value.slice(0, 200) : undefined
+}
+
+/** Arriving by a service entry link (/go/<service>) carries the service, name and email. */
+export default async function SignUpPage({ searchParams }: PageProps) {
+  const params = await searchParams
+  const service = findLeadService(param(params, "service"))
+
   return (
     <AuthSplit
       title="Create your account"
@@ -17,13 +29,20 @@ export default function SignUpPage() {
       footer={
         <p>
           Already have an account?{" "}
-          <Link href="/sign-in" className="text-brand-blue font-semibold underline-offset-4 hover:underline">
+          <Link
+            href={service ? `/sign-in?service=${service.slug}` : "/sign-in"}
+            className="text-brand-blue font-semibold underline-offset-4 hover:underline"
+          >
             Sign in
           </Link>
         </p>
       }
     >
-      <SignUpForm />
+      <SignUpForm
+        service={service ? { slug: service.slug, title: service.title } : undefined}
+        defaultName={param(params, "name")}
+        defaultEmail={param(params, "email")}
+      />
     </AuthSplit>
   )
 }
