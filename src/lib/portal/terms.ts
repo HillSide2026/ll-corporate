@@ -36,7 +36,7 @@ export const TERMS_TEXT: TermsSection[] = [
     blocks: [
       {
         type: "p",
-        text: "Through the Portal, Levine Law may, in its discretion, offer limited scope legal services to users who become clients (“Limited Scope Services”). Limited Scope Services are provided only under a separate written engagement agreement between you and Levine Law that describes the nature, extent and scope of the services to be provided and their limitations (an “Engagement Agreement”). No Limited Scope Services will be provided, and no lawyer-client relationship will arise, until Levine Law has completed its conflict check and and an Engagement Agreement has been entered into.",
+        text: "Through the Portal, Levine Law may, in its discretion, offer limited scope legal services to users who become clients (“Limited Scope Services”). Limited Scope Services are provided only under a separate written engagement agreement between you and Levine Law that describes the nature, extent and scope of the services to be provided and their limitations (an “Engagement Agreement”). No Limited Scope Services will be provided, and no lawyer-client relationship will arise, until Levine Law has completed its conflict check and an Engagement Agreement has been entered into.",
       },
       {
         type: "p",
@@ -161,7 +161,7 @@ export const TERMS_TEXT: TermsSection[] = [
     blocks: [
       {
         type: "p",
-        text: "If you have problems viewing any part of the Platform, please do not hesitate to contact the Webmaster.",
+        text: "If you have problems viewing any part of the Platform, please do not hesitate to contact the Webmaster at office@levine-law.ca.",
       },
     ],
   },
@@ -171,7 +171,7 @@ export const TERMS_TEXT: TermsSection[] = [
     blocks: [
       {
         type: "p",
-        text: "To use the Portal, you may be required to create an account. You agree to provide accurate and complete registration information and to keep it current. You are responsible for keeping your login credentials confidential and for all activity under your account. You must notify us promptly at {Portal support email address} if you become aware of any unauthorized access to or use of your account. Levine Law may suspend or terminate your access to the Portal at any time, including if we believe your account has been compromised or these Terms have been breached, subject to any obligations we owe you under an Engagement Agreement.",
+        text: "To use the Portal, you may be required to create an account. You agree to provide accurate and complete registration information and to keep it current. You are responsible for keeping your login credentials confidential and for all activity under your account. You must notify us promptly at office@levine-law.ca if you become aware of any unauthorized access to or use of your account. Levine Law may suspend or terminate your access to the Portal at any time, including if we believe your account has been compromised or these Terms have been breached, subject to any obligations we owe you under an Engagement Agreement.",
       },
     ],
   },
@@ -405,7 +405,7 @@ export const TERMS_TEXT: TermsSection[] = [
     blocks: [
       {
         type: "p",
-        text: "For details of the cookies employed by us, please consult our Cookie Policy, which forms part of this Platform Privacy Policy.",
+        text: "For details of the cookies employed by us, please contact us at office@levine-law.ca.",
       },
     ],
   },
