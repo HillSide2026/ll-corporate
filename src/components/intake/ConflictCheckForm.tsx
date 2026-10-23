@@ -30,7 +30,7 @@ function ChoiceButton({ selected, onClick, children }: { selected: boolean; onCl
       className={cn(
         "rounded-lg border px-5 py-2.5 text-sm font-medium transition-colors",
         selected
-          ? "border-brand-navy bg-brand-navy text-white"
+          ? "border-brand-blue bg-brand-blue text-white"
           : "border-stone-300 bg-white text-stone-700 hover:border-stone-400"
       )}
     >
@@ -108,7 +108,7 @@ export function ConflictCheckForm({ service, defaultName }: { service: LeadServi
             type="checkbox"
             name="acknowledged"
             required
-            className="accent-brand-navy mt-1 size-4 shrink-0"
+            className="accent-brand-blue mt-1 size-4 shrink-0"
             aria-invalid={state?.field === "acknowledged" || undefined}
           />
           <span>
@@ -119,7 +119,11 @@ export function ConflictCheckForm({ service, defaultName }: { service: LeadServi
         <FieldError state={state} field="acknowledged" />
       </div>
 
-      <button type="submit" disabled={pending} className={cn(brandButton, "w-full sm:w-auto")}>
+      <button
+        type="submit"
+        disabled={pending}
+        className={cn(brandButton, "bg-brand-blue hover:bg-brand-navy w-full sm:w-auto")}
+      >
         {pending ? "Sending..." : "Request Check"}
       </button>
     </form>
