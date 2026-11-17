@@ -107,7 +107,29 @@ LL_CORPORATE_APP_BASE_URL=https://portal.levine-law.ca/sign-in
 LL_CORPORATE_POST_LOGIN_REDIRECT_URL=https://portal.levine-law.ca/corporate/app
 LL_CORPORATE_LOGOUT_REDIRECT_URL=https://portal.levine-law.ca/sign-in
 LL_TASK_TRACKER_API_BASE_URL=<future backend URL>
+AZURE_TENANT_ID=<levinellp tenant ID>
+AZURE_CLIENT_ID=<LL-Client Portal client ID>
+AZURE_CLIENT_SECRET=<LL-Client Portal secret>
 ```
+
+## Microsoft Entra App (SharePoint)
+
+This repo has its own Entra app, **LL-Client Portal** (formerly Portals-LL Client Hub), in
+the `levinellp` tenant. No other repo uses it, and this repo uses no other app (ML1
+2026-11-17, one app per repo).
+
+- Graph permission: application `Sites.Selected` only, with admin consent.
+- Site grants: **read** on `/sites/Clients`, **write** on `/sites/Admin`. Every other site,
+  including `/sites/Legal-Matters`, is refused (403, tested 2026-11-17).
+- A grant covers the whole site, not one library. Code must keep each client's data apart.
+- Sign-in is client credentials (tenant ID, client ID, secret). The app has no redirect URI;
+  the Power Pages portal that used one (`LLclients.powerappsportals.com`) is retired.
+- Secret: created 2026-11-17, expires 2027-11-17. Stored in Vercel production
+  (`AZURE_TENANT_ID`, `AZURE_CLIENT_ID`, `AZURE_CLIENT_SECRET`) and the firm password manager.
+  Rotate it before expiry in Entra (App registrations, LL-Client Portal, Certificates &
+  secrets) and update Vercel.
+- Status: the values are set, but no code reads them yet. Documents still go to Vercel Blob.
+- Changing a site grant needs a tenant admin with `Sites.FullControl.All`.
 
 ## Build / Start
 
