@@ -35,7 +35,10 @@ describe("PortalShell", () => {
     expect(screen.getByRole("link", { name: "Documents" })).toHaveAttribute("href", "/corporate/app/documents")
     expect(screen.getByRole("link", { name: "Requests" })).toHaveAttribute("href", "/corporate/app/requests")
     expect(screen.getByRole("link", { name: "Team / Contacts" })).toHaveAttribute("href", "/corporate/app/scope")
-    expect(screen.getByRole("link", { name: "Open a matter" })).toHaveAttribute("href", "/corporate/app/requests/new")
+    // ML1 2026-11-18: no "Open a matter" button in the dashboard header; Settings sits apart with a gear.
+    expect(screen.queryByRole("link", { name: "Open a matter" })).not.toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Settings" })).toHaveAttribute("href", "/corporate/app/settings")
+    expect(screen.getByRole("link", { name: "Client Portal" })).toHaveAttribute("href", "/corporate/app")
   })
 
   it("clearly indicates preview mode without showing the real sign-out action", () => {

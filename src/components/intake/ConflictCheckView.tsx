@@ -1,6 +1,6 @@
 import { Check, CircleCheck, Clock, Lock, ShieldCheck } from "lucide-react"
 
-import { Eyebrow, NavyPanel } from "src/components/brand/Brand"
+import { Eyebrow } from "src/components/brand/Brand"
 import type { ConflictRequest } from "src/lib/intake/conflictRequestStore"
 import type { LeadService } from "src/lib/services/leadServices"
 import { cn } from "@/lib/utils"
@@ -162,15 +162,15 @@ export function ConflictCheckView({
 }) {
   return (
     <div className="bg-white">
-      <NavyPanel bleed className="px-0 py-14 sm:px-0 sm:py-20">
+      <section className="border-b border-stone-200 py-12 sm:py-16">
         <div className={column}>
-          <Eyebrow tone="dark" rule>
-            Step 2 · Conflict check
-          </Eyebrow>
-          <h1 className="font-display mt-5 text-4xl font-semibold tracking-tight sm:text-5xl">{service.title}</h1>
-          <p className="mt-4 max-w-2xl text-lg leading-8 text-white/80">{service.why}</p>
+          <Eyebrow rule>Step 2 · Conflict check</Eyebrow>
+          <h1 className="font-display mt-5 text-4xl font-semibold tracking-tight text-stone-950 sm:text-5xl">
+            {service.title}
+          </h1>
+          <p className="mt-4 max-w-2xl text-lg leading-8 text-stone-600">{service.why}</p>
         </div>
-      </NavyPanel>
+      </section>
 
       <section className="py-14 sm:py-16">
         <div className={column}>
