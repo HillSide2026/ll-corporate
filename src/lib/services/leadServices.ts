@@ -3,10 +3,22 @@
  * ML1 2026-10-22: CORP-001, CORP-002 (founders tier), CORP-003 and CORP-009.
  * CORP-006 Corporate Maintenance is not offered to leads.
  * No prices or add-ons are shown; each fee is quoted after the conflict check (ML1 2026-10-22).
- * Codes are SERVICES_REGISTRY.json codes in ll-secondbrain.
+ *
+ * Each entry is an offer: the approved marketing language for describing a service line
+ * (ML1 2026-11-18). Offer, service and service line are kept apart; the six offers in all
+ * three levels are in ll-secondbrain funnel-01 FUNNEL_SPEC.md, section Client Portal.
  */
 export type LeadService = {
+  /**
+   * The offer's key, stored with each conflict request and intake event; do not change it.
+   * For the four corporate offers it happens to be a registry code; it is not the service line.
+   */
   code: string
+  /**
+   * The service line the offer draws on: its SERVICES_REGISTRY.json code and name in
+   * ll-secondbrain (ML1 2026-11-18). `open` marks a placement ML1 has not confirmed.
+   */
+  serviceLine: { code: string; name: string; open?: string }
   slug: string
   category: string
   title: string
@@ -33,6 +45,7 @@ const buyingOrSelling: ScreeningQuestion = {
 export const leadServices: LeadService[] = [
   {
     code: "CORP-001",
+    serviceLine: { code: "CORP-001", name: "Incorporation" },
     slug: "incorporation",
     testFeeCents: 120000, // ML1 2026-10-22: $1,200 all in
     category: "New company",
@@ -55,6 +68,11 @@ export const leadServices: LeadService[] = [
   },
   {
     code: "CORP-002",
+    serviceLine: {
+      code: "CORP-002",
+      name: "Shareholder Agreements",
+      open: "Module of CORP-002, or something distinct such as a pre-incorporation founders' agreement (ML1 2026-11-18)",
+    },
     slug: "founders-shareholder-agreement",
     category: "Co-founders",
     title: "Founders' Agreement",
@@ -70,6 +88,7 @@ export const leadServices: LeadService[] = [
   },
   {
     code: "CORP-003",
+    serviceLine: { code: "CORP-003", name: "New Shareholder" },
     slug: "new-shareholder",
     category: "Ownership change",
     title: "New Shareholder Admission",
@@ -85,6 +104,11 @@ export const leadServices: LeadService[] = [
   },
   {
     code: "CORP-009",
+    serviceLine: {
+      code: "CORP-009",
+      name: "Corporate CheckUp",
+      open: "ML1 ruled CORP-009 an add-on, not standalone; offered here on its own (ML1 2026-11-18: a definite tension)",
+    },
     slug: "corporate-checkup",
     category: "Records review",
     title: "Review & Update Minutebook",
@@ -99,11 +123,12 @@ export const leadServices: LeadService[] = [
       partiesHint: "Full names of people or companies, one per line.",
     },
   },
-  // Private company M&A entry offers (ML1 2026-10-22). Neither has a registry code yet:
-  // they are phases 1A and 1B of CORP-036 Share Purchase and CORP-037 Asset Purchase,
-  // and their classification goes to the LLP-015 MS1 ruling. These codes are portal keys only.
+  // Private company M&A entry offers (ML1 2026-10-22). Both draw on the service line
+  // COMM-022 Letter of Intent (LOI) Review and Negotiation (ML1 2026-11-18). Their `code`
+  // values are offer keys only.
   {
     code: "MA-LOI-PREP",
+    serviceLine: { code: "COMM-022", name: "Letter of Intent (LOI) Review and Negotiation" },
     slug: "letter-of-intent",
     category: "Buying a business",
     title: "Prepare Letter of Intent",
@@ -124,6 +149,7 @@ export const leadServices: LeadService[] = [
   },
   {
     code: "MA-LOI-REVIEW",
+    serviceLine: { code: "COMM-022", name: "Letter of Intent (LOI) Review and Negotiation" },
     slug: "letter-of-intent-review",
     category: "Buying a business",
     title: "Review Letter of Intent",
