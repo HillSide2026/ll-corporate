@@ -6,9 +6,10 @@ import { Check } from "lucide-react"
 import { Eyebrow, NavyPanel } from "src/components/brand/Brand"
 
 /**
- * Sign-in and sign-up layout: a full-height navy brand section on the left meeting a white
- * section with the form on the right. No cards: the contrast between the two sections carries
- * the design (ML1 2026-10-22).
+ * Sign-in and sign-up layout: a full-height navy brand section filling the left side, meeting a
+ * white section with the form on the right. No cards: the contrast between the two sections
+ * carries the design (ML1 2026-10-22). The logo is the rounded-corner Horizontal Logo 600px
+ * (POL-050 4.3b, Canva DAHaS2lfANs), top right (ML1 2026-11-18).
  */
 export function AuthSplit({
   eyebrow = "Corporate law services",
@@ -29,23 +30,25 @@ export function AuthSplit({
   footer?: ReactNode
 }) {
   return (
-    <main className="grid min-h-dvh grid-rows-[auto_1fr] bg-white lg:grid-cols-2 lg:grid-rows-1">
+    <main className="relative grid min-h-dvh grid-rows-[auto_1fr] bg-white lg:grid-cols-2 lg:grid-rows-1">
+      <Link
+        href="/sign-in"
+        aria-label="Levine Law Portal"
+        className="absolute top-5 right-5 z-10 block sm:top-6 sm:right-6 lg:top-8 lg:right-8"
+      >
+        <Image
+          src="/logos/levine-law-logo-horizontal-rounded.png"
+          alt="Levine Law"
+          width={580}
+          height={300}
+          priority
+          className="h-12 w-auto sm:h-14 lg:h-16"
+        />
+      </Link>
+
       <NavyPanel bleed className="lg:px-16 lg:py-12">
         <div className="flex h-full flex-col">
-          <Link href="/sign-in" aria-label="Levine Law Portal" className="flex w-fit items-center gap-3">
-            <Image
-              src="/logos/levine-law-wordmark-white-transparent.png"
-              alt=""
-              width={1080}
-              height={600}
-              priority
-              className="-ml-3 h-14 w-auto lg:h-20"
-            />
-            <span className="h-6 w-px bg-white/25" aria-hidden="true" />
-            <span className="text-xs font-semibold tracking-[0.16em] text-white/70 uppercase">Portal</span>
-          </Link>
-
-          <div className="mt-10 max-w-lg lg:my-auto lg:py-12">
+          <div className="mt-16 max-w-lg lg:my-auto lg:py-12">
             <Eyebrow tone="dark" rule>
               {eyebrow}
             </Eyebrow>
