@@ -13,21 +13,24 @@ If this file and doctrine disagree, doctrine wins. Fix this file.
 
 ## Colour
 
-| Token | Hex | Use |
-|---|---|---|
-| `brand-navy` | #1D4771 | Feature panels, primary buttons, step numbers |
-| `brand-blue` | #0365B2 | Button hover, links, icons, small labels |
-| `brand-red` | #FF5E5B | The short rule before a page's opening label. Nothing else |
-| `stone-50` | Tailwind | Page background |
-| `stone-200` | Tailwind | Card borders |
-| `stone-600` / `stone-950` | Tailwind | Body text / headings |
+| Token                     | Hex      | Use                                                                                             |
+| ------------------------- | -------- | ----------------------------------------------------------------------------------------------- |
+| `brand-navy`              | #1D4771  | Feature panels, primary buttons, step numbers                                                   |
+| `brand-blue`              | #0365B2  | Sign-in and sign-up buttons (navy on hover), button hover elsewhere, links, icons, small labels |
+| `brand-red`               | #FF5E5B  | The short rule before a page's opening label. Nothing else                                      |
+| `stone-50`                | Tailwind | Page background                                                                                 |
+| `stone-200`               | Tailwind | Card borders                                                                                    |
+| `stone-600` / `stone-950` | Tailwind | Body text / headings                                                                            |
 
 Tokens are defined in `styles/tailwind.css`.
 
+On the sign-in and sign-up pages the `NavyPanel` is the only navy: their buttons are brand blue (ML1, 2026-10-22: too much dark blue).
+
 ## Type
 
-- **Display:** Source Serif 4 (`font-display`). Use it for page titles, section headings, card titles and names. It echoes the serif wordmark.
-- **Text:** Geist (`font-sans`, the default). Use it for body copy, labels, forms and buttons.
+- **Display:** Libre Baskerville (`font-display`). Use it for page titles, section headings, card titles and names. It stands in on the web for Baskerville Display PT, the wordmark's typeface (POL-050 4.2a).
+- **Text:** Montserrat (`font-sans`, the default). Use it for body copy, labels, forms and buttons (POL-050 4.2a).
+- No other fonts.
 - **Labels:** 11px, semibold, uppercase, wide tracking. Use the `Eyebrow` component.
 
 ## Building blocks (`src/components/brand/Brand.tsx`)

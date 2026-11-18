@@ -11,7 +11,7 @@ export default async function CatalogPage() {
   const firstName = session?.identity.displayName?.trim().split(/\s+/)[0]
 
   return (
-    <IntakeShell active="browse" wide showProgress={false}>
+    <IntakeShell active="browse" wide showProgress={false} bleed>
       <LeadWelcome firstName={firstName} />
     </IntakeShell>
   )

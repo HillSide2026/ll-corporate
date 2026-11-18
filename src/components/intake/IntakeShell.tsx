@@ -13,12 +13,15 @@ export async function IntakeShell({
   active = "browse",
   wide = false,
   showProgress = true,
+  bleed = false,
   step,
   children,
 }: {
   active?: IntakeSection
   wide?: boolean
   showProgress?: boolean
+  /** Full-width page: children lay out their own sections and containers. */
+  bleed?: boolean
   /** Progress bar stage; set explicitly by each page. */
   step?: number
   children: ReactNode
@@ -52,7 +55,7 @@ export async function IntakeShell({
 
       {showProgress ? <IntakeFunnelBar className={width} currentStep={step} /> : null}
 
-      <div className={cx("mx-auto w-full px-6 py-10 sm:py-14", width)}>{children}</div>
+      {bleed ? children : <div className={cx("mx-auto w-full px-6 py-10 sm:py-14", width)}>{children}</div>}
     </main>
   )
 }
