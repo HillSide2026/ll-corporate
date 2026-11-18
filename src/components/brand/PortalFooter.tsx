@@ -37,9 +37,16 @@ export function TermsLink() {
  * section, lined up with the page text (ML1 2026-11-18). `className` sets the column width so the
  * edges match the page above.
  */
-export function ContentFooter({ className }: { className?: string }) {
+export function ContentFooter({
+  className,
+  outerClassName,
+}: {
+  className?: string
+  /** Background and grid placement of the full-width strip, e.g. grey on the lead pages. */
+  outerClassName?: string
+}) {
   return (
-    <div className="border-t border-stone-200">
+    <div className={cn("border-t border-stone-200", outerClassName)}>
       <div
         className={cn(
           "mx-auto flex w-full flex-col gap-3 py-6 text-sm text-stone-500 sm:flex-row sm:items-center sm:justify-between",
