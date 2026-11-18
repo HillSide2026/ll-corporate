@@ -74,7 +74,7 @@ async function DashboardContent({ accessToken, session }: { accessToken: string 
     ? await getMatterList(accessToken)
     : { matters: [] as CaseInstance[], isMock: false }
   const { documents: lawyerDocs, isMock: documentsMock } = showMattersAndDocuments
-    ? await getDocumentList()
+    ? await getDocumentList(session.identity)
     : { documents: [] as Awaited<ReturnType<typeof getDocumentList>>["documents"], isMock: false }
   const serviceRequests = await getRequests(session.identity)
   const matterRequests = await getMatterRequests(session.identity)
@@ -92,7 +92,7 @@ async function DashboardContent({ accessToken, session }: { accessToken: string 
     ...allDocs.slice(0, 3).map((doc) => ({
       id: `doc-${doc.id}`,
       title: doc.filename,
-      meta: `Document added to ${doc.matterKey}`,
+      meta: doc.matterKey ? `Document added to ${doc.matterKey}` : "Document shared by Levine Law",
       date: doc.addedAt,
     })),
     ...matterRequests.slice(0, 2).map((request) => ({

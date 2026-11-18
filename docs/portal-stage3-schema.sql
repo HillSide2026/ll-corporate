@@ -52,6 +52,36 @@ create index if not exists portal_documents_added_by_subject_idx
   on portal_documents (added_by_subject, added_at desc)
   where deleted_at is null;
 
+-- Client document libraries on the SharePoint Clients site (LLP-055, ML1 2026-11-18).
+-- One library per client. drive_id is the Graph drive id of that client's library.
+create table if not exists portal_client_libraries (
+  client_key text primary key,
+  client_name text not null,
+  drive_id text not null unique,
+  -- Teammates see the library unless the firm restricts this client to the
+  -- Instructing Officer only (ML1 2026-11-18).
+  teammate_access boolean not null default true,
+  created_at timestamptz not null default now(),
+  created_by text,
+  deactivated_at timestamptz
+);
+
+-- Which portal user belongs to which client. The only link from a signed-in
+-- user to a library; the browser never names a library.
+create table if not exists portal_client_memberships (
+  subject text not null,
+  client_key text not null references portal_client_libraries (client_key),
+  created_at timestamptz not null default now(),
+  created_by text,
+  revoked_at timestamptz,
+  primary key (subject, client_key)
+);
+
+-- One active client per user for now; a user with two would see neither.
+create unique index if not exists portal_client_memberships_one_active_idx
+  on portal_client_memberships (subject)
+  where revoked_at is null;
+
 create table if not exists portal_matter_updates (
   id text primary key,
   matter_key text not null,

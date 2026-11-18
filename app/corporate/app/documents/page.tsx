@@ -42,7 +42,7 @@ export default async function DocumentsPage({ searchParams }: DocumentsPageProps
   const query = typeof params.search === "string" ? params.search.trim().toLowerCase() : ""
   const owner = typeof params.owner === "string" ? params.owner : ""
 
-  const { documents: lawyerDocs, isMock } = await getDocumentList()
+  const { documents: lawyerDocs, isMock } = await getDocumentList(session.identity)
 
   const allDocs = lawyerDocs.sort((a, b) => new Date(b.addedAt).getTime() - new Date(a.addedAt).getTime())
 
@@ -129,7 +129,7 @@ export default async function DocumentsPage({ searchParams }: DocumentsPageProps
                 <thead>
                   <tr className="border-b border-stone-100 bg-stone-50 text-left">
                     <th className="px-5 py-3 font-semibold text-stone-600">Document</th>
-                    <th className="px-5 py-3 font-semibold text-stone-600">Matter</th>
+                    <th className="px-5 py-3 font-semibold text-stone-600">Matter or folder</th>
                     <th className="px-5 py-3 font-semibold text-stone-600">Date added</th>
                     <th className="px-5 py-3 font-semibold text-stone-600">Added by</th>
                     <th className="px-5 py-3 text-right font-semibold text-stone-600">Action</th>
@@ -145,12 +145,16 @@ export default async function DocumentsPage({ searchParams }: DocumentsPageProps
                         </div>
                       </td>
                       <td className="px-5 py-4">
-                        <Link
-                          href={`/corporate/app/matters/${encodeURIComponent(doc.matterKey)}`}
-                          className="text-brand-navy font-medium underline-offset-2 hover:underline"
-                        >
-                          {doc.matterKey}
-                        </Link>
+                        {doc.matterKey ? (
+                          <Link
+                            href={`/corporate/app/matters/${encodeURIComponent(doc.matterKey)}`}
+                            className="text-brand-navy font-medium underline-offset-2 hover:underline"
+                          >
+                            {doc.matterKey}
+                          </Link>
+                        ) : (
+                          <span className="text-stone-500">{doc.location || "Main folder"}</span>
+                        )}
                       </td>
                       <td className="px-5 py-4 text-stone-500">{formatDate(doc.addedAt)}</td>
                       <td className="px-5 py-4 text-stone-500">{doc.addedByName}</td>

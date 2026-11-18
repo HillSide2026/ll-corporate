@@ -1,7 +1,12 @@
+import { isSharePointConfigured, isValidGraphId, listClientLibraryFiles } from "src/lib/api/sharepointGraph"
 import type { PortalIdentity } from "src/lib/auth/session"
 import { uploadPortalDocumentBlob } from "./blobStorage"
 import { recordAuditEvent } from "./auditLog"
+import { getClientLibraryForIdentity } from "./clientLibraryStore"
 import { isPortalDatabaseConfigured, isPortalMockFallbackEnabled, requirePortalDatabase } from "./portalDb"
+
+/** Document ids for files in a client's SharePoint library: prefix + Graph item id. */
+export const CLIENT_LIBRARY_DOCUMENT_PREFIX = "cl-"
 
 export type PortalDocumentRecord = {
   id: string
@@ -15,6 +20,10 @@ export type PortalDocumentRecord = {
   addedBySubject?: string
   contentType?: string
   sizeBytes?: number
+  /** "client_library": a copy the firm shared in the client's SharePoint library. */
+  source?: "portal" | "client_library"
+  /** Folder path inside the client library, "" at its root. Client library documents only. */
+  location?: string
 }
 
 export type AddPortalDocumentInput = {
@@ -56,6 +65,7 @@ function mapDocument(row: DocumentRow): PortalDocumentRecord {
     addedBySubject: row.added_by_subject ?? undefined,
     contentType: row.content_type ?? undefined,
     sizeBytes: row.size_bytes == null ? undefined : Number(row.size_bytes),
+    source: "portal",
   }
 }
 
@@ -187,4 +197,49 @@ export async function getPortalDocumentById(id: string): Promise<PortalDocumentR
     limit 1
   `
   return result.rows[0] ? mapDocument(result.rows[0]) : null
+}
+
+/** Documents this user uploaded through the portal. Never another user's. */
+export async function getClientUploadedDocuments(subject: string): Promise<PortalDocumentRecord[]> {
+  if (!subject || !isPortalDatabaseConfigured()) return []
+
+  const db = requirePortalDatabase()
+  const result = await db.sql<DocumentRow>`
+    select id, matter_key, filename, blob_pathname, content_type, size_bytes, added_at, added_by_name, added_by_subject, uploaded_by_client
+    from portal_documents
+    where added_by_subject = ${subject}
+      and uploaded_by_client = true
+      and deleted_at is null
+    order by added_at desc
+  `
+  return result.rows.map(mapDocument)
+}
+
+/**
+ * Documents the firm shared in this user's client library on the SharePoint
+ * Clients site (LLP-055, ML1 2026-11-18). Only the one library mapped to the
+ * user is read; no mapping, no documents.
+ */
+export async function getClientLibraryDocuments(identity: PortalIdentity): Promise<PortalDocumentRecord[]> {
+  if (!isSharePointConfigured()) return []
+
+  const library = await getClientLibraryForIdentity(identity)
+  if (!library) return []
+
+  const files = await listClientLibraryFiles(library.driveId)
+  return files
+    .filter((file) => isValidGraphId(file.itemId))
+    .map((file) => ({
+      id: `${CLIENT_LIBRARY_DOCUMENT_PREFIX}${file.itemId}`,
+      matterKey: "",
+      filename: file.name,
+      fileUrl: `/corporate/api/documents/${encodeURIComponent(`${CLIENT_LIBRARY_DOCUMENT_PREFIX}${file.itemId}`)}/download`,
+      addedAt: file.lastModifiedAt ?? new Date(0).toISOString(),
+      addedByName: "Levine Law",
+      uploadedByClient: false,
+      contentType: file.contentType,
+      sizeBytes: file.sizeBytes,
+      source: "client_library" as const,
+      location: file.folderPath,
+    }))
 }
