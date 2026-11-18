@@ -107,3 +107,7 @@ No business logic should be imported from `toronto-corporate`.
 - [Deployment Topology Note](docs/deployment-topology.md)
 - [Production Routing + Auth Note](docs/production-routing-auth.md)
 - [Infra / DevOps Implementation Note](docs/infra-devops.md)
+
+## Client Copy
+
+- [Client Workspace Copy](docs/CLIENT_COPY.md): pointer to the draft client wording kept in `ll-secondbrain` (LLP-055)
