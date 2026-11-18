@@ -4,7 +4,7 @@ import { useActionState, useState } from "react"
 
 import { brandButton } from "src/components/brand/Brand"
 import { type ConflictFormState, submitConflictCheck } from "src/lib/intake/conflictActions"
-import type { LeadService } from "src/lib/services/leadServices"
+import type { LeadService, ScreeningQuestion } from "src/lib/services/leadServices"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -39,6 +39,24 @@ function ChoiceButton({ selected, onClick, children }: { selected: boolean; onCl
   )
 }
 
+/** One routing question, answered by choice buttons and sent as screening.<name>. */
+function ScreeningField({ question }: { question: ScreeningQuestion }) {
+  const [answer, setAnswer] = useState<string | null>(null)
+  return (
+    <fieldset className="space-y-3">
+      <legend className="text-sm font-medium text-stone-900">{question.label}</legend>
+      <input type="hidden" name={`screening.${question.name}`} value={answer ?? ""} />
+      <div className="flex flex-wrap gap-2">
+        {question.options.map((option) => (
+          <ChoiceButton key={option} selected={answer === option} onClick={() => setAnswer(option)}>
+            {option}
+          </ChoiceButton>
+        ))}
+      </div>
+    </fieldset>
+  )
+}
+
 export function ConflictCheckForm({ service, defaultName }: { service: LeadService; defaultName?: string }) {
   const [state, action, pending] = useActionState(submitConflictCheck, null)
   const [otherSide, setOtherSide] = useState<"yes" | "no" | null>(null)
@@ -69,6 +87,11 @@ export function ConflictCheckForm({ service, defaultName }: { service: LeadServi
         />
         <FieldError state={state} field="applicantName" />
       </div>
+
+      {service.screening?.map((question) => (
+        <ScreeningField key={question.name} question={question} />
+      ))}
+      <FieldError state={state} field="screening" />
 
       <div className="space-y-1.5">
         <Label htmlFor="cc-company">{service.conflict.companyLabel}</Label>

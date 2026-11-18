@@ -9,7 +9,9 @@ import { getPortalSession } from "src/lib/auth/session"
 import { sendPortalNotification } from "src/lib/portal/portalNotifications"
 import { leadServices } from "src/lib/services/leadServices"
 import { normalizeRef, REF_COOKIE } from "./attribution"
+import { parseScreening } from "./screening"
 import {
+  type ConflictRequest,
   createConflictRequest,
   decideConflictRequest,
   getLatestConflictRequest,
@@ -20,7 +22,7 @@ import {
 
 export type ConflictFormState = {
   error?: string
-  field?: "applicantName" | "acknowledged"
+  field?: "applicantName" | "acknowledged" | "screening"
 } | null
 
 const MAX_FIELD = 2000
@@ -40,6 +42,8 @@ export async function submitConflictCheck(_prev: ConflictFormState, formData: Fo
 
   const applicantName = field(formData, "applicantName")
   if (!applicantName) return { error: "Enter your full legal name.", field: "applicantName" }
+  const screening = parseScreening(service, formData)
+  if (!screening) return { error: "Please answer each question above.", field: "screening" }
   if (formData.get("acknowledged") !== "on") {
     return { error: "Please confirm you have read the note above.", field: "acknowledged" }
   }
@@ -58,14 +62,9 @@ export async function submitConflictCheck(_prev: ConflictFormState, formData: Fo
         relatedParties: field(formData, "relatedParties") || undefined,
         adverseParties: field(formData, "adverseParties") || undefined,
         source: normalizeRef((await cookies()).get(REF_COOKIE)?.value),
+        screening,
       })
-      await sendPortalNotification({
-        type: "intake_conflict_request_created",
-        requestId: created.id,
-        email: created.userEmail,
-        fullName: created.applicantName,
-        status: created.status,
-      }).catch((err: unknown) => console.warn("submitConflictCheck: notification failed", err))
+      await notifyIntake("intake_conflict_request_created", created)
     }
   } catch (err) {
     console.error("submitConflictCheck: conflict request store unavailable", err)
@@ -86,17 +85,31 @@ export async function decideConflictCheck(formData: FormData): Promise<void> {
   }
 
   const decided = await decideConflictRequest(id, decision)
-  if (decided) {
-    await sendPortalNotification({
-      type: "intake_conflict_request_decided",
-      requestId: decided.id,
-      email: decided.userEmail,
-      fullName: decided.applicantName,
-      status: decided.status,
-    }).catch((err: unknown) => console.warn("decideConflictCheck: notification failed", err))
-  }
+  if (decided) await notifyIntake("intake_conflict_request_decided", decided)
 
   revalidatePath("/corporate/admin/conflicts")
+}
+
+/** Tells the CRM where the lead now stands. A failed notification never blocks the action. */
+async function notifyIntake(
+  type:
+    | "intake_conflict_request_created"
+    | "intake_conflict_request_decided"
+    | "intake_engagement_recorded"
+    | "intake_payment_recorded"
+    | "intake_completion_recorded",
+  request: ConflictRequest
+): Promise<void> {
+  await sendPortalNotification({
+    type,
+    requestId: request.id,
+    email: request.userEmail,
+    fullName: request.applicantName,
+    status: request.status,
+    serviceSlug: request.serviceSlug,
+    serviceCode: request.finalServiceCode ?? request.serviceCode,
+    source: request.source,
+  }).catch((err: unknown) => console.warn(`${type}: notification failed`, err))
 }
 
 async function requireAdmin(): Promise<void> {
@@ -116,14 +129,20 @@ export async function recordEngagementAction(formData: FormData): Promise<void> 
   const finalServiceCode = field(formData, "finalServiceCode")
   const feeCents = parseFeeCents(field(formData, "fee"))
   if (!id || !finalServiceCode || feeCents === null) redirect("/corporate/admin/conflicts?error=engagement")
-  await recordEngagement(id, { finalServiceCode, feeCents, clioMatter: field(formData, "clioMatter") || null })
+  const engaged = await recordEngagement(id, {
+    finalServiceCode,
+    feeCents,
+    clioMatter: field(formData, "clioMatter") || null,
+  })
+  if (engaged) await notifyIntake("intake_engagement_recorded", engaged)
   revalidatePath("/corporate/admin/conflicts")
 }
 
 export async function recordPaymentAction(formData: FormData): Promise<void> {
   await requireAdmin()
   const id = field(formData, "id")
-  if (id) await recordPayment(id)
+  const paid = id ? await recordPayment(id) : null
+  if (paid) await notifyIntake("intake_payment_recorded", paid)
   revalidatePath("/corporate/admin/conflicts")
 }
 
@@ -134,6 +153,7 @@ export async function recordCompletionAction(formData: FormData): Promise<void> 
   if (!id || !Number.isFinite(hours) || hours <= 0 || hours > 999) {
     redirect("/corporate/admin/conflicts?error=hours")
   }
-  await recordCompletion(id, Math.round(hours * 100) / 100)
+  const completed = await recordCompletion(id, Math.round(hours * 100) / 100)
+  if (completed) await notifyIntake("intake_completion_recorded", completed)
   revalidatePath("/corporate/admin/conflicts")
 }

@@ -6,10 +6,18 @@ type PortalNotificationPayload = {
     | "portal_access_request_status_changed"
     | "intake_conflict_request_created"
     | "intake_conflict_request_decided"
+    | "intake_engagement_recorded"
+    | "intake_payment_recorded"
+    | "intake_completion_recorded"
   requestId: string
   email: string
   fullName: string
   status?: string
+  /** Intake events also carry the service and source, so a CRM (GHL) can move the lead
+   * along its pipeline. Names, service and source only: never matter details. */
+  serviceSlug?: string
+  serviceCode?: string
+  source?: string | null
 }
 
 export async function sendPortalNotification(payload: PortalNotificationPayload): Promise<void> {

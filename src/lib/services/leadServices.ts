@@ -18,6 +18,16 @@ export type LeadService = {
   why: string
   /** Conflict check form wording for this service (ML1 2026-10-22). */
   conflict: { companyLabel: string; companyHint: string; partiesLabel: string; partiesHint: string }
+  /** Routing questions asked with the conflict check. Never matter details (ML1 2026-10-22). */
+  screening?: ScreeningQuestion[]
+}
+
+export type ScreeningQuestion = { name: string; label: string; options: string[] }
+
+const buyingOrSelling: ScreeningQuestion = {
+  name: "side",
+  label: "Are you buying or selling?",
+  options: ["Buying", "Selling"],
 }
 
 export const leadServices: LeadService[] = [
@@ -89,4 +99,55 @@ export const leadServices: LeadService[] = [
       partiesHint: "Full names of people or companies, one per line.",
     },
   },
+  // Private company M&A entry offers (ML1 2026-10-22). Neither has a registry code yet:
+  // they are phases 1A and 1B of CORP-036 Share Purchase and CORP-037 Asset Purchase,
+  // and their classification goes to the LLP-015 MS1 ruling. These codes are portal keys only.
+  {
+    code: "MA-LOI-PREP",
+    slug: "letter-of-intent",
+    category: "Buying a business",
+    title: "Letter of Intent",
+    summary: "Put your offer for a business on paper, with the protections a buyer needs written in from the start.",
+    includes: [
+      "Letter of intent drafted from your agreed terms",
+      "Binding and non-binding terms set apart",
+      "Exclusivity, due diligence access and conditions",
+    ],
+    why: "The letter of intent sets the price, the structure and the timetable for the whole deal. Terms agreed loosely at this stage are hard to change later, and the exclusivity period it sets is the time you will have for due diligence.",
+    conflict: {
+      companyLabel: "Business being bought or sold",
+      companyHint: "The company or business name, as listed.",
+      partiesLabel: "Your side of the deal",
+      partiesHint: "You and anyone buying or selling with you, people or companies, one per line.",
+    },
+    screening: [buyingOrSelling],
+  },
+  {
+    code: "MA-LOI-REVIEW",
+    slug: "letter-of-intent-review",
+    category: "Buying a business",
+    title: "Letter of Intent Review",
+    summary:
+      "A lawyer reads the letter of intent or offer in front of you and tells you what it commits you to and what is still open.",
+    includes: [
+      "What binds you, and when exclusivity ends",
+      "What the letter has already fixed",
+      "What is still open for the purchase agreement",
+    ],
+    why: "Once a letter of intent is signed, its binding terms apply and its exclusivity clock is running. Knowing exactly what it commits you to, and what it leaves open, shapes due diligence and the purchase agreement that follows.",
+    conflict: {
+      companyLabel: "Business being bought or sold",
+      companyHint: "The company or business name, as listed.",
+      partiesLabel: "Your side of the deal",
+      partiesHint: "You and anyone buying or selling with you, people or companies, one per line.",
+    },
+    screening: [
+      buyingOrSelling,
+      { name: "signed", label: "Has the letter of intent or offer been signed?", options: ["Yes", "Not yet"] },
+    ],
+  },
 ]
+
+export function findLeadService(slug: string | null | undefined): LeadService | undefined {
+  return slug ? leadServices.find((s) => s.slug === slug) : undefined
+}

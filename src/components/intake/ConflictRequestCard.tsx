@@ -156,6 +156,15 @@ export function ConflictRequestCard({ request }: { request: ConflictRequest }) {
         <PartyList label="Other side" value={request.adverseParties} />
       </dl>
 
+      {request.screening && service?.screening ? (
+        <p className="mt-3 text-sm text-stone-700">
+          {service.screening
+            .filter((q) => request.screening?.[q.name])
+            .map((q) => `${q.label} ${request.screening?.[q.name]}`)
+            .join(" · ")}
+        </p>
+      ) : null}
+
       {request.status === "pending" ? (
         <div className="mt-5 flex flex-wrap gap-2 border-t border-stone-100 pt-4">
           <form action={decideConflictCheck}>

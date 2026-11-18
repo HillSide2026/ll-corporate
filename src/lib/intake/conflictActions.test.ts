@@ -74,10 +74,21 @@ describe("submitConflictCheck", () => {
       relatedParties: "John Cofounder",
       adverseParties: undefined,
       source: "msb-partner",
+      screening: {},
     })
     expect(mocks.sendPortalNotification).toHaveBeenCalledWith(
       expect.objectContaining({ type: "intake_conflict_request_created", requestId: "CC-1" })
     )
+  })
+
+  it("requires the routing questions for a service that has them", async () => {
+    const result = await submitConflictCheck(
+      null,
+      conflictFormData({ serviceSlug: "letter-of-intent-review", "screening.side": "Buying" })
+    )
+
+    expect(result).toEqual({ error: "Please answer each question above.", field: "screening" })
+    expect(mocks.createConflictRequest).not.toHaveBeenCalled()
   })
 
   it("requires the acknowledgement", async () => {

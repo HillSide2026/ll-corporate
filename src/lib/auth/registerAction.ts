@@ -5,6 +5,7 @@ import { AuthError } from "next-auth"
 import { createUser, getUserByEmail } from "src/lib/db/users"
 import { TERMS_VERSION } from "src/lib/portal/terms"
 import { signIn } from "./auth"
+import { afterSignInPath } from "./redirects"
 
 export type RegisterState = {
   error?: string
@@ -47,7 +48,7 @@ export async function registerAction(_prev: RegisterState, formData: FormData): 
   }
 
   try {
-    await signIn("credentials", { email, password, redirectTo: "/auth/after-sign-in" })
+    await signIn("credentials", { email, password, redirectTo: afterSignInPath(formData.get("service")) })
   } catch (err) {
     if (err instanceof AuthError) {
       return { error: "Account created but sign-in failed. Please sign in to continue." }
