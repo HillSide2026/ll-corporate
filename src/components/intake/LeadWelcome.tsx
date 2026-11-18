@@ -12,7 +12,7 @@ import {
   Users,
 } from "lucide-react"
 
-import { brandButton, Eyebrow, NavyPanel } from "src/components/brand/Brand"
+import { brandButton, Eyebrow } from "src/components/brand/Brand"
 import { cn } from "@/lib/utils"
 import { leadFaqs } from "src/lib/portal/leadFaqs"
 import { lawyers } from "src/lib/portal/team"
@@ -66,33 +66,27 @@ function ServiceRow({ service }: { service: LeadService }) {
 const column = "mx-auto w-full max-w-5xl px-6"
 
 /**
- * The lead welcome page: one full-width brand section opens it, then white and light-stone
- * sections. Navy appears only in the opening section (ML1 2026-10-22: sections, not cards;
- * less dark blue).
+ * The lead welcome page: white and light-stone sections (ML1 2026-10-22: sections, not cards).
+ * Once signed in, navy appears only in the narrow column on the left (ML1 2026-11-18).
  */
 export function LeadWelcome({ firstName }: { firstName?: string }) {
   return (
     <div className="bg-white">
-      <NavyPanel bleed className="px-0 py-16 sm:px-0 sm:py-24">
+      <section className="border-b border-stone-200 py-14 sm:py-20">
         <div className={column}>
-          <Eyebrow tone="dark" rule>
-            Corporate law services
-          </Eyebrow>
-          <h1 className="font-display mt-5 text-4xl font-semibold tracking-tight sm:text-5xl">
+          <Eyebrow rule>Corporate law services</Eyebrow>
+          <h1 className="font-display mt-5 text-4xl font-semibold tracking-tight text-stone-950 sm:text-5xl">
             {firstName ? `Welcome, ${firstName}.` : "Welcome."}
           </h1>
-          <p className="mt-5 max-w-2xl text-lg leading-8 text-white/80">
+          <p className="mt-5 max-w-2xl text-lg leading-8 text-stone-600">
             Levine Law helps founders and entrepreneurs set up, run and grow their companies on sound legal footing.
           </p>
-          <a
-            href="#services"
-            className="text-brand-navy mt-8 inline-flex items-center gap-2 rounded-md bg-white px-5 py-3 text-sm font-semibold transition-colors hover:bg-white/90"
-          >
+          <a href="#services" className={cn(brandButton, "mt-8")}>
             View services
             <ArrowDown className="size-4" aria-hidden="true" />
           </a>
         </div>
-      </NavyPanel>
+      </section>
 
       <section className="py-16 sm:py-20">
         <div className={column}>

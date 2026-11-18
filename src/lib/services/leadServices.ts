@@ -57,9 +57,9 @@ export const leadServices: LeadService[] = [
     code: "CORP-002",
     slug: "founders-shareholder-agreement",
     category: "Co-founders",
-    title: "Founders' Shareholder Agreement",
+    title: "Founders' Agreement",
     summary: "Agree on ownership, vesting, decisions and exits before they become disputes.",
-    includes: ["Two or three founders", "Vesting and departure terms", "Decision-making and deadlock rules"],
+    includes: ["Vesting and departure terms", "Decision-making and deadlock rules"],
     why: "Without an agreement, the corporate statute and your articles decide what happens when founders disagree or one of you leaves. A shareholders' agreement sets ownership, vesting, decision-making and exits on your terms, while everyone is still aligned.",
     conflict: {
       companyLabel: "Company name",
@@ -87,11 +87,11 @@ export const leadServices: LeadService[] = [
     code: "CORP-009",
     slug: "corporate-checkup",
     category: "Records review",
-    title: "Corporate CheckUp",
+    title: "Review & Update Minutebook",
     summary:
       "A lawyer reviews your corporate records and tells you what is missing or out of date, and what it takes to fix it.",
     includes: ["Minute book and register review", "Public record comparison", "Written list of gaps and fixes"],
-    why: "Gaps in corporate records tend to surface at the worst moment: a financing, a sale or a bank's due diligence. A CheckUp finds what is missing or out of date while it is still simple to fix.",
+    why: "Gaps in corporate records tend to surface at the worst moment: a financing, a sale or a bank's due diligence. This review finds what is missing or out of date while it is still simple to fix.",
     conflict: {
       companyLabel: "Company name",
       companyHint: "The company whose records we will review.",
@@ -106,7 +106,7 @@ export const leadServices: LeadService[] = [
     code: "MA-LOI-PREP",
     slug: "letter-of-intent",
     category: "Buying a business",
-    title: "Letter of Intent",
+    title: "Prepare Letter of Intent",
     summary: "Put your offer for a business on paper, with the protections a buyer needs written in from the start.",
     includes: [
       "Letter of intent drafted from your agreed terms",
@@ -126,7 +126,7 @@ export const leadServices: LeadService[] = [
     code: "MA-LOI-REVIEW",
     slug: "letter-of-intent-review",
     category: "Buying a business",
-    title: "Letter of Intent Review",
+    title: "Review Letter of Intent",
     summary:
       "A lawyer reads the letter of intent or offer in front of you and tells you what it commits you to and what is still open.",
     includes: [

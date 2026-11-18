@@ -206,34 +206,9 @@ async function DashboardContent({ accessToken, session }: { accessToken: string 
         <div className={showMattersAndDocuments ? "space-y-6" : "contents"}>
           <PortalCard>
             <PortalCardHeader>
-              <PortalCardTitle>Primary Levine Law contact</PortalCardTitle>
-              <PortalCardDescription>Your relationship contact for portal matters.</PortalCardDescription>
-            </PortalCardHeader>
-            <PortalCardContent>
-              <div className="flex items-start gap-4">
-                <div className="bg-brand-navy flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-sm font-semibold text-white">
-                  ML
-                </div>
-                <div>
-                  <p className="font-semibold text-stone-950">{profile.lawyerName}</p>
-                  <p className="mt-1 text-sm text-stone-500">{profile.model} Counsel</p>
-                  <p className="mt-3 text-sm leading-6 text-stone-600">{profile.description}</p>
-                  <Link
-                    href="/corporate/app/scope"
-                    className="text-brand-navy mt-4 inline-flex text-sm font-semibold underline-offset-2 hover:underline"
-                  >
-                    View team and scope
-                  </Link>
-                </div>
-              </div>
-            </PortalCardContent>
-          </PortalCard>
-
-          <PortalCard>
-            <PortalCardHeader>
               <PortalCardTitle>Recent activity</PortalCardTitle>
               <PortalCardDescription>
-                {showMattersAndDocuments ? "Latest document and request movement." : "Latest request movement."}
+                {showMattersAndDocuments ? "Latest document and request movement." : "Latest legal solutions."}
               </PortalCardDescription>
             </PortalCardHeader>
             <PortalCardContent>
@@ -261,6 +236,31 @@ async function DashboardContent({ accessToken, session }: { accessToken: string 
                   ))}
                 </ol>
               )}
+            </PortalCardContent>
+          </PortalCard>
+
+          <PortalCard>
+            <PortalCardHeader>
+              <PortalCardTitle>Primary Levine Law contact</PortalCardTitle>
+              <PortalCardDescription>Your relationship contact for portal matters.</PortalCardDescription>
+            </PortalCardHeader>
+            <PortalCardContent>
+              <div className="flex items-start gap-4">
+                <div className="bg-brand-navy flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-sm font-semibold text-white">
+                  ML
+                </div>
+                <div>
+                  <p className="font-semibold text-stone-950">{profile.lawyerName}</p>
+                  <p className="mt-1 text-sm text-stone-500">{profile.model} Counsel</p>
+                  <p className="mt-3 text-sm leading-6 text-stone-600">{profile.description}</p>
+                  <Link
+                    href="/corporate/app/scope"
+                    className="text-brand-navy mt-4 inline-flex text-sm font-semibold underline-offset-2 hover:underline"
+                  >
+                    View team and scope
+                  </Link>
+                </div>
+              </div>
             </PortalCardContent>
           </PortalCard>
         </div>
@@ -365,14 +365,11 @@ export function PortalShell({ previewMode = false, session, accessToken = null }
               : "A secure overview of your Levine Law requests and relationship contacts."
           }
           action={
-            <div className="flex flex-wrap gap-3">
-              <PortalButton href="/corporate/app/requests/new">Open a matter</PortalButton>
-              {showMattersAndDocuments ? (
-                <PortalButton href="/corporate/app/documents" tone="secondary">
-                  View documents
-                </PortalButton>
-              ) : null}
-            </div>
+            showMattersAndDocuments ? (
+              <PortalButton href="/corporate/app/documents" tone="secondary">
+                View documents
+              </PortalButton>
+            ) : undefined
           }
         />
         <Suspense fallback={<DashboardSkeleton />}>

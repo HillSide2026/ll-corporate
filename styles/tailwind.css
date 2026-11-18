@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/dist/tailwind.css";
 /*
@@ -7,13 +7,13 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --color-brand-navy: #1D4771;
+  --color-brand-navy: #1d4771;
   --color-brand-navy-dark: #0d3d7c;
   --color-brand-navy-light: #2d7bc4;
-  --color-brand-blue: #0365B2;
-  --color-brand-red: #FF5E5B;
-  --color-ink: #2E2E2E;
-  --color-border-subtle: #D1D5DB;
+  --color-brand-blue: #0365b2;
+  --color-brand-red: #ff5e5b;
+  --color-ink: #2e2e2e;
+  --color-border-subtle: #d1d5db;
 }
 
 /*
@@ -160,4 +160,9 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+}
+/* Layouts that draw their own copyright and Terms of Use strip mark their <main> with
+   data-self-footed; the root layout's footer then hides (ML1 2026-11-18). */
+body:has([data-self-footed]) [data-portal-footer] {
+  display: none;
 }
