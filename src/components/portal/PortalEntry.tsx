@@ -33,7 +33,9 @@ export function PortalEntry({ authError, previewAccessEnabled = false, serviceSl
 
   return (
     <AuthSplit
+      eyebrow="Levine Law"
       title="Welcome back."
+      intro="Sign in to see where your file stands."
       cardTitle="Sign in"
       footer={
         <>
