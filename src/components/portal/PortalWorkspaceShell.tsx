@@ -61,11 +61,15 @@ export function PortalWorkspaceShell({
         </div>
       ) : null}
 
-      <div className="grid min-h-dvh lg:grid-cols-[232px_1fr]">
-        <div className="bg-brand-navy">
+      {/* As on the lead pages (ML1 2026-11-18): the footer line crosses the whole page, faint over
+          the navy; the column's foot (Settings, account, Sign out) sits above it and comes into
+          view at the bottom of the page; the footer strip is grey. */}
+      <div className="grid min-h-dvh lg:grid-cols-[232px_1fr] lg:grid-rows-[1fr_auto]">
+        <div className="bg-brand-navy lg:col-start-1 lg:row-start-1">
           <NavyRail
             homeHref="/corporate/app"
             label="Client Portal"
+            footerAtPageEnd
             footer={
               <div className="space-y-3">
                 <NavyRailLink href={settingsHref} active={active === "settings"}>
@@ -126,7 +130,7 @@ export function PortalWorkspaceShell({
           </NavyRail>
         </div>
 
-        <section className="flex min-w-0 flex-col">
+        <section className="flex min-w-0 flex-col lg:col-start-2 lg:row-start-1">
           <header className="sticky top-0 z-10 border-b border-stone-200 bg-white/95 backdrop-blur">
             <div className="mx-auto flex min-h-16 w-full max-w-7xl items-center justify-between gap-4 px-5 py-4 md:px-8">
               <div className="flex flex-col gap-1">
@@ -143,8 +147,10 @@ export function PortalWorkspaceShell({
             </div>
           </header>
           <div className="mx-auto w-full max-w-7xl flex-1 px-5 py-6 md:px-8 md:py-8">{children}</div>
-          <ContentFooter className="max-w-7xl px-5 md:px-8" />
         </section>
+
+        <div className="bg-brand-navy hidden border-t border-white/25 lg:col-start-1 lg:row-start-2 lg:block" />
+        <ContentFooter className="max-w-7xl px-5 md:px-8" outerClassName="bg-stone-50 lg:col-start-2 lg:row-start-2" />
       </div>
     </main>
   )

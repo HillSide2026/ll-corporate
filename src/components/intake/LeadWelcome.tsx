@@ -1,7 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
 import {
-  ArrowDown,
   ArrowRight,
   Building2,
   Check,
@@ -83,7 +82,6 @@ export function LeadWelcome({ firstName }: { firstName?: string }) {
           </p>
           <a href="#services" className={cn(brandButton, "mt-8")}>
             View services
-            <ArrowDown className="size-4" aria-hidden="true" />
           </a>
         </div>
       </section>
@@ -146,7 +144,9 @@ export function LeadWelcome({ firstName }: { firstName?: string }) {
         <div className={column}>
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <h2 className="font-display text-3xl font-semibold tracking-tight text-stone-950">Our services</h2>
-            <p className="text-sm text-stone-500">Each service is a fixed fee, quoted after your conflict check.</p>
+            <p className="text-sm text-stone-500">
+              Each service is delivered within two (2) days, conflict check creates no obligation.
+            </p>
           </div>
           <div className="mt-8 space-y-5">
             {leadServices.map((service) => (

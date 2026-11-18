@@ -16,24 +16,44 @@ export function NavyRail({
   label = "Portal",
   children,
   footer,
+  footerAtPageEnd = false,
 }: {
   homeHref: string
   /** "Client Portal" in the client workspace (ML1 2026-11-18); "Portal" on the lead pages. */
   label?: string
   children?: ReactNode
   footer?: ReactNode
+  /**
+   * Lead pages (ML1 2026-11-18): the label and navigation stay in view as the page scrolls, and
+   * the footer (Sign out) sits at the foot of the column, just above the page's footer line, so
+   * it comes into view when the reader reaches the bottom of the page.
+   */
+  footerAtPageEnd?: boolean
 }) {
+  if (footerAtPageEnd) {
+    return (
+      <aside className="bg-brand-navy text-white lg:h-full">
+        <div className="flex h-full flex-col">
+          <div className="lg:flex-1">
+            <div className="lg:sticky lg:top-0">
+              <RailHead homeHref={homeHref} label={label} />
+              {children ? (
+                <nav aria-label="Portal navigation" className="border-t border-white/10 px-3 py-3 lg:py-5">
+                  {children}
+                </nav>
+              ) : null}
+            </div>
+          </div>
+          {footer ? <div className="p-3">{footer}</div> : null}
+        </div>
+      </aside>
+    )
+  }
+
   return (
     <aside className="bg-brand-navy text-white lg:sticky lg:top-0 lg:h-full lg:max-h-dvh">
       <div className="flex h-full flex-col">
-        <div className="px-5 py-4 lg:pt-8 lg:pb-5">
-          <Link
-            href={homeHref}
-            className="text-[11px] font-semibold tracking-[0.18em] text-white/70 uppercase hover:text-white"
-          >
-            {label}
-          </Link>
-        </div>
+        <RailHead homeHref={homeHref} label={label} />
 
         {children ? (
           <nav aria-label="Portal navigation" className="border-t border-white/10 px-3 py-3 lg:flex-1 lg:py-5">
@@ -46,6 +66,19 @@ export function NavyRail({
         {footer ? <div className="p-3">{footer}</div> : null}
       </div>
     </aside>
+  )
+}
+
+function RailHead({ homeHref, label }: { homeHref: string; label: string }) {
+  return (
+    <div className="px-5 py-4 lg:pt-8 lg:pb-5">
+      <Link
+        href={homeHref}
+        className="text-[11px] font-semibold tracking-[0.18em] text-white/70 uppercase hover:text-white"
+      >
+        {label}
+      </Link>
+    </div>
   )
 }
 
