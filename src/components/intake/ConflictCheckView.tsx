@@ -85,6 +85,30 @@ function NextStepsPanel({ request }: { request: ConflictRequest | null }) {
   )
 }
 
+/** Whether the offer's selling points show: once the conflict check is sent, unless declined (ML1 2026-11-25). */
+export function showsSellingPoints(request: ConflictRequest | null): boolean {
+  return Boolean(request) && request?.status !== "declined"
+}
+
+function SellingPoints({ service }: { service: LeadService }) {
+  if (!service.sellingPoints.length) return null
+  return (
+    <section aria-labelledby="selling-points" className="mt-12 max-w-2xl border-t border-stone-200 pt-10">
+      <h2 id="selling-points" className="font-display text-2xl font-semibold tracking-tight text-stone-950">
+        Why Levine Law for {service.title}
+      </h2>
+      <ul className="mt-6 space-y-3">
+        {service.sellingPoints.map((point) => (
+          <li key={point} className="flex gap-3 text-[15px] leading-7 text-stone-700">
+            <Check className="text-brand-blue mt-1.5 size-4 shrink-0" aria-hidden="true" />
+            <span>{point}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
 function StatusCard({ icon, title, children }: { icon: React.ReactNode; title: string; children: React.ReactNode }) {
   return (
     <section>
@@ -191,6 +215,7 @@ export function ConflictCheckView({
           ) : request ? (
             <>
               <RequestStatus request={request} email={email} />
+              {showsSellingPoints(request) ? <SellingPoints service={service} /> : null}
               {request.status === "cleared" ? (
                 <div className="mt-12 max-w-2xl border-t border-stone-200 pt-10">
                   {detailsGiven && letterHref ? (
