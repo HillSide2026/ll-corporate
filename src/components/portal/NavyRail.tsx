@@ -73,6 +73,18 @@ export function NavyRailLink({
   )
 }
 
+/** A menu item shown greyed out: a section not yet open (ML1 2026-11-25). Not a link. */
+export function NavyRailDisabledItem({ children }: { children: ReactNode }) {
+  return (
+    <span
+      aria-disabled="true"
+      className="flex cursor-not-allowed items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-white/35 select-none"
+    >
+      {children}
+    </span>
+  )
+}
+
 /** Sign-out button styled for the navy column. */
 export const navyRailButton =
   "w-full rounded-md border border-white/20 px-3 py-2 text-sm font-medium text-white/80 transition-colors hover:border-white/40 hover:text-white"

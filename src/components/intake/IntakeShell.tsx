@@ -1,7 +1,13 @@
 import type { ReactNode } from "react"
 import { cookies } from "next/headers"
 
-import { NavyRail, navyRailButton, NavyRailLink, PortalLogo } from "src/components/portal/NavyRail"
+import {
+  NavyRail,
+  navyRailButton,
+  NavyRailDisabledItem,
+  NavyRailLink,
+  PortalLogo,
+} from "src/components/portal/NavyRail"
 import { cx } from "src/components/portal/PortalDesignSystem"
 import { ContentFooter, SELF_FOOTED } from "src/components/brand/PortalFooter"
 import { signOutFromPortal } from "src/lib/auth/actions"
@@ -55,6 +61,8 @@ export async function IntakeShell({
           <NavyRailLink href="/intake/requests" active={active === "requests"}>
             My requests
           </NavyRailLink>
+          <NavyRailDisabledItem>Corporate Strategies</NavyRailDisabledItem>
+          <NavyRailDisabledItem>Contract Playbooks</NavyRailDisabledItem>
         </NavyRail>
       </div>
 
