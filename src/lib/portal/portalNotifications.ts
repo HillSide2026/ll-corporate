@@ -9,6 +9,8 @@ type PortalNotificationPayload = {
     | "intake_engagement_recorded"
     | "intake_payment_recorded"
     | "intake_completion_recorded"
+    /** Engagement letter details given; status is the SharePoint outcome (uploaded, no_template, ...). */
+    | "intake_onboarding_details_submitted"
   requestId: string
   email: string
   fullName: string

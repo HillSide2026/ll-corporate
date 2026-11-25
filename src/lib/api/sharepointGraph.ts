@@ -258,3 +258,160 @@ function isSharePointDownloadUrl(value: string): boolean {
     return false
   }
 }
+
+// ── Onboarding library (Clients site) ──────────────────────────────────────────
+//
+// Writes for the portal's engagement letter step (LLP-055, ML1 2026-11-18: the data goes
+// to SharePoint). Confined to one library on the Clients site, the "Onboarding" library,
+// addressed by name through the configured site. Uploads never replace an existing file
+// (conflictBehavior=fail). Needs the LL-Client Portal app's Sites.Selected grant on the
+// Clients site with write access; without it Graph returns 401 or 403.
+
+export const ONBOARDING_LIBRARY_NAME = "Onboarding"
+
+const DriveListSchema = z.object({ value: z.array(z.object({ id: z.string(), name: z.string() })) })
+
+const FolderItemSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  lastModifiedDateTime: z.string().optional(),
+  file: z.object({ mimeType: z.string().optional() }).optional(),
+  listItem: z.object({ fields: z.record(z.unknown()).optional() }).optional(),
+})
+
+export type OnboardingFolderItem = {
+  itemId: string
+  name: string
+  lastModifiedAt?: string
+  isFile: boolean
+  fields: Record<string, unknown>
+}
+
+function siteBase(): string {
+  return `${GRAPH_BASE}/sites/${encodeURIComponent(env.SHAREPOINT_CLIENTS_SITE_ID!)}`
+}
+
+function encodePath(path: string): string {
+  return path
+    .split("/")
+    .filter(Boolean)
+    .map((segment) => encodeURIComponent(segment))
+    .join("/")
+}
+
+async function graphSend(
+  url: string,
+  endpoint: string,
+  init: { method: string; body?: BodyInit; contentType?: string; accept?: string }
+): Promise<Response> {
+  if (!url.startsWith(`${GRAPH_BASE}/`)) throw new Error(`Refusing non-Graph URL for ${endpoint}`)
+  const token = await getAppToken()
+  const response = await fetch(url, {
+    method: init.method,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: init.accept ?? "application/json",
+      ...(init.contentType ? { "Content-Type": init.contentType } : {}),
+    },
+    body: init.body,
+    cache: "no-store",
+  })
+  if (!response.ok) throw new SharePointApiError(response.status, endpoint)
+  return response
+}
+
+let cachedOnboardingDrive: string | null = null
+
+/** Test hook: forget the cached Onboarding library drive id. */
+export function resetOnboardingDriveCache(): void {
+  cachedOnboardingDrive = null
+}
+
+/** The Onboarding library's drive id on the Clients site, or null if it is not there. */
+export async function getOnboardingDriveId(): Promise<string | null> {
+  if (cachedOnboardingDrive) return cachedOnboardingDrive
+  const response = await graphSend(`${siteBase()}/drives?$select=id,name`, "list drives", { method: "GET" })
+  const drives = DriveListSchema.parse(await response.json())
+  const drive = drives.value.find((d) => d.name === ONBOARDING_LIBRARY_NAME)
+  if (!drive || !isValidGraphId(drive.id)) return null
+  cachedOnboardingDrive = drive.id
+  return drive.id
+}
+
+/** Files and folders directly inside one Onboarding library folder, with their column values. */
+export async function listOnboardingFolder(driveId: string, folderPath: string): Promise<OnboardingFolderItem[]> {
+  assertIds(driveId)
+  const items: OnboardingFolderItem[] = []
+  let url: string | undefined =
+    `${siteBase()}/drives/${encodeURIComponent(driveId)}/root:/${encodePath(folderPath)}:/children` +
+    `?$select=id,name,lastModifiedDateTime,file&$expand=listItem($expand=fields)&$top=200`
+  while (url) {
+    let response: Response
+    try {
+      response = await graphSend(url, "list onboarding folder", { method: "GET" })
+    } catch (err) {
+      if (err instanceof SharePointApiError && err.status === 404) return items
+      throw err
+    }
+    const body = (await response.json()) as { value?: unknown[]; "@odata.nextLink"?: string }
+    for (const raw of body.value ?? []) {
+      const item = FolderItemSchema.parse(raw)
+      items.push({
+        itemId: item.id,
+        name: item.name,
+        lastModifiedAt: item.lastModifiedDateTime,
+        isFile: Boolean(item.file),
+        fields: item.listItem?.fields ?? {},
+      })
+    }
+    url = body["@odata.nextLink"]
+  }
+  return items
+}
+
+/** Downloads one file from the Onboarding library. */
+export async function downloadOnboardingFile(driveId: string, itemId: string): Promise<Buffer> {
+  assertIds(driveId, itemId)
+  const response = await graphSend(
+    `${siteBase()}/drives/${encodeURIComponent(driveId)}/items/${encodeURIComponent(itemId)}/content`,
+    "download onboarding file",
+    { method: "GET", accept: "*/*" }
+  )
+  return Buffer.from(await response.arrayBuffer())
+}
+
+/** Uploads a new file; fails with HTTP 409 if a file of that name is already in the folder. */
+export async function uploadNewOnboardingFile(
+  driveId: string,
+  folderPath: string,
+  fileName: string,
+  content: Buffer
+): Promise<string> {
+  assertIds(driveId)
+  const response = await graphSend(
+    `${siteBase()}/drives/${encodeURIComponent(driveId)}/root:/${encodePath(`${folderPath}/${fileName}`)}:/content` +
+      `?@microsoft.graph.conflictBehavior=fail`,
+    "upload onboarding file",
+    {
+      method: "PUT",
+      body: new Uint8Array(content),
+      contentType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    }
+  )
+  const body = z.object({ id: z.string() }).parse(await response.json())
+  return body.id
+}
+
+/** Sets library column values on a file the portal uploaded. */
+export async function setOnboardingFileFields(
+  driveId: string,
+  itemId: string,
+  fields: Record<string, string>
+): Promise<void> {
+  assertIds(driveId, itemId)
+  await graphSend(
+    `${siteBase()}/drives/${encodeURIComponent(driveId)}/items/${encodeURIComponent(itemId)}/listItem/fields`,
+    "set onboarding fields",
+    { method: "PATCH", body: JSON.stringify(fields), contentType: "application/json" }
+  )
+}

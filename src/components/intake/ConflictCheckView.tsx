@@ -5,6 +5,7 @@ import type { ConflictRequest } from "src/lib/intake/conflictRequestStore"
 import type { LeadService } from "src/lib/services/leadServices"
 import { cn } from "@/lib/utils"
 import { ConflictCheckForm } from "./ConflictCheckForm"
+import { OnboardingDetailsForm } from "./OnboardingDetailsForm"
 
 /** Inner column shared by the full-width sections (matches the lead welcome page). */
 const column = "mx-auto w-full max-w-5xl px-6"
@@ -153,12 +154,15 @@ export function ConflictCheckView({
   email,
   defaultName,
   unavailable = false,
+  detailsGiven = false,
 }: {
   service: LeadService
   request: ConflictRequest | null
   email: string
   defaultName?: string
   unavailable?: boolean
+  /** Whether the lead has given the engagement letter details (after clearing). */
+  detailsGiven?: boolean
 }) {
   return (
     <div className="bg-white">
@@ -182,7 +186,31 @@ export function ConflictCheckView({
               This page is unavailable right now. Please try again later.
             </div>
           ) : request ? (
-            <RequestStatus request={request} email={email} />
+            <>
+              <RequestStatus request={request} email={email} />
+              {request.status === "cleared" ? (
+                <div className="mt-12 max-w-2xl border-t border-stone-200 pt-10">
+                  {detailsGiven ? (
+                    <StatusCard icon={<CircleCheck className="size-6 text-emerald-600" />} title="Details received">
+                      <p>Thank you. We will use these details to prepare your engagement letter.</p>
+                    </StatusCard>
+                  ) : (
+                    <>
+                      <h2 className="font-display text-2xl font-semibold tracking-tight text-stone-950">
+                        Details for your engagement letter
+                      </h2>
+                      <p className="mt-2 text-[15px] leading-7 text-stone-600">
+                        Tell us who the letter is for and who will sign it. Please don&apos;t include details of your
+                        matter here.
+                      </p>
+                      <div className="mt-7">
+                        <OnboardingDetailsForm service={service} email={email} />
+                      </div>
+                    </>
+                  )}
+                </div>
+              ) : null}
+            </>
           ) : (
             <>
               <h2 className="font-display text-2xl font-semibold tracking-tight text-stone-950">Who is involved?</h2>

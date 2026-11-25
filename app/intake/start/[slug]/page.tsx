@@ -8,6 +8,7 @@ import { getPortalSession } from "src/lib/auth/session"
 import { normalizeRef, REF_COOKIE } from "src/lib/intake/attribution"
 import { type ConflictRequest, getLatestConflictRequest } from "src/lib/intake/conflictRequestStore"
 import { recordIntakeEvent } from "src/lib/intake/eventStore"
+import { getOnboardingDetails } from "src/lib/intake/onboardingStore"
 import { leadServices } from "src/lib/services/leadServices"
 
 export const metadata: Metadata = { title: "Conflict check" }
@@ -26,8 +27,18 @@ export default async function ConflictCheckPage({ params }: PageProps) {
 
   let request: ConflictRequest | null = null
   let unavailable = false
+  let detailsGiven = false
   try {
     request = await getLatestConflictRequest(session.identity.subject, service.slug)
+    if (request?.status === "cleared") {
+      // A missing onboarding table must not hide the conflict check status
+      detailsGiven = Boolean(
+        await getOnboardingDetails(request.id).catch((err: unknown) => {
+          console.error("ConflictCheckPage: onboarding details unavailable", err)
+          return null
+        })
+      )
+    }
   } catch (err) {
     console.error("ConflictCheckPage: conflict request store unavailable", err)
     unavailable = true
@@ -52,6 +63,7 @@ export default async function ConflictCheckPage({ params }: PageProps) {
         email={session.identity.email}
         defaultName={session.identity.displayName}
         unavailable={unavailable}
+        detailsGiven={detailsGiven}
       />
     </IntakeShell>
   )

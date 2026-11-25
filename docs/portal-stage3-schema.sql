@@ -168,3 +168,34 @@ alter table users add column if not exists terms_accepted_at timestamptz;
 -- Routing answers asked with the conflict check (ML1 2026-10-22), e.g. buying or
 -- selling for the letter of intent services. Never matter details.
 alter table intake_conflict_requests add column if not exists screening jsonb;
+
+-- Engagement letter details (ML1 2026-11-18: the portal's form asks for everything the
+-- service's agreement template needs; collected after the conflict check clears). One row
+-- per conflict request. Who the letter is for and who signs: never matter details.
+-- sharepoint_status records whether the draft letter reached the Clients site Onboarding
+-- library: uploaded, no_template, not_configured, not_permitted or error.
+create table if not exists intake_onboarding_details (
+  id text primary key,
+  conflict_request_id text not null unique references intake_conflict_requests (id),
+  user_id text not null,
+  signing_capacity text not null,
+  salutation text not null,
+  client_first_name text not null,
+  client_surname text not null,
+  client_email text not null,
+  corporation_name text,
+  signer_title text,
+  signing_authority boolean not null default false,
+  instructing_officer_name text not null,
+  instructing_officer_title text,
+  instructing_officer_email text,
+  sharepoint_status text not null default 'pending',
+  sharepoint_item_id text,
+  sharepoint_file_name text,
+  sharepoint_error text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists intake_onboarding_details_user_idx
+  on intake_onboarding_details (user_id, created_at desc);
