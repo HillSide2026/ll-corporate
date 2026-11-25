@@ -3,10 +3,20 @@
  * ML1 2026-10-22: CORP-001, CORP-002 (founders tier), CORP-003 and CORP-009.
  * CORP-006 Corporate Maintenance is not offered to leads.
  * No prices or add-ons are shown; each fee is quoted after the conflict check (ML1 2026-10-22).
- * Codes are SERVICES_REGISTRY.json codes in ll-secondbrain.
+ * Codes are SERVICES_REGISTRY.json codes in ll-secondbrain. Two offers can draw on the
+ * same service line (both letter of intent offers draw on COMM-022, ML1 2026-11-18), so
+ * the portal tells offers apart by offerKey, never by code.
  */
 export type LeadService = {
+  /**
+   * Unique, stable key for the offer. Stored in intake_conflict_requests.service_code and
+   * final_service_code, so it keeps the values those rows were written with. Never change one.
+   */
+  offerKey: string
+  /** Registry service line code (SERVICES_REGISTRY.json). Not unique across offers. */
   code: string
+  /** Registry service line name, as in the SharePoint Onboarding library's Service Name column. */
+  serviceName: string
   slug: string
   category: string
   title: string
@@ -32,7 +42,9 @@ const buyingOrSelling: ScreeningQuestion = {
 
 export const leadServices: LeadService[] = [
   {
+    offerKey: "CORP-001",
     code: "CORP-001",
+    serviceName: "Incorporation",
     slug: "incorporation",
     testFeeCents: 120000, // ML1 2026-10-22: $1,200 all in
     category: "New company",
@@ -53,8 +65,13 @@ export const leadServices: LeadService[] = [
       partiesHint: "Full names, one per line.",
     },
   },
+  // Founders' Agreement is the Founders' Agreement level of CORP-002 Shareholder Agreements,
+  // which has three levels: Founders' Agreement, Shareholders' Agreement and Unanimous
+  // Shareholders' Agreement (ML1 2026-11-24).
   {
+    offerKey: "CORP-002",
     code: "CORP-002",
+    serviceName: "Shareholder Agreements",
     slug: "founders-shareholder-agreement",
     category: "Co-founders",
     title: "Founders' Agreement",
@@ -69,7 +86,9 @@ export const leadServices: LeadService[] = [
     },
   },
   {
+    offerKey: "CORP-003",
     code: "CORP-003",
+    serviceName: "New Shareholder",
     slug: "new-shareholder",
     category: "Ownership change",
     title: "New Shareholder Admission",
@@ -84,7 +103,9 @@ export const leadServices: LeadService[] = [
     },
   },
   {
+    offerKey: "CORP-009",
     code: "CORP-009",
+    serviceName: "Corporate CheckUp",
     slug: "corporate-checkup",
     category: "Records review",
     title: "Review & Update Minutebook",
@@ -99,11 +120,13 @@ export const leadServices: LeadService[] = [
       partiesHint: "Full names of people or companies, one per line.",
     },
   },
-  // Private company M&A entry offers (ML1 2026-10-22). Neither has a registry code yet:
-  // they are phases 1A and 1B of CORP-036 Share Purchase and CORP-037 Asset Purchase,
-  // and their classification goes to the LLP-015 MS1 ruling. These codes are portal keys only.
+  // Private company M&A entry offers (ML1 2026-10-22). Both draw on COMM-022 Letter of
+  // Intent (LOI) Review and Negotiation, a solution (ML1 2026-11-18). Their offerKeys keep
+  // the portal keys they were stored under before that ruling.
   {
-    code: "MA-LOI-PREP",
+    offerKey: "MA-LOI-PREP",
+    code: "COMM-022",
+    serviceName: "Letter of Intent (LOI) Review and Negotiation",
     slug: "letter-of-intent",
     category: "Buying a business",
     title: "Prepare Letter of Intent",
@@ -123,7 +146,9 @@ export const leadServices: LeadService[] = [
     screening: [buyingOrSelling],
   },
   {
-    code: "MA-LOI-REVIEW",
+    offerKey: "MA-LOI-REVIEW",
+    code: "COMM-022",
+    serviceName: "Letter of Intent (LOI) Review and Negotiation",
     slug: "letter-of-intent-review",
     category: "Buying a business",
     title: "Review Letter of Intent",
@@ -150,4 +175,9 @@ export const leadServices: LeadService[] = [
 
 export function findLeadService(slug: string | null | undefined): LeadService | undefined {
   return slug ? leadServices.find((s) => s.slug === slug) : undefined
+}
+
+/** Looks an offer up by the key stored in intake_conflict_requests.service_code. */
+export function findLeadServiceByKey(offerKey: string | null | undefined): LeadService | undefined {
+  return offerKey ? leadServices.find((s) => s.offerKey === offerKey) : undefined
 }

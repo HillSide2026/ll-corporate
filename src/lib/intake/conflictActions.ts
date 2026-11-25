@@ -7,7 +7,7 @@ import { redirect } from "next/navigation"
 import { getAdminSession } from "src/lib/auth/adminAuth"
 import { getPortalSession } from "src/lib/auth/session"
 import { sendPortalNotification } from "src/lib/portal/portalNotifications"
-import { leadServices } from "src/lib/services/leadServices"
+import { findLeadServiceByKey, leadServices } from "src/lib/services/leadServices"
 import { normalizeRef, REF_COOKIE } from "./attribution"
 import { parseScreening } from "./screening"
 import {
@@ -55,7 +55,8 @@ export async function submitConflictCheck(_prev: ConflictFormState, formData: Fo
       const created = await createConflictRequest({
         userId: session.identity.subject,
         userEmail: session.identity.email,
-        serviceCode: service.code,
+        // The stored key is the offer key (unique), not the registry code
+        serviceCode: service.offerKey,
         serviceSlug: service.slug,
         applicantName,
         companyName: field(formData, "companyName") || undefined,
@@ -107,7 +108,11 @@ async function notifyIntake(
     fullName: request.applicantName,
     status: request.status,
     serviceSlug: request.serviceSlug,
-    serviceCode: request.finalServiceCode ?? request.serviceCode,
+    // Registry code for the CRM; the stored value is the offer key
+    serviceCode:
+      findLeadServiceByKey(request.finalServiceCode ?? request.serviceCode)?.code ??
+      request.finalServiceCode ??
+      request.serviceCode,
     source: request.source,
   }).catch((err: unknown) => console.warn(`${type}: notification failed`, err))
 }

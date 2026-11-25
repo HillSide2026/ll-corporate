@@ -5,7 +5,7 @@ import {
   recordPaymentAction,
 } from "src/lib/intake/conflictActions"
 import type { ConflictRequest, ConflictStatus } from "src/lib/intake/conflictRequestStore"
-import { leadServices } from "src/lib/services/leadServices"
+import { findLeadServiceByKey, leadServices } from "src/lib/services/leadServices"
 
 function statusBadge(status: ConflictStatus): string {
   switch (status) {
@@ -50,10 +50,10 @@ const smallInput = "rounded border border-stone-300 bg-white px-3 py-2 text-sm"
 /** After clearing: letter sent (service, fee, Clio matter), then paid, then complete (hours). */
 function ConversionRecord({ request }: { request: ConflictRequest }) {
   if (request.status !== "cleared") return null
-  const finalService = leadServices.find((s) => s.code === request.finalServiceCode)
+  const finalService = findLeadServiceByKey(request.finalServiceCode)
 
   if (!request.engagedAt) {
-    const picked = leadServices.find((s) => s.code === request.serviceCode)
+    const picked = findLeadServiceByKey(request.serviceCode)
     const pickedFee = picked?.testFeeCents ? String(picked.testFeeCents / 100) : undefined
     return (
       <form
@@ -65,7 +65,7 @@ function ConversionRecord({ request }: { request: ConflictRequest }) {
           Service in the letter
           <select name="finalServiceCode" defaultValue={request.serviceCode} className={`mt-1 block ${smallInput}`}>
             {leadServices.map((s) => (
-              <option key={s.code} value={s.code}>
+              <option key={s.offerKey} value={s.offerKey}>
                 {s.title}
               </option>
             ))}
@@ -140,7 +140,8 @@ export function ConflictRequestCard({ request }: { request: ConflictRequest }) {
         <div>
           <p className="font-semibold text-stone-900">{request.applicantName}</p>
           <p className="mt-0.5 text-sm text-stone-500">
-            {request.userEmail} · Picked: {service?.title ?? request.serviceSlug} ({request.serviceCode})
+            {request.userEmail} · Picked: {service?.title ?? request.serviceSlug} (
+            {findLeadServiceByKey(request.serviceCode)?.code ?? request.serviceCode})
             {request.engagedAt ? "" : ", not yet confirmed"}
           </p>
           <p className="mt-0.5 text-xs text-stone-400">
