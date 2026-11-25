@@ -75,9 +75,9 @@ export const leadServices: LeadService[] = [
     slug: "founders-shareholder-agreement",
     category: "Co-founders",
     title: "Founders' Agreement",
-    summary: "Agree on ownership, vesting, decisions and exits before they become disputes.",
-    includes: ["Vesting and departure terms", "Decision-making and deadlock rules"],
-    why: "Without an agreement, the corporate statute and your articles decide what happens when founders disagree or one of you leaves. A shareholders' agreement sets ownership, vesting, decision-making and exits on your terms, while everyone is still aligned.",
+    summary: "Agree on ownership, vesting, voting and exits before they become disputes.",
+    includes: ["Vesting and departure terms", "How founders vote their shares, and deadlocks between them"],
+    why: "Without an agreement, the corporate statute and your articles decide what happens when founders disagree or one of you leaves. A founders' agreement sets ownership, vesting, how you vote your shares and exits on your terms, while everyone is still aligned.",
     conflict: {
       companyLabel: "Company name",
       companyHint: "Include a proposed name if the company doesn't exist yet.",
