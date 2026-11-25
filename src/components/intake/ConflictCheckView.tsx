@@ -155,6 +155,7 @@ export function ConflictCheckView({
   defaultName,
   unavailable = false,
   detailsGiven = false,
+  letterHref,
 }: {
   service: LeadService
   request: ConflictRequest | null
@@ -163,6 +164,8 @@ export function ConflictCheckView({
   unavailable?: boolean
   /** Whether the lead has given the engagement letter details (after clearing). */
   detailsGiven?: boolean
+  /** Download link for the released engagement letter, once Levine Law has released it. */
+  letterHref?: string
 }) {
   return (
     <div className="bg-white">
@@ -190,7 +193,19 @@ export function ConflictCheckView({
               <RequestStatus request={request} email={email} />
               {request.status === "cleared" ? (
                 <div className="mt-12 max-w-2xl border-t border-stone-200 pt-10">
-                  {detailsGiven ? (
+                  {detailsGiven && letterHref ? (
+                    <StatusCard
+                      icon={<CircleCheck className="size-6 text-emerald-600" />}
+                      title="Engagement letter issued"
+                    >
+                      <p>Your engagement letter is ready. We will confirm how to sign it and pay.</p>
+                      <p className="mt-3">
+                        <a href={letterHref} className="text-brand-navy font-semibold underline">
+                          Download your engagement letter
+                        </a>
+                      </p>
+                    </StatusCard>
+                  ) : detailsGiven ? (
                     <StatusCard icon={<CircleCheck className="size-6 text-emerald-600" />} title="Details received">
                       <p>Thank you. We will use these details to prepare your engagement letter.</p>
                     </StatusCard>

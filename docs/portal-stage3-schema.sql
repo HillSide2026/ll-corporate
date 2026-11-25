@@ -199,3 +199,11 @@ create table if not exists intake_onboarding_details (
 
 create index if not exists intake_onboarding_details_user_idx
   on intake_onboarding_details (user_id, created_at desc);
+
+-- Step 3 (ML1 2026-11-25): MJL finishes and releases the engagement letter. The release is
+-- a new file in the same Onboarding folder; the Draft is left as it is.
+alter table intake_onboarding_details add column if not exists matter_number text;
+alter table intake_onboarding_details add column if not exists released_at timestamptz;
+alter table intake_onboarding_details add column if not exists released_item_id text;
+alter table intake_onboarding_details add column if not exists released_file_name text;
+alter table intake_onboarding_details add column if not exists release_error text;

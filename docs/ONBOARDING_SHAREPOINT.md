@@ -43,10 +43,37 @@ collected after the conflict check clears.
    `PORTAL_NOTIFICATION_WEBHOOK_URL` with that status (names, service and outcome only). A
    SharePoint failure never blocks the lead.
 
+## Step 3: MJL finishes and releases the letter (ML1 2026-11-25)
+
+- **Admin page** `/corporate/admin/onboarding` (admin lock; linked from the admin home as
+  "Engagement letters"): every submission with offer, client, signer and capacity,
+  instructing officer, the SharePoint outcome and a link to the filed Draft (SharePoint
+  links appear on admin pages only). The conflicts queue now shows each request's letter
+  status too.
+- **Release:** on a submission with a filed Draft, MJL enters the Clio matter number
+  (`NN-NNNN-NNNNN`, for example 24-256-00001) and clicks "Approve and release to client"
+  (`src/lib/intake/releaseActions.ts`, `releaseLetter.ts`). The Draft is downloaded,
+  `{Matter Number}` filled, and the result uploaded as a NEW file in the same folder
+  (conflictBehavior=fail), named like the Draft with "- Released LLS", tagged as the Draft
+  plus Resource Status = Current. The Draft is not changed. The release is only ever MJL's
+  click; nothing releases on its own. Disabled in local admin preview.
+- **Refusals:** a release is refused, with the reason shown on the admin page, if the letter
+  still has any `{curly bracket}` placeholder after the matter number is filled (they are
+  listed; fix the Draft in SharePoint and retry) or still has tracked changes. Optional
+  `[square bracket]` text does not block. A name clash (409) is reported, not overwritten.
+- **Client:** once released, `/intake/start/<slug>` shows "Engagement letter issued" with a
+  download link to `/intake/engagement-letter/<slug>`, which serves the released file
+  server-side, found only through the signed-in user's own cleared request.
+- **Alert:** `intake_engagement_letter_released` on the webhook (names, service, outcome).
+- **Records:** `matter_number`, `released_at`, `released_item_id`, `released_file_name`,
+  `release_error` on `intake_onboarding_details` (step 3 block at the end of the schema
+  file, `add column if not exists`).
+- Signing and payment are still not built (ML1's decision, portal or email, is open).
+
 ## Before it works
 
-1. **Database:** run the new `intake_onboarding_details` block at the end of
-   `docs/portal-stage3-schema.sql` on the portal database (`pnpm db:migrate` runs the whole
+1. **Database:** run the new `intake_onboarding_details` block and the step 3 `alter table`
+   block at the end of `docs/portal-stage3-schema.sql` on the portal database (`pnpm db:migrate` runs the whole
    file; every statement is `if not exists`). Not run anywhere yet. Until it is, the form
    shows "We could not save your details right now" and the rest of the page works.
 2. **Entra grant:** the LL-Client Portal app needs write access on the Clients site
@@ -63,6 +90,4 @@ collected after the conflict check clears.
 
 ## Not done
 
-- The admin conflicts page does not yet show the SharePoint status; it is in the database
-  and the alert.
 - Signing and payment are unchanged (ML1's decision is open).

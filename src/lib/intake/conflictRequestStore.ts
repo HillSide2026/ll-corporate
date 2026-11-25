@@ -128,6 +128,12 @@ export async function getLatestConflictRequest(userId: string, serviceSlug: stri
   return result.rows[0] ? mapRow(result.rows[0]) : null
 }
 
+export async function getConflictRequestById(id: string): Promise<ConflictRequest | null> {
+  const db = requirePortalDatabase()
+  const result = await db.sql<ConflictRow>`select * from intake_conflict_requests where id = ${id}`
+  return result.rows[0] ? mapRow(result.rows[0]) : null
+}
+
 export async function listConflictRequests(): Promise<ConflictRequest[]> {
   const db = requirePortalDatabase()
   const result = await db.sql<ConflictRow>`

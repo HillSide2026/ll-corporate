@@ -28,16 +28,17 @@ export default async function ConflictCheckPage({ params }: PageProps) {
   let request: ConflictRequest | null = null
   let unavailable = false
   let detailsGiven = false
+  let letterReleased = false
   try {
     request = await getLatestConflictRequest(session.identity.subject, service.slug)
     if (request?.status === "cleared") {
       // A missing onboarding table must not hide the conflict check status
-      detailsGiven = Boolean(
-        await getOnboardingDetails(request.id).catch((err: unknown) => {
-          console.error("ConflictCheckPage: onboarding details unavailable", err)
-          return null
-        })
-      )
+      const details = await getOnboardingDetails(request.id).catch((err: unknown) => {
+        console.error("ConflictCheckPage: onboarding details unavailable", err)
+        return null
+      })
+      detailsGiven = Boolean(details)
+      letterReleased = Boolean(details?.releasedAt)
     }
   } catch (err) {
     console.error("ConflictCheckPage: conflict request store unavailable", err)
@@ -64,6 +65,7 @@ export default async function ConflictCheckPage({ params }: PageProps) {
         defaultName={session.identity.displayName}
         unavailable={unavailable}
         detailsGiven={detailsGiven}
+        letterHref={letterReleased ? `/intake/engagement-letter/${service.slug}` : undefined}
       />
     </IntakeShell>
   )

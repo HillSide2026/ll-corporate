@@ -275,3 +275,37 @@ export function fillDocx(
   entries[index] = replaceEntry(entries[index]!, Buffer.from(fillDocumentXml(xml, values, optional), "utf8"))
   return writeZip(entries)
 }
+
+/** The text of each paragraph in word/document.xml (inserted text included, deleted text not). */
+function paragraphTexts(xml: string): string[] {
+  return Array.from(xml.matchAll(/<w:p[ >][\s\S]*?<\/w:p>/g)).map((m) =>
+    Array.from(m[0].matchAll(TEXT_NODE))
+      .map((t) => xmlUnescape(t[2]!))
+      .join("")
+  )
+}
+
+function documentXmlOf(docx: Buffer): string {
+  const entry = readZip(docx).find((e) => e.name === "word/document.xml")
+  if (!entry) throw new Error("Not a Word document: word/document.xml is missing.")
+  return entryData(entry).toString("utf8")
+}
+
+/**
+ * Every {curly bracket} placeholder still in the document, in order, without repeats.
+ * Optional [square bracket] text is not a placeholder; a {placeholder} inside it still is.
+ */
+export function documentPlaceholders(docx: Buffer): string[] {
+  const found: string[] = []
+  for (const text of paragraphTexts(documentXmlOf(docx))) {
+    for (const m of Array.from(text.matchAll(/\{[^{}]{1,200}\}/g))) {
+      if (!found.includes(m[0])) found.push(m[0])
+    }
+  }
+  return found
+}
+
+/** Whether the document still carries tracked changes (insertions, deletions or moves). */
+export function hasTrackedChanges(docx: Buffer): boolean {
+  return /<w:(ins|del|moveFrom|moveTo)\s/.test(documentXmlOf(docx))
+}

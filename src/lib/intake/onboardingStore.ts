@@ -12,6 +12,13 @@ export type OnboardingDetails = OnboardingDetailsInput & {
   sharepointItemId: string | null
   sharepointFileName: string | null
   sharepointError: string | null
+  /** Step 3: set when MJL releases the finished letter to the client. */
+  matterNumber: string | null
+  releasedAt: string | null
+  releasedItemId: string | null
+  releasedFileName: string | null
+  /** Why the last release attempt was refused or failed (for example, placeholders left). */
+  releaseError: string | null
   createdAt: string
 }
 
@@ -34,7 +41,17 @@ type OnboardingRow = {
   sharepoint_item_id: string | null
   sharepoint_file_name: string | null
   sharepoint_error: string | null
+  matter_number?: string | null
+  released_at?: Date | string | null
+  released_item_id?: string | null
+  released_file_name?: string | null
+  release_error?: string | null
   created_at: Date | string
+}
+
+function toIso(value: Date | string | null | undefined): string | null {
+  if (!value) return null
+  return value instanceof Date ? value.toISOString() : value
 }
 
 function mapRow(row: OnboardingRow): OnboardingDetails {
@@ -57,6 +74,11 @@ function mapRow(row: OnboardingRow): OnboardingDetails {
     sharepointItemId: row.sharepoint_item_id,
     sharepointFileName: row.sharepoint_file_name,
     sharepointError: row.sharepoint_error,
+    matterNumber: row.matter_number ?? null,
+    releasedAt: toIso(row.released_at),
+    releasedItemId: row.released_item_id ?? null,
+    releasedFileName: row.released_file_name ?? null,
+    releaseError: row.release_error ?? null,
     createdAt: row.created_at instanceof Date ? row.created_at.toISOString() : row.created_at,
   }
 }
@@ -106,5 +128,46 @@ export async function recordSharePointResult(
         sharepoint_file_name = ${result.fileName ?? null}, sharepoint_error = ${result.error?.slice(0, 500) ?? null},
         updated_at = now()
     where id = ${id}
+  `
+}
+
+/** Every onboarding submission, newest first (admin pages). */
+export async function listOnboardingDetails(): Promise<OnboardingDetails[]> {
+  const db = requirePortalDatabase()
+  const result = await db.sql<OnboardingRow>`
+    select * from intake_onboarding_details order by created_at desc limit 500
+  `
+  return result.rows.map(mapRow)
+}
+
+export async function getOnboardingDetailsById(id: string): Promise<OnboardingDetails | null> {
+  const db = requirePortalDatabase()
+  const result = await db.sql<OnboardingRow>`select * from intake_onboarding_details where id = ${id}`
+  return result.rows[0] ? mapRow(result.rows[0]) : null
+}
+
+/** Records a release. Only the first release counts; returns null if already released. */
+export async function recordRelease(
+  id: string,
+  release: { matterNumber: string; itemId: string; fileName: string }
+): Promise<OnboardingDetails | null> {
+  const db = requirePortalDatabase()
+  const result = await db.sql<OnboardingRow>`
+    update intake_onboarding_details
+    set matter_number = ${release.matterNumber}, released_at = now(), released_item_id = ${release.itemId},
+        released_file_name = ${release.fileName}, release_error = null, updated_at = now()
+    where id = ${id} and released_at is null
+    returning *
+  `
+  return result.rows[0] ? mapRow(result.rows[0]) : null
+}
+
+/** Records why a release was refused or failed, for the admin page. */
+export async function recordReleaseError(id: string, error: string): Promise<void> {
+  const db = requirePortalDatabase()
+  await db.sql`
+    update intake_onboarding_details
+    set release_error = ${error.slice(0, 1000)}, updated_at = now()
+    where id = ${id} and released_at is null
   `
 }

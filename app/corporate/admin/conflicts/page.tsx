@@ -5,6 +5,7 @@ import { redirect } from "next/navigation"
 import { getAdminSession } from "src/lib/auth/adminAuth"
 import { ConflictRequestCard } from "src/components/intake/ConflictRequestCard"
 import { type ConflictRequest, listConflictRequests } from "src/lib/intake/conflictRequestStore"
+import { listOnboardingDetails, type OnboardingDetails } from "src/lib/intake/onboardingStore"
 
 export const metadata: Metadata = { title: "Conflict Checks — Levine Law Admin" }
 
@@ -21,6 +22,15 @@ export default async function AdminConflictsPage() {
   } catch (err) {
     console.error("AdminConflictsPage: conflict request store unavailable", err)
     unavailable = true
+  }
+  // The onboarding table may not exist yet; the queue must still load
+  const onboarding = new Map<string, OnboardingDetails>()
+  if (!unavailable) {
+    const rows = await listOnboardingDetails().catch((err: unknown) => {
+      console.error("AdminConflictsPage: onboarding details unavailable", err)
+      return [] as OnboardingDetails[]
+    })
+    for (const row of rows) onboarding.set(row.conflictRequestId, row)
   }
   const pending = requests.filter((r) => r.status === "pending").length
 
@@ -51,7 +61,7 @@ export default async function AdminConflictsPage() {
         ) : (
           <ul className="space-y-3">
             {requests.map((request) => (
-              <ConflictRequestCard key={request.id} request={request} />
+              <ConflictRequestCard key={request.id} request={request} onboarding={onboarding.get(request.id)} />
             ))}
           </ul>
         )}

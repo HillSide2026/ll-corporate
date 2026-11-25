@@ -415,3 +415,25 @@ export async function setOnboardingFileFields(
     { method: "PATCH", body: JSON.stringify(fields), contentType: "application/json" }
   )
 }
+
+const ItemSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  webUrl: z.string().optional(),
+  listItem: z.object({ fields: z.record(z.unknown()).optional() }).optional(),
+})
+
+export type OnboardingItem = { itemId: string; name: string; webUrl: string | null; fields: Record<string, unknown> }
+
+/** One Onboarding library file: name, SharePoint link (admin pages only) and column values. */
+export async function getOnboardingItem(driveId: string, itemId: string): Promise<OnboardingItem> {
+  assertIds(driveId, itemId)
+  const response = await graphSend(
+    `${siteBase()}/drives/${encodeURIComponent(driveId)}/items/${encodeURIComponent(itemId)}` +
+      `?$select=id,name,webUrl&$expand=listItem($expand=fields)`,
+    "get onboarding item",
+    { method: "GET" }
+  )
+  const item = ItemSchema.parse(await response.json())
+  return { itemId: item.id, name: item.name, webUrl: item.webUrl ?? null, fields: item.listItem?.fields ?? {} }
+}

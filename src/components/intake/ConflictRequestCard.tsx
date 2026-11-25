@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 import {
   decideConflictCheck,
   recordCompletionAction,
@@ -5,6 +7,7 @@ import {
   recordPaymentAction,
 } from "src/lib/intake/conflictActions"
 import type { ConflictRequest, ConflictStatus } from "src/lib/intake/conflictRequestStore"
+import type { OnboardingDetails } from "src/lib/intake/onboardingStore"
 import { findLeadServiceByKey, leadServices } from "src/lib/services/leadServices"
 
 function statusBadge(status: ConflictStatus): string {
@@ -132,7 +135,38 @@ function ConversionRecord({ request }: { request: ConflictRequest }) {
   )
 }
 
-export function ConflictRequestCard({ request }: { request: ConflictRequest }) {
+const LETTER_STATUS: Record<OnboardingDetails["sharepointStatus"], string> = {
+  pending: "details given, letter not filed yet",
+  uploaded: "Draft filed in SharePoint",
+  no_template: "not filed: no Current template for this offer",
+  not_configured: "not filed: SharePoint is not configured",
+  not_permitted: "not filed: the portal is not permitted to write to SharePoint",
+  error: "not filed: error",
+}
+
+/** Where the engagement letter stands in SharePoint (step 2 and step 3). */
+function LetterStatus({ onboarding }: { onboarding: OnboardingDetails | null | undefined }) {
+  if (!onboarding) return null
+  const status = onboarding.releasedAt
+    ? `released to the client (Clio ${onboarding.matterNumber})`
+    : LETTER_STATUS[onboarding.sharepointStatus]
+  return (
+    <p className="mt-3 text-sm text-stone-700">
+      Engagement letter: {status} ·{" "}
+      <Link href="/corporate/admin/onboarding" className="text-brand-navy underline">
+        Engagement letters
+      </Link>
+    </p>
+  )
+}
+
+export function ConflictRequestCard({
+  request,
+  onboarding,
+}: {
+  request: ConflictRequest
+  onboarding?: OnboardingDetails | null
+}) {
   const service = leadServices.find((s) => s.slug === request.serviceSlug)
   return (
     <li className="rounded border border-stone-200 bg-white p-5">
@@ -193,6 +227,7 @@ export function ConflictRequestCard({ request }: { request: ConflictRequest }) {
         <p className="mt-4 text-xs text-stone-400">Decided {formatDate(request.decidedAt)}</p>
       ) : null}
 
+      <LetterStatus onboarding={onboarding} />
       <ConversionRecord request={request} />
     </li>
   )

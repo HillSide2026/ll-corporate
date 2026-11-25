@@ -11,6 +11,8 @@ type PortalNotificationPayload = {
     | "intake_completion_recorded"
     /** Engagement letter details given; status is the SharePoint outcome (uploaded, no_template, ...). */
     | "intake_onboarding_details_submitted"
+    /** MJL released the finished engagement letter to the client (step 3). */
+    | "intake_engagement_letter_released"
   requestId: string
   email: string
   fullName: string
