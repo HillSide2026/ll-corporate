@@ -22,7 +22,7 @@ import {
 
 export type ConflictFormState = {
   error?: string
-  field?: "applicantName" | "acknowledged" | "screening"
+  field?: "applicantName" | "acknowledged" | "screening" | "relatedParties" | "otherSide" | "adverseParties"
 } | null
 
 const MAX_FIELD = 2000
@@ -44,6 +44,17 @@ export async function submitConflictCheck(_prev: ConflictFormState, formData: Fo
   if (!applicantName) return { error: "Enter your full legal name.", field: "applicantName" }
   const screening = parseScreening(service, formData)
   if (!screening) return { error: "Please answer each question above.", field: "screening" }
+  // A conflict check needs names to check (Chloe Nguyen review, ML1 2026-11-25)
+  const relatedParties = field(formData, "relatedParties")
+  if (!relatedParties) return { error: "List the people involved, one per line.", field: "relatedParties" }
+  const otherSide = field(formData, "otherSide")
+  if (otherSide !== "yes" && otherSide !== "no") {
+    return { error: "Tell us whether anyone is on the other side.", field: "otherSide" }
+  }
+  const adverseParties = otherSide === "yes" ? field(formData, "adverseParties") : ""
+  if (otherSide === "yes" && !adverseParties) {
+    return { error: "List who is on the other side, one per line.", field: "adverseParties" }
+  }
   if (formData.get("acknowledged") !== "on") {
     return { error: "Please confirm you have read the note above.", field: "acknowledged" }
   }
@@ -60,8 +71,8 @@ export async function submitConflictCheck(_prev: ConflictFormState, formData: Fo
         serviceSlug: service.slug,
         applicantName,
         companyName: field(formData, "companyName") || undefined,
-        relatedParties: field(formData, "relatedParties") || undefined,
-        adverseParties: field(formData, "adverseParties") || undefined,
+        relatedParties,
+        adverseParties: adverseParties || undefined,
         source: normalizeRef((await cookies()).get(REF_COOKIE)?.value),
         screening,
       })

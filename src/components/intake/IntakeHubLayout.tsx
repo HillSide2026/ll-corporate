@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react"
 import Link from "next/link"
-import { ClipboardList, Compass, FileSignature, LayoutGrid, LogOut } from "lucide-react"
+import { ClipboardList, Compass, FileSignature, Inbox, LayoutGrid, LogOut } from "lucide-react"
 
 import { PortalBrandMark } from "src/components/portal/PortalBrandHeader"
 import { signOutFromPortal } from "src/lib/auth/actions"
@@ -27,6 +27,7 @@ import type { IntakeSection } from "./IntakeShell"
 
 const navItems = [
   { key: "browse" as IntakeSection, label: "Browse", href: "/intake/catalog", icon: LayoutGrid },
+  { key: "requests" as IntakeSection, label: "My requests", href: "/intake/requests", icon: Inbox },
   { key: "questionnaire" as IntakeSection, label: "My Intake", href: "/intake/questionnaire", icon: ClipboardList },
   { key: "engagement" as IntakeSection, label: "Engagement", href: "/intake/engagement", icon: FileSignature },
 ]

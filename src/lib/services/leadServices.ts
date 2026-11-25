@@ -108,7 +108,7 @@ export const leadServices: LeadService[] = [
     serviceName: "Corporate CheckUp",
     slug: "corporate-checkup",
     category: "Records review",
-    title: "Review & Update Minutebook",
+    title: "Review & Update Minute Book",
     summary:
       "A lawyer reviews your corporate records and tells you what is missing or out of date, and what it takes to fix it.",
     includes: ["Minute book and register review", "Public record comparison", "Written list of gaps and fixes"],

@@ -7,6 +7,8 @@ import {
   Check,
   ChevronDown,
   ClipboardCheck,
+  FilePen,
+  FileSearch,
   type LucideIcon,
   UserPlus,
   Users,
@@ -30,6 +32,8 @@ const serviceIcons: Record<string, LucideIcon> = {
   "founders-shareholder-agreement": Users,
   "new-shareholder": UserPlus,
   "corporate-checkup": ClipboardCheck,
+  "letter-of-intent": FilePen,
+  "letter-of-intent-review": FileSearch,
 }
 
 function ServiceRow({ service }: { service: LeadService }) {

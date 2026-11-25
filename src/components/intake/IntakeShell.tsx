@@ -8,7 +8,7 @@ import { signOutFromPortal } from "src/lib/auth/actions"
 import { IntakeFunnelBar } from "./IntakeFunnelBar"
 import { IntakeHubLayout } from "./IntakeHubLayout"
 
-export type IntakeSection = "browse" | "questionnaire" | "engagement"
+export type IntakeSection = "browse" | "requests" | "questionnaire" | "engagement"
 
 export async function IntakeShell({
   active = "browse",
@@ -51,6 +51,9 @@ export async function IntakeShell({
         >
           <NavyRailLink href="/intake/catalog" active={active === "browse"}>
             Services
+          </NavyRailLink>
+          <NavyRailLink href="/intake/requests" active={active === "requests"}>
+            My requests
           </NavyRailLink>
         </NavyRail>
       </div>

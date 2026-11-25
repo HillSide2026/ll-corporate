@@ -36,6 +36,7 @@ function conflictFormData(overrides: Record<string, string | null> = {}) {
     applicantName: "Jane Founder",
     companyName: "Acme Ltd.",
     relatedParties: "John Cofounder",
+    otherSide: "no",
     adverseParties: "",
     acknowledged: "on",
     ...overrides,
@@ -89,6 +90,35 @@ describe("submitConflictCheck", () => {
 
     expect(result).toEqual({ error: "Please answer each question above.", field: "screening" })
     expect(mocks.createConflictRequest).not.toHaveBeenCalled()
+  })
+
+  it("requires the people involved", async () => {
+    const result = await submitConflictCheck(null, conflictFormData({ relatedParties: "  " }))
+
+    expect(result).toEqual({ error: "List the people involved, one per line.", field: "relatedParties" })
+    expect(mocks.createConflictRequest).not.toHaveBeenCalled()
+  })
+
+  it("requires an answer on whether anyone is on the other side", async () => {
+    const result = await submitConflictCheck(null, conflictFormData({ otherSide: null }))
+
+    expect(result).toEqual({ error: "Tell us whether anyone is on the other side.", field: "otherSide" })
+    expect(mocks.createConflictRequest).not.toHaveBeenCalled()
+  })
+
+  it("requires the other side's names when the answer is yes", async () => {
+    const result = await submitConflictCheck(null, conflictFormData({ otherSide: "yes", adverseParties: "" }))
+
+    expect(result).toEqual({ error: "List who is on the other side, one per line.", field: "adverseParties" })
+    expect(mocks.createConflictRequest).not.toHaveBeenCalled()
+  })
+
+  it("ignores other-side names when the answer is no", async () => {
+    await expect(
+      submitConflictCheck(null, conflictFormData({ otherSide: "no", adverseParties: "Stale Name" }))
+    ).rejects.toThrow("REDIRECT:/intake/start/incorporation")
+
+    expect(mocks.createConflictRequest).toHaveBeenCalledWith(expect.objectContaining({ adverseParties: undefined }))
   })
 
   it("requires the acknowledgement", async () => {

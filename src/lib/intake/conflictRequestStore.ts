@@ -128,6 +128,17 @@ export async function getLatestConflictRequest(userId: string, serviceSlug: stri
   return result.rows[0] ? mapRow(result.rows[0]) : null
 }
 
+/** Every request the signed-in lead has sent, newest first (My requests page). */
+export async function listConflictRequestsForUser(userId: string): Promise<ConflictRequest[]> {
+  const db = requirePortalDatabase()
+  const result = await db.sql<ConflictRow>`
+    select * from intake_conflict_requests
+    where user_id = ${userId}
+    order by created_at desc
+  `
+  return result.rows.map(mapRow)
+}
+
 export async function getConflictRequestById(id: string): Promise<ConflictRequest | null> {
   const db = requirePortalDatabase()
   const result = await db.sql<ConflictRow>`select * from intake_conflict_requests where id = ${id}`

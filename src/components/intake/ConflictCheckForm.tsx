@@ -101,13 +101,22 @@ export function ConflictCheckForm({ service, defaultName }: { service: LeadServi
 
       <div className="space-y-1.5">
         <Label htmlFor="cc-related">{service.conflict.partiesLabel}</Label>
-        <Textarea id="cc-related" name="relatedParties" rows={4} className="rounded-lg bg-white" />
+        <Textarea
+          id="cc-related"
+          name="relatedParties"
+          rows={4}
+          required
+          className="rounded-lg bg-white"
+          aria-invalid={state?.field === "relatedParties" || undefined}
+        />
         <Hint>{service.conflict.partiesHint}</Hint>
+        <FieldError state={state} field="relatedParties" />
       </div>
 
       <fieldset className="space-y-3">
         <legend className="text-sm font-medium text-stone-900">Is anyone on the other side?</legend>
         <Hint>For example, a departing shareholder or the other party to a deal.</Hint>
+        <input type="hidden" name="otherSide" value={otherSide ?? ""} />
         <div className="flex gap-2">
           <ChoiceButton selected={otherSide === "yes"} onClick={() => setOtherSide("yes")}>
             Yes
@@ -119,10 +128,19 @@ export function ConflictCheckForm({ service, defaultName }: { service: LeadServi
         {otherSide === "yes" ? (
           <div className="space-y-1.5 pt-2">
             <Label htmlFor="cc-adverse">Who is on the other side?</Label>
-            <Textarea id="cc-adverse" name="adverseParties" rows={3} className="rounded-lg bg-white" />
+            <Textarea
+              id="cc-adverse"
+              name="adverseParties"
+              rows={3}
+              required
+              className="rounded-lg bg-white"
+              aria-invalid={state?.field === "adverseParties" || undefined}
+            />
             <Hint>Full names of people or companies, one per line.</Hint>
+            <FieldError state={state} field="adverseParties" />
           </div>
         ) : null}
+        <FieldError state={state} field="otherSide" />
       </fieldset>
 
       <div className="rounded-xl border border-stone-200 bg-stone-50 p-5">
